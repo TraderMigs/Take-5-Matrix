@@ -256,7 +256,7 @@ export default function Home() {
 
           <Button
             variant="ghost"
-            className="flex flex-col items-center space-y-1 text-neutral-gray hover:text-primary-indigo transition-colors"
+            className="flex flex-col items-center space-y-1 text-light-gray hover:text-navy-blue transition-colors"
             onClick={() => alert("Settings would allow personalization of the app, language selection, and emergency contact management.")}
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -267,7 +267,7 @@ export default function Home() {
 
           <Button
             variant="ghost"
-            className="flex flex-col items-center space-y-1 text-neutral-gray hover:text-primary-indigo transition-colors"
+            className="flex flex-col items-center space-y-1 text-light-gray hover:text-navy-blue transition-colors"
             onClick={() => alert("Resources would display additional mental health information, local services, and educational content.")}
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -278,7 +278,7 @@ export default function Home() {
 
           <Button
             variant="ghost"
-            className="flex flex-col items-center space-y-1 text-neutral-gray hover:text-primary-indigo transition-colors"
+            className="flex flex-col items-center space-y-1 text-light-gray hover:text-navy-blue transition-colors"
             onClick={() => {
               if (confirm("This will call emergency services. Continue?")) {
                 window.location.href = `tel:${getEmergencyNumber()}`;
