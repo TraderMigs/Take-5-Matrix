@@ -158,7 +158,7 @@ export default function Home() {
   return (
     <div className="max-w-md mx-auto bg-white min-h-screen shadow-lg">
       {/* Header */}
-      <header className="bg-gradient-to-r from-teal-600 to-blue-600 text-white text-center py-8 px-6">
+      <header className="bg-gradient-to-r from-primary-indigo to-accent-teal text-white text-center py-8 px-6">
         <h1 className="text-4xl font-bold mb-3 tracking-wide">Take 5</h1>
         <p className="text-lg opacity-95 leading-relaxed font-medium">
           Take 5 minutes. Take a breath. Take back control.
@@ -175,7 +175,7 @@ export default function Home() {
               placeholder="Type how you feel: 'I'm alone', 'homeless', 'want to talk'..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full p-4 pr-12 text-lg border-2 border-gray-200 rounded-xl focus:border-calm-blue focus:outline-none transition-colors"
+              className="w-full p-4 pr-12 text-lg border-2 border-muted rounded-xl focus:border-primary-indigo focus:outline-none transition-colors"
             />
             <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
           </div>
@@ -208,8 +208,8 @@ export default function Home() {
         </section>
 
         {/* Quick Tools */}
-        <section className="bg-gradient-to-r from-slate-50 to-gray-50 rounded-xl p-6 space-y-4 border border-gray-100">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Quick Support Tools</h2>
+        <section className="bg-soft-bg rounded-xl p-6 space-y-4 border border-muted">
+          <h2 className="text-xl font-semibold text-foreground mb-4">Quick Support Tools</h2>
 
           <div className="grid grid-cols-2 gap-4">
             {quickTools.map((tool) => (
@@ -222,7 +222,7 @@ export default function Home() {
         <PersonalContacts />
 
         {/* Safe Message */}
-        <section className="bg-gradient-to-r from-teal-600 to-emerald-600 text-white rounded-xl p-6 text-center space-y-3">
+        <section className="bg-gradient-to-r from-accent-teal to-primary-indigo text-white rounded-xl p-6 text-center space-y-3">
           <h2 className="text-xl font-semibold">You're not alone</h2>
           <p className="text-lg opacity-95">You matter. Your life has value. Help is always available.</p>
           <p className="text-sm opacity-90">This moment is temporary. You can get through this.</p>
@@ -235,7 +235,7 @@ export default function Home() {
           <Button
             variant="ghost"
             className={`flex flex-col items-center space-y-1 ${
-              currentView === "home" ? "text-calm-blue" : "text-gray-400 hover:text-calm-blue"
+              currentView === "home" ? "text-primary-indigo" : "text-neutral-gray hover:text-primary-indigo"
             }`}
             onClick={() => setCurrentView("home")}
           >
