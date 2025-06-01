@@ -92,7 +92,7 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
         <div className="space-y-6 p-4">
           <div className="flex justify-center">
             <div className="w-32 h-32 rounded-full border-4 border-navy-blue flex items-center justify-center">
-              <div className="w-20 h-20 bg-gradient-to-r from-navy-blue to-sage-green rounded-full flex items-center justify-center text-white font-bold text-lg">
+              <div className="w-20 h-20 rounded-full flex items-center justify-center text-white font-bold text-lg" style={{ background: 'linear-gradient(to right, #47556D, #6B8E7B)' }}>
                 {count}
               </div>
             </div>

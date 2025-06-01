@@ -160,7 +160,7 @@ export default function Home() {
   return (
     <div className="max-w-md mx-auto bg-background dark:bg-background min-h-screen shadow-lg">
       {/* Header */}
-      <header className="bg-gradient-to-r from-navy-blue to-sage-green text-white text-center py-8 px-6 relative">
+      <header className="text-white text-center py-8 px-6 relative" style={{ background: 'linear-gradient(to right, #47556D, #6B8E7B)' }}>
         <button
           onClick={toggleTheme}
           className="absolute top-4 right-4 p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
@@ -231,7 +231,7 @@ export default function Home() {
         <PersonalContacts />
 
         {/* Safe Message */}
-        <section className="bg-gradient-to-r from-sage-green to-navy-blue text-white rounded-xl p-6 text-center space-y-3">
+        <section className="text-white rounded-xl p-6 text-center space-y-3" style={{ background: 'linear-gradient(to right, #6B8E7B, #47556D)' }}>
           <h2 className="text-xl font-semibold">You're not alone</h2>
           <p className="text-lg opacity-95">You matter. Your life has value. Help is always available.</p>
           <p className="text-sm opacity-90">This moment is temporary. You can get through this.</p>
