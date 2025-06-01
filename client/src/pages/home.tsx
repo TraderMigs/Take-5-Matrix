@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Search, Phone, Heart, TriangleAlert } from "lucide-react";
+import { Search, Phone, Heart, TriangleAlert, Moon, Sun } from "lucide-react";
+import { useTheme } from "@/components/theme-provider";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import BreathingModal from "@/components/breathing-modal";
@@ -14,6 +15,7 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showBreathingModal, setShowBreathingModal] = useState(false);
   const [currentView, setCurrentView] = useState("home");
+  const { theme, toggleTheme } = useTheme();
 
   const supportModules = [
     {
@@ -156,9 +158,16 @@ export default function Home() {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white min-h-screen shadow-lg">
+    <div className="max-w-md mx-auto bg-background dark:bg-background min-h-screen shadow-lg">
       {/* Header */}
-      <header className="bg-gradient-to-r from-primary-indigo to-accent-teal text-white text-center py-8 px-6">
+      <header className="bg-gradient-to-r from-navy-blue to-sage-green text-white text-center py-8 px-6 relative">
+        <button
+          onClick={toggleTheme}
+          className="absolute top-4 right-4 p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+          aria-label="Toggle theme"
+        >
+          {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
+        </button>
         <h1 className="text-4xl font-bold mb-3 tracking-wide">Take 5</h1>
         <p className="text-lg opacity-95 leading-relaxed font-medium">
           Take 5 minutes. Take a breath. Take back control.
@@ -175,9 +184,9 @@ export default function Home() {
               placeholder="Type how you feel: 'I'm alone', 'homeless', 'want to talk'..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full p-4 pr-12 text-lg border-2 border-muted rounded-xl focus:border-primary-indigo focus:outline-none transition-colors"
+              className="w-full p-4 pr-12 text-lg border-2 border-muted rounded-xl focus:border-navy-blue focus:outline-none transition-colors bg-background dark:bg-background"
             />
-            <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+            <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={20} />
           </div>
         </section>
 
@@ -222,7 +231,7 @@ export default function Home() {
         <PersonalContacts />
 
         {/* Safe Message */}
-        <section className="bg-gradient-to-r from-accent-teal to-primary-indigo text-white rounded-xl p-6 text-center space-y-3">
+        <section className="bg-gradient-to-r from-sage-green to-navy-blue text-white rounded-xl p-6 text-center space-y-3">
           <h2 className="text-xl font-semibold">You're not alone</h2>
           <p className="text-lg opacity-95">You matter. Your life has value. Help is always available.</p>
           <p className="text-sm opacity-90">This moment is temporary. You can get through this.</p>
@@ -230,12 +239,12 @@ export default function Home() {
       </main>
 
       {/* Bottom Navigation */}
-      <nav className="bg-white border-t border-gray-200 px-6 py-4">
+      <nav className="bg-background dark:bg-background border-t border-muted px-6 py-4">
         <div className="flex justify-around">
           <Button
             variant="ghost"
             className={`flex flex-col items-center space-y-1 ${
-              currentView === "home" ? "text-primary-indigo" : "text-neutral-gray hover:text-primary-indigo"
+              currentView === "home" ? "text-navy-blue" : "text-light-gray hover:text-navy-blue"
             }`}
             onClick={() => setCurrentView("home")}
           >
