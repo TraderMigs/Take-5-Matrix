@@ -2,17 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Force override any yellow backgrounds */
-* {
-  background-color: inherit !important;
-}
-
+/* Clean colors without yellow borders */
 html, body {
   background-color: #ffffff !important;
 }
 
 html.dark, body.dark {
   background-color: #1F2937 !important;
+}
+
+/* Remove all default borders and yellow highlighting */
+button, input, div, section {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+button:focus, input:focus {
+  outline: none !important;
 }
 
 

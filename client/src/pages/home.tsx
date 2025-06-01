@@ -1,228 +1,177 @@
 import { useState } from "react";
-import { Search, Phone, Heart, TriangleAlert, Moon, Sun } from "lucide-react";
+import { Search, Phone, Heart, Lightbulb, Users, Moon, Sun } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import BreathingModal from "@/components/breathing-modal";
-import SupportModuleButton from "@/components/support-module-button";
-import QuickToolButton from "@/components/quick-tool-button";
 import EmergencySection from "@/components/emergency-section";
 import PersonalContacts from "@/components/personal-contacts";
-import { getEmergencyNumber, getCrisisHotline } from "@/lib/emergency-numbers";
-import { getRandomAffirmation } from "@/lib/affirmations";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showBreathingModal, setShowBreathingModal] = useState(false);
-  const [currentView, setCurrentView] = useState("home");
   const { theme, toggleTheme } = useTheme();
 
-  const supportModules = [
+  const quickTools = [
     {
       id: "overwhelmed",
       title: "I feel overwhelmed",
-      description: "Breathing exercises and grounding techniques",
-      icon: "cloud-rain",
-      color: "gentle-orange",
-      bgColor: "bg-yellow-50",
+      subtitle: "Breathing exercises and grounding techniques",
+      icon: "💨",
+      color: "#47556D",
+      action: () => setShowBreathingModal(true)
     },
     {
       id: "homeless",
       title: "I'm homeless",
-      description: "Local resources and immediate assistance",
-      icon: "home",
-      color: "sage-green",
-      bgColor: "bg-green-50",
+      subtitle: "Local resources and immediate assistance", 
+      icon: "🏠",
+      color: "#6B8E7B",
+      action: () => console.log("Homeless resources")
     },
     {
       id: "suicidal",
       title: "I feel suicidal",
-      description: "Immediate professional support available",
-      icon: "heart",
-      color: "emergency-red",
-      bgColor: "bg-red-50",
+      subtitle: "Immediate professional support available",
+      icon: "💜",
+      color: "#47556D", 
+      action: () => console.log("Crisis intervention")
     },
     {
       id: "talk",
       title: "I need someone to talk to",
-      description: "Connect with trained listeners",
-      icon: "message-circle",
-      color: "calm-blue",
-      bgColor: "bg-blue-50",
+      subtitle: "Connect with trained listeners",
+      icon: "💬",
+      color: "#6B8E7B",
+      action: () => console.log("Talk to someone")
     },
     {
       id: "bullied",
       title: "I'm being bullied",
-      description: "Protection resources and support",
-      icon: "shield",
-      color: "purple-500",
-      bgColor: "bg-purple-50",
+      subtitle: "Protection resources and support",
+      icon: "🛡️",
+      color: "#47556D",
+      action: () => console.log("Bullying support")
     },
     {
-      id: "self-harm",
-      title: "I've hurt myself",
-      description: "Safe alternatives and medical guidance",
-      icon: "bandage",
-      color: "pink-500",
-      bgColor: "bg-pink-50",
+      id: "hurt",
+      title: "I've hurt myself", 
+      subtitle: "Safe alternatives and medical guidance",
+      icon: "🩹",
+      color: "#6B8E7B",
+      action: () => console.log("Self-harm support")
     },
     {
-      id: "quiet-support",
+      id: "quiet",
       title: "I just want quiet support",
-      description: "Peaceful exercises and affirmations",
-      icon: "peace",
-      color: "indigo-500",
-      bgColor: "bg-indigo-50",
-    },
+      subtitle: "Peaceful exercises and affirmations",
+      icon: "🕯️",
+      color: "#47556D",
+      action: () => console.log("Quiet support")
+    }
   ];
 
-  const quickTools = [
+  const supportModules = [
     {
       id: "breathing",
       title: "Breathing",
-      subtitle: "5-min guide",
-      icon: "wind",
-      color: "text-sage-green",
-      action: () => setShowBreathingModal(true),
+      description: "5-min guide",
+      icon: "🫁",
+      action: () => setShowBreathingModal(true)
     },
     {
-      id: "affirmations",
+      id: "affirmations", 
       title: "Affirmations",
-      subtitle: "Kind words",
-      icon: "heart",
-      color: "text-navy-blue",
-      action: () => alert(getRandomAffirmation()),
+      description: "Kind words",
+      icon: "💭",
+      action: () => console.log("Affirmations")
     },
     {
       id: "music",
       title: "Calm Music",
-      subtitle: "Soothing sounds",
-      icon: "music",
-      color: "text-sage-green",
-      action: () => {
-        // Open a calming music playlist
-        window.open("https://www.youtube.com/results?search_query=calming+meditation+music", "_blank");
-      },
+      description: "Soothing sounds",
+      icon: "🎵",
+      action: () => console.log("Calm music")
     },
     {
       id: "grounding",
       title: "Grounding",
-      subtitle: "5-4-3-2-1",
-      icon: "anchor",
-      color: "text-navy-blue",
-      action: () => {
-        alert(
-          "Grounding Exercise (5-4-3-2-1):\n\n" +
-          "• Name 5 things you can see\n" +
-          "• Name 4 things you can touch\n" +
-          "• Name 3 things you can hear\n" +
-          "• Name 2 things you can smell\n" +
-          "• Name 1 thing you can taste\n\n" +
-          "Take your time with each step."
-        );
-      },
-    },
+      description: "5-4-3-2-1",
+      icon: "🌱",
+      action: () => console.log("Grounding")
+    }
   ];
 
-  const handleModuleClick = (moduleId: string) => {
-    const module = supportModules.find(m => m.id === moduleId);
-    if (!module) return;
-
-    switch (moduleId) {
-      case "suicidal":
-        if (confirm("You're taking a brave step by reaching out. Would you like to call the crisis hotline now?")) {
-          window.location.href = `tel:${getCrisisHotline()}`;
-        }
-        break;
-      case "overwhelmed":
-        setShowBreathingModal(true);
-        break;
-      case "homeless":
-        alert("Local Resources for Housing:\n\n• National Homeless Hotline: 1-877-482-6959\n• 211 for local services\n• Local shelter information\n• Food assistance programs\n\nYou deserve help and support.");
-        break;
-      case "talk":
-        alert("Connect with Support:\n\n• Crisis Text Line: Text HOME to 741741\n• National Suicide Prevention Lifeline: 988\n• SAMHSA Helpline: 1-800-662-4357\n\nTrained counselors are available 24/7.");
-        break;
-      case "bullied":
-        alert("Anti-Bullying Resources:\n\n• StopBullying.gov\n• Crisis Text Line: Text HOME to 741741\n• Contact school counselor or trusted adult\n• Document incidents\n\nYou don't have to face this alone.");
-        break;
-      case "self-harm":
-        alert("Self-Harm Support:\n\n• Crisis Text Line: Text HOME to 741741\n• National Suicide Prevention Lifeline: 988\n• Consider reaching out to a trusted adult\n• Remove harmful objects from reach\n\nYour safety matters. Please reach out for help.");
-        break;
-      case "quiet-support":
-        setShowBreathingModal(true);
-        break;
-      default:
-        alert(`Opening ${module.title} support resources...`);
-    }
+  const handleQuickToolClick = (tool: any) => {
+    tool.action();
   };
 
   return (
-    <div className="max-w-md mx-auto bg-background min-h-screen shadow-lg">
+    <div className="max-w-md mx-auto bg-white dark:bg-gray-900 min-h-screen">
       {/* Header */}
-      <header className="text-white text-center py-8 px-6 relative" style={{ background: 'linear-gradient(to right, #47556D, #6B8E7B)' }}>
+      <header className="text-white text-center py-8 px-6 relative" style={{ background: 'linear-gradient(135deg, #47556D 0%, #6B8E7B 100%)' }}>
         <button
           onClick={toggleTheme}
-          className="absolute top-4 right-4 p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+          className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
           aria-label="Toggle theme"
         >
-          {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
+          {theme === "light" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
         </button>
-        <h1 className="text-4xl font-bold mb-3 tracking-wide">Take 5</h1>
-        <p className="text-lg opacity-95 leading-relaxed font-medium">
-          Take 5 minutes. Take a breath. Take back control.
-        </p>
+        
+        <h1 className="text-4xl font-bold mb-2">Take 5</h1>
+        <p className="text-lg opacity-90">Take 5 minutes. Take a breath. Take back control.</p>
       </header>
 
-      {/* Main Content */}
-      <main className="px-6 py-6 space-y-6">
-        {/* Search Section */}
+      <main className="p-6 space-y-6 pb-20 bg-white dark:bg-gray-900">
+        {/* Search Bar */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <input
+            type="text"
+            placeholder="Type how you feel: 'I'm alone', 'homeless', 'want to die'..."
+            className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm border-0"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+
+        {/* Emergency Support */}
+        <EmergencySection />
+
+        {/* Quick Tools */}
         <section className="space-y-4">
-          <div className="relative">
-            <Input
-              type="text"
-              placeholder="Type how you feel: 'I'm alone', 'homeless', 'want to talk'..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full p-4 pr-12 text-lg border-2 border-muted rounded-xl focus:border-navy-blue focus:outline-none transition-colors bg-background dark:bg-background"
-            />
-            <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={20} />
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">How can we support you right now?</h2>
+          <div className="space-y-3">
+            {quickTools.map((tool) => (
+              <button
+                key={tool.id}
+                onClick={() => handleQuickToolClick(tool)}
+                className="w-full p-4 rounded-xl bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left border-0"
+              >
+                <div className="flex items-start space-x-3">
+                  <div className="text-2xl">{tool.icon}</div>
+                  <div>
+                    <h3 className="font-medium text-gray-900 dark:text-white">{tool.title}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{tool.subtitle}</p>
+                  </div>
+                </div>
+              </button>
+            ))}
           </div>
         </section>
-
-        {/* Emergency Section */}
-        <EmergencySection />
 
         {/* Support Modules */}
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            How can we support you right now?
-          </h2>
-
-          <div className="grid gap-4">
-            {supportModules
-              .filter(module =>
-                searchQuery === "" ||
-                module.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                module.description.toLowerCase().includes(searchQuery.toLowerCase())
-              )
-              .map((module) => (
-                <SupportModuleButton
-                  key={module.id}
-                  module={module}
-                  onClick={() => handleModuleClick(module.id)}
-                />
-              ))}
-          </div>
-        </section>
-
-        {/* Quick Tools */}
-        <section className="bg-soft-bg rounded-xl p-6 space-y-4 border border-muted">
-          <h2 className="text-xl font-semibold text-foreground mb-4">Quick Support Tools</h2>
-
-          <div className="grid grid-cols-2 gap-4">
-            {quickTools.map((tool) => (
-              <QuickToolButton key={tool.id} tool={tool} onClick={tool.action} />
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Additional Support</h2>
+          <div className="grid grid-cols-2 gap-3">
+            {supportModules.map((module) => (
+              <button
+                key={module.id}
+                onClick={() => module.action()}
+                className="p-4 rounded-xl bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-center border-0"
+              >
+                <div className="text-2xl mb-2">{module.icon}</div>
+                <h3 className="font-medium text-gray-900 dark:text-white text-sm">{module.title}</h3>
+                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{module.description}</p>
+              </button>
             ))}
           </div>
         </section>
@@ -231,70 +180,17 @@ export default function Home() {
         <PersonalContacts />
 
         {/* Safe Message */}
-        <section className="text-white rounded-xl p-6 text-center space-y-3" style={{ background: 'linear-gradient(to right, #6B8E7B, #47556D)' }}>
+        <section className="text-white rounded-xl p-6 text-center space-y-3" style={{ background: 'linear-gradient(135deg, #6B8E7B 0%, #47556D 100%)' }}>
           <h2 className="text-xl font-semibold">You're not alone</h2>
           <p className="text-lg opacity-95">You matter. Your life has value. Help is always available.</p>
           <p className="text-sm opacity-90">This moment is temporary. You can get through this.</p>
         </section>
       </main>
 
-      {/* Bottom Navigation */}
-      <nav className="bg-background dark:bg-background border-t border-muted px-6 py-4">
-        <div className="flex justify-around">
-          <Button
-            variant="ghost"
-            className={`flex flex-col items-center space-y-1 ${
-              currentView === "home" ? "text-navy-blue" : "text-light-gray hover:text-navy-blue"
-            }`}
-            onClick={() => setCurrentView("home")}
-          >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-            </svg>
-            <span className="text-xs font-medium">Home</span>
-          </Button>
-
-          <Button
-            variant="ghost"
-            className="flex flex-col items-center space-y-1 text-light-gray hover:text-navy-blue transition-colors"
-            onClick={() => alert("Settings would allow personalization of the app, language selection, and emergency contact management.")}
-          >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
-            </svg>
-            <span className="text-xs font-medium">Settings</span>
-          </Button>
-
-          <Button
-            variant="ghost"
-            className="flex flex-col items-center space-y-1 text-light-gray hover:text-navy-blue transition-colors"
-            onClick={() => alert("Resources would display additional mental health information, local services, and educational content.")}
-          >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
-            </svg>
-            <span className="text-xs font-medium">Resources</span>
-          </Button>
-
-          <Button
-            variant="ghost"
-            className="flex flex-col items-center space-y-1 text-light-gray hover:text-navy-blue transition-colors"
-            onClick={() => {
-              if (confirm("This will call emergency services. Continue?")) {
-                window.location.href = `tel:${getEmergencyNumber()}`;
-              }
-            }}
-          >
-            <TriangleAlert className="w-5 h-5" />
-            <span className="text-xs font-medium">SOS</span>
-          </Button>
-        </div>
-      </nav>
-
       {/* Breathing Modal */}
-      <BreathingModal
-        isOpen={showBreathingModal}
-        onClose={() => setShowBreathingModal(false)}
+      <BreathingModal 
+        isOpen={showBreathingModal} 
+        onClose={() => setShowBreathingModal(false)} 
       />
     </div>
   );
