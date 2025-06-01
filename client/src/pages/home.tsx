@@ -158,9 +158,9 @@ export default function Home() {
   return (
     <div className="max-w-md mx-auto bg-white min-h-screen shadow-lg">
       {/* Header */}
-      <header className="bg-gradient-to-r from-calm-teal to-calm-blue text-white text-center py-8 px-6">
-        <h1 className="text-3xl font-bold mb-2">Take 5</h1>
-        <p className="text-lg opacity-90 leading-relaxed">
+      <header className="bg-gradient-to-r from-teal-600 to-blue-600 text-white text-center py-8 px-6">
+        <h1 className="text-4xl font-bold mb-3 tracking-wide">Take 5</h1>
+        <p className="text-lg opacity-95 leading-relaxed font-medium">
           Take 5 minutes. Take a breath. Take back control.
         </p>
       </header>
@@ -208,7 +208,7 @@ export default function Home() {
         </section>
 
         {/* Quick Tools */}
-        <section className="bg-gradient-to-r from-teal-50 to-blue-50 rounded-xl p-6 space-y-4">
+        <section className="bg-gradient-to-r from-slate-50 to-gray-50 rounded-xl p-6 space-y-4 border border-gray-100">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Quick Support Tools</h2>
 
           <div className="grid grid-cols-2 gap-4">
@@ -222,10 +222,10 @@ export default function Home() {
         <PersonalContacts />
 
         {/* Safe Message */}
-        <section className="bg-gradient-to-r from-calm-teal to-sage-green text-white rounded-xl p-6 text-center space-y-3">
+        <section className="bg-gradient-to-r from-teal-600 to-emerald-600 text-white rounded-xl p-6 text-center space-y-3">
           <h2 className="text-xl font-semibold">You're not alone</h2>
-          <p className="text-lg opacity-90">You matter. Your life has value. Help is always available.</p>
-          <p className="text-sm opacity-80">This moment is temporary. You can get through this.</p>
+          <p className="text-lg opacity-95">You matter. Your life has value. Help is always available.</p>
+          <p className="text-sm opacity-90">This moment is temporary. You can get through this.</p>
         </section>
       </main>
 

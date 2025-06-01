@@ -91,10 +91,13 @@ export default function PersonalContacts() {
               Add a trusted contact
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-sm w-full mx-4">
+          <DialogContent className="max-w-sm w-full mx-4" aria-describedby="contact-description">
             <DialogHeader>
               <DialogTitle>Add Trusted Contact</DialogTitle>
             </DialogHeader>
+            <div id="contact-description" className="sr-only">
+              Add a trusted person you can reach out to during difficult times
+            </div>
             <div className="space-y-4">
               <div>
                 <Label htmlFor="name">Name</Label>
