@@ -29,7 +29,7 @@ export default function EmergencySection() {
         </Button>
         <Button
           onClick={handleCrisisCall}
-          className="w-full bg-calm-blue hover:bg-indigo-600 text-white font-semibold py-4 px-6 rounded-xl transition-colors flex items-center justify-center text-lg"
+          className="w-full bg-primary-indigo hover:bg-accent-teal text-white font-semibold py-4 px-6 rounded-xl transition-colors flex items-center justify-center text-lg"
         >
           <Heart className="mr-3" size={20} />
           Crisis Hotline: {getCrisisHotline()}

@@ -80,7 +80,7 @@ export default function Home() {
       title: "Breathing",
       subtitle: "5-min guide",
       icon: "wind",
-      color: "text-calm-teal",
+      color: "text-accent-teal",
       action: () => setShowBreathingModal(true),
     },
     {
@@ -88,7 +88,7 @@ export default function Home() {
       title: "Affirmations",
       subtitle: "Kind words",
       icon: "heart",
-      color: "text-pink-500",
+      color: "text-primary-indigo",
       action: () => alert(getRandomAffirmation()),
     },
     {
@@ -96,7 +96,7 @@ export default function Home() {
       title: "Calm Music",
       subtitle: "Soothing sounds",
       icon: "music",
-      color: "text-purple-500",
+      color: "text-accent-teal",
       action: () => {
         // Open a calming music playlist
         window.open("https://www.youtube.com/results?search_query=calming+meditation+music", "_blank");
@@ -107,7 +107,7 @@ export default function Home() {
       title: "Grounding",
       subtitle: "5-4-3-2-1",
       icon: "anchor",
-      color: "text-indigo-500",
+      color: "text-primary-indigo",
       action: () => {
         alert(
           "Grounding Exercise (5-4-3-2-1):\n\n" +
@@ -247,7 +247,7 @@ export default function Home() {
 
           <Button
             variant="ghost"
-            className="flex flex-col items-center space-y-1 text-gray-400 hover:text-calm-blue transition-colors"
+            className="flex flex-col items-center space-y-1 text-neutral-gray hover:text-primary-indigo transition-colors"
             onClick={() => alert("Settings would allow personalization of the app, language selection, and emergency contact management.")}
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -258,7 +258,7 @@ export default function Home() {
 
           <Button
             variant="ghost"
-            className="flex flex-col items-center space-y-1 text-gray-400 hover:text-calm-blue transition-colors"
+            className="flex flex-col items-center space-y-1 text-neutral-gray hover:text-primary-indigo transition-colors"
             onClick={() => alert("Resources would display additional mental health information, local services, and educational content.")}
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -269,7 +269,7 @@ export default function Home() {
 
           <Button
             variant="ghost"
-            className="flex flex-col items-center space-y-1 text-gray-400 hover:text-calm-blue transition-colors"
+            className="flex flex-col items-center space-y-1 text-neutral-gray hover:text-primary-indigo transition-colors"
             onClick={() => {
               if (confirm("This will call emergency services. Continue?")) {
                 window.location.href = `tel:${getEmergencyNumber()}`;
