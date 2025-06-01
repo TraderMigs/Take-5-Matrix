@@ -5,20 +5,20 @@
 
 
 :root {
-  --background: 255 255 255; /* #FFFFFF */
-  --foreground: 47 55 74; /* #2F374A */
-  --muted: 245 245 245; /* #F5F5F5 */
-  --muted-foreground: 156 163 175; /* #9CA3AF */
+  --background: 255 255 255; /* #FFFFFF - White background */
+  --foreground: 71 85 105; /* #47556D - Navy blue text */
+  --muted: 243 244 246; /* #F3F4F6 - Light gray */
+  --muted-foreground: 156 163 175; /* #9CA3AF - Warm light gray */
   --popover: 255 255 255; /* #FFFFFF */
-  --popover-foreground: 47 55 74; /* #2F374A */
+  --popover-foreground: 71 85 105; /* #47556D */
   --card: 255 255 255; /* #FFFFFF */
-  --card-foreground: 47 55 74; /* #2F374A */
+  --card-foreground: 71 85 105; /* #47556D */
   --border: 229 231 235; /* #E5E7EB */
-  --input: 229 231 235; /* #E5E7EB */
+  --input: 243 244 246; /* #F3F4F6 */
   --primary: 71 85 105; /* #47556D - Soft Navy Blue */
   --primary-foreground: 255 255 255; /* #FFFFFF */
-  --secondary: 156 163 175; /* #9CA3AF - Warm Light Gray */
-  --secondary-foreground: 47 55 74; /* #2F374A */
+  --secondary: 243 244 246; /* #F3F4F6 */
+  --secondary-foreground: 71 85 105; /* #47556D */
   --accent: 107 142 123; /* #6B8E7B - Muted Sage Green */
   --accent-foreground: 255 255 255; /* #FFFFFF */
   --destructive: 239 68 68; /* #EF4444 */
@@ -30,29 +30,29 @@
   --navy-blue: 71 85 105; /* #47556D - Soft Navy Blue */
   --sage-green: 107 142 123; /* #6B8E7B - Muted Sage Green */
   --light-gray: 156 163 175; /* #9CA3AF - Warm Light Gray */
-  --soft-bg: 249 250 251; /* #F9FAFB */
+  --soft-bg: 243 244 246; /* #F3F4F6 */
   --emergency-red: 239 68 68; /* #EF4444 */
 }
 
 .dark {
   --background: 31 41 55; /* #1F2937 - Charcoal Black */
-  --foreground: 249 250 251; /* #F9FAFB */
-  --muted: 55 65 81; /* #374151 */
+  --foreground: 255 255 255; /* #FFFFFF - White text */
+  --muted: 55 65 81; /* #374151 - Dark muted */
   --muted-foreground: 156 163 175; /* #9CA3AF */
   --popover: 31 41 55; /* #1F2937 */
-  --popover-foreground: 249 250 251; /* #F9FAFB */
+  --popover-foreground: 255 255 255; /* #FFFFFF */
   --card: 31 41 55; /* #1F2937 */
-  --card-foreground: 249 250 251; /* #F9FAFB */
+  --card-foreground: 255 255 255; /* #FFFFFF */
   --border: 55 65 81; /* #374151 */
   --input: 55 65 81; /* #374151 */
   --primary: 107 142 123; /* #6B8E7B - Sage Green as primary in dark */
   --primary-foreground: 31 41 55; /* #1F2937 */
-  --secondary: 71 85 105; /* #47556D - Navy Blue as secondary in dark */
-  --secondary-foreground: 249 250 251; /* #F9FAFB */
-  --accent: 156 163 175; /* #9CA3AF - Light Gray as accent in dark */
-  --accent-foreground: 31 41 55; /* #1F2937 */
+  --secondary: 55 65 81; /* #374151 */
+  --secondary-foreground: 255 255 255; /* #FFFFFF */
+  --accent: 71 85 105; /* #47556D - Navy Blue as accent in dark */
+  --accent-foreground: 255 255 255; /* #FFFFFF */
   --destructive: 239 68 68; /* #EF4444 */
-  --destructive-foreground: 249 250 251; /* #F9FAFB */
+  --destructive-foreground: 255 255 255; /* #FFFFFF */
   --ring: 107 142 123; /* #6B8E7B */
 }
 
@@ -63,7 +63,7 @@
 
   body {
     @apply font-inter antialiased;
-    background-color: hsl(var(--soft-bg));
+    background-color: hsl(var(--background));
     color: hsl(var(--foreground));
     font-family: 'Inter', sans-serif;
   }

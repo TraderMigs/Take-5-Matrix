@@ -158,7 +158,7 @@ export default function Home() {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-background dark:bg-background min-h-screen shadow-lg">
+    <div className="max-w-md mx-auto bg-background min-h-screen shadow-lg">
       {/* Header */}
       <header className="text-white text-center py-8 px-6 relative" style={{ background: 'linear-gradient(to right, #47556D, #6B8E7B)' }}>
         <button
