@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Force override any yellow backgrounds */
+* {
+  background-color: inherit !important;
+}
+
+html, body {
+  background-color: #ffffff !important;
+}
+
+html.dark, body.dark {
+  background-color: #1F2937 !important;
+}
+
 
 
 :root {
@@ -63,9 +76,21 @@
 
   body {
     @apply font-inter antialiased;
-    background-color: hsl(var(--background));
+    background-color: #ffffff !important;
     color: hsl(var(--foreground));
     font-family: 'Inter', sans-serif;
+  }
+
+  body.dark {
+    background-color: #1F2937 !important;
+  }
+
+  html {
+    background-color: #ffffff !important;
+  }
+
+  html.dark {
+    background-color: #1F2937 !important;
   }
 }
 
