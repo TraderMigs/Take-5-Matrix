@@ -1,0 +1,130 @@
+App Name: Take 5
+
+Purpose:Build a mobile-first mental wellness web app called Take 5, designed to help people in emotional crisis or distress take a moment to pause, breathe, and access help quickly. This app should feel like a safe space — simple, intuitive, non-judgmental — and offer real-time access to tools, support, or someone to reach out to in their darkest moments.
+
+🌍 Who It’s For:
+
+Military veterans, like myself, struggling with PTSD, depression, or suicidal ideation
+
+Teens and young people facing bullying, anxiety, or family issues
+
+People experiencing homelessness or isolation
+
+Anyone dealing with emotional overload, fear, or hopelessness
+
+People of all backgrounds, ages, and languages
+
+🧠 Home Screen Design
+
+Layout:
+
+App name at top: Take 5
+
+Subheading or tagline below: “Take 5 minutes. Take a breath. Take back control.”
+
+Search bar underneath (user types how they feel: "I’m alone," "homeless," "want to talk")
+
+Just below that: show location-based emergency contact number (911, suicide hotline, etc.)
+
+Main Menu:
+Below the search bar, display clear, clickable choices such as:
+
+I feel overwhelmed
+
+I’m homeless
+
+I feel suicidal
+
+I need someone to talk to
+
+I’m being bullied
+
+I’ve hurt myself
+
+I just want quiet support
+
+Each button leads to a specific support module.
+
+🧩 Support Modules (Pages or Popups)
+
+Each module includes:
+
+A calm message: “You’re not alone. You matter.”
+
+Local hotline or emergency call button
+
+Option to text/call a saved emergency contact
+
+Quiet support options like:
+
+Guided breathing
+
+Positive affirmations (text/audio/video)
+
+Calming music or safe YouTube content
+
+Short mental reset exercises
+
+Let users choose what level of interaction they’re ready for — even if it’s none.
+
+🛠 Onboarding Personalization
+
+During setup or on first use, ask:
+
+Are you a veteran?
+
+Are you under 18?
+
+Would you like to add trusted emergency contacts?
+
+Would you like a personalized home screen?
+
+Based on answers:
+
+Display relevant suicide prevention hotlines (like VA lines for vets)
+
+Offer to add personal contact buttons (parent, teacher, therapist, friend)
+
+Automatically show appropriate emergency services for the user’s country (911, 999, etc.)
+
+🌐 Global and Inclusive Design
+
+App should detect user’s country and show local emergency numbers
+
+Support multiple languages based on user device/browser settings
+
+Fully responsive layout (mobile-first)
+
+Gender, age, cultural, and language inclusive
+
+Anonymous — no login required to use main features
+
+🔇 For Users Who Don’t Want to Talk
+
+If they choose “I don’t want to talk right now,” lead them to:
+
+A peaceful interface with:
+
+Calming visuals
+
+Breathing timers
+
+Grounding techniques
+
+Soothing affirmations or short positive quotes
+
+Peaceful YouTube videos or soundtracks
+
+All aimed at slowing down their racing thoughts and helping them feel safe for just one more minute
+
+✨ Optional Technical Preferences (If Hostinger AI Supports)
+
+PWA-ready (for installable experience)
+
+Search bar must return related modules by emotion or keyword
+
+Customizable home screen with drag-and-drop icons or saved buttons
+
+Ability to store local emergency contacts (stored locally, not online)
+
+Tone and Goal:Make Take 5 feel like a safe, non-intrusive space. It’s not a therapy platform. It’s not a cold chatbot. It’s that moment where a person in crisis can take a breath, get what they need, and not feel alone — even if just for five minutes.
