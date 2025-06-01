@@ -34,13 +34,13 @@ const iconMap = {
 };
 
 const colorMap = {
-  "gentle-orange": "text-primary-indigo",
-  "sage-green": "text-accent-teal",
+  "gentle-orange": "text-navy-blue",
+  "sage-green": "text-sage-green",
   "emergency-red": "text-emergency-red",
-  "calm-blue": "text-primary-indigo",
-  "purple-500": "text-primary-indigo",
-  "pink-500": "text-accent-teal",
-  "indigo-500": "text-primary-indigo",
+  "calm-blue": "text-navy-blue",
+  "purple-500": "text-navy-blue",
+  "pink-500": "text-sage-green",
+  "indigo-500": "text-navy-blue",
 };
 
 export default function SupportModuleButton({ module, onClick }: SupportModuleButtonProps) {
@@ -51,7 +51,7 @@ export default function SupportModuleButton({ module, onClick }: SupportModuleBu
     <Button
       onClick={onClick}
       variant="outline"
-      className="w-full bg-white border-2 border-muted hover:border-primary-indigo hover:bg-soft-bg p-5 rounded-xl transition-all text-left h-auto"
+      className="w-full bg-background dark:bg-background border-2 border-muted hover:border-navy-blue hover:bg-soft-bg p-5 rounded-xl transition-all text-left h-auto"
     >
       <div className="flex items-center w-full">
         <div className={`w-12 h-12 ${module.bgColor} rounded-xl flex items-center justify-center mr-4`}>

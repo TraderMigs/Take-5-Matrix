@@ -82,7 +82,7 @@ export default function Home() {
       title: "Breathing",
       subtitle: "5-min guide",
       icon: "wind",
-      color: "text-accent-teal",
+      color: "text-sage-green",
       action: () => setShowBreathingModal(true),
     },
     {
@@ -90,7 +90,7 @@ export default function Home() {
       title: "Affirmations",
       subtitle: "Kind words",
       icon: "heart",
-      color: "text-primary-indigo",
+      color: "text-navy-blue",
       action: () => alert(getRandomAffirmation()),
     },
     {
@@ -98,7 +98,7 @@ export default function Home() {
       title: "Calm Music",
       subtitle: "Soothing sounds",
       icon: "music",
-      color: "text-accent-teal",
+      color: "text-sage-green",
       action: () => {
         // Open a calming music playlist
         window.open("https://www.youtube.com/results?search_query=calming+meditation+music", "_blank");
@@ -109,7 +109,7 @@ export default function Home() {
       title: "Grounding",
       subtitle: "5-4-3-2-1",
       icon: "anchor",
-      color: "text-primary-indigo",
+      color: "text-navy-blue",
       action: () => {
         alert(
           "Grounding Exercise (5-4-3-2-1):\n\n" +

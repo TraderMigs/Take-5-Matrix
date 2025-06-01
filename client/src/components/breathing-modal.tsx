@@ -91,8 +91,8 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
 
         <div className="space-y-6 p-4">
           <div className="flex justify-center">
-            <div className="w-32 h-32 rounded-full border-4 border-primary-indigo flex items-center justify-center">
-              <div className="w-20 h-20 bg-gradient-to-r from-primary-indigo to-accent-teal rounded-full flex items-center justify-center text-white font-bold text-lg">
+            <div className="w-32 h-32 rounded-full border-4 border-navy-blue flex items-center justify-center">
+              <div className="w-20 h-20 bg-gradient-to-r from-navy-blue to-sage-green rounded-full flex items-center justify-center text-white font-bold text-lg">
                 {count}
               </div>
             </div>
@@ -108,7 +108,7 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
           <div className="flex space-x-3">
             <Button
               onClick={isActive ? stopBreathing : startBreathing}
-              className="flex-1 bg-primary-indigo hover:bg-accent-teal text-white py-3 px-6 rounded-xl transition-colors"
+              className="flex-1 bg-navy-blue hover:bg-sage-green text-white py-3 px-6 rounded-xl transition-colors"
             >
               {isActive ? "Stop" : "Start"}
             </Button>
