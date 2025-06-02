@@ -444,36 +444,33 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                             <>
                               <Button
                                 size="sm"
-                                variant="outline"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   startEditingEntry(entry);
                                 }}
-                                className="border-teal-400 text-teal-600 hover:bg-teal-50 dark:hover:bg-teal-900"
+                                className="bg-stone-200 hover:bg-stone-300 text-white p-2 min-w-0 h-8 w-8"
                               >
-                                <Edit className="w-4 h-4" />
+                                <Edit className="w-3 h-3" />
                               </Button>
                               <Button
                                 size="sm"
-                                variant="outline"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   exportEntry(entry);
                                 }}
-                                className="border-blue-400 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900"
+                                className="bg-stone-200 hover:bg-stone-300 text-white p-2 min-w-0 h-8 w-8"
                               >
-                                <Download className="w-4 h-4" />
+                                <Download className="w-3 h-3" />
                               </Button>
                               <Button
                                 size="sm"
-                                variant="outline"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   deleteEntry(entryId);
                                 }}
-                                className="border-red-400 text-red-600 hover:bg-red-50 dark:hover:bg-red-900"
+                                className="bg-stone-200 hover:bg-stone-300 text-white p-2 min-w-0 h-8 w-8"
                               >
-                                <Trash2 className="w-4 h-4" />
+                                <Trash2 className="w-3 h-3" />
                               </Button>
                             </>
                           )}
