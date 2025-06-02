@@ -85,7 +85,7 @@ export default function PersonalContacts() {
           <DialogTrigger asChild>
             <Button
               variant="outline"
-              className="w-full border-2 border-dashed border-muted hover:border-navy-blue p-4 rounded-xl transition-colors text-center text-gray-800 dark:text-white hover:text-navy-blue"
+              className="w-full bg-yellow-600 hover:bg-yellow-700 border-2 border-yellow-700 hover:border-yellow-800 p-4 rounded-xl transition-colors text-center text-black"
             >
               <Plus className="mr-2" size={16} />
               Add a trusted contact
@@ -100,41 +100,44 @@ export default function PersonalContacts() {
             </div>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="name">Name</Label>
+                <Label htmlFor="name" className="text-black dark:text-white">Name</Label>
                 <Input
                   id="name"
                   value={newContact.name}
                   onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
                   placeholder="Enter name"
+                  className="bg-white dark:bg-black text-black dark:text-white border-black dark:border-white"
                 />
               </div>
               <div>
-                <Label htmlFor="phone">Phone Number</Label>
+                <Label htmlFor="phone" className="text-black dark:text-white">Phone Number</Label>
                 <Input
                   id="phone"
                   type="tel"
                   value={newContact.phone}
                   onChange={(e) => setNewContact({ ...newContact, phone: e.target.value })}
                   placeholder="Enter phone number"
+                  className="bg-white dark:bg-black text-black dark:text-white border-black dark:border-white"
                 />
               </div>
               <div>
-                <Label htmlFor="relationship">Relationship</Label>
+                <Label htmlFor="relationship" className="text-black dark:text-white">Relationship</Label>
                 <Input
                   id="relationship"
                   value={newContact.relationship}
                   onChange={(e) => setNewContact({ ...newContact, relationship: e.target.value })}
                   placeholder="e.g., Therapist, Friend, Family"
+                  className="bg-white dark:bg-black text-black dark:text-white border-black dark:border-white"
                 />
               </div>
               <div className="flex space-x-2">
-                <Button onClick={handleAddContact} className="flex-1">
+                <Button onClick={handleAddContact} className="flex-1 bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200">
                   Add Contact
                 </Button>
                 <Button
                   variant="outline"
                   onClick={() => setIsAddingContact(false)}
-                  className="flex-1"
+                  className="flex-1 bg-white dark:bg-black text-black dark:text-white border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-900"
                 >
                   Cancel
                 </Button>
