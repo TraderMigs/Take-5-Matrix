@@ -134,7 +134,7 @@ export default function Home() {
         </button>
         
         <h1 className="text-4xl font-bold mb-2">Take 5</h1>
-        <p className="text-lg opacity-90">Take 5 minutes. Take a breath. Take back control.</p>
+        <p className="text-lg opacity-90">Take a breath. Take back control.</p>
       </header>
 
       <main className="p-6 space-y-6 pb-20 bg-white dark:bg-black">
