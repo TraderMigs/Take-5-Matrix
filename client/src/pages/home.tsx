@@ -9,6 +9,7 @@ import LanguageSelector from "@/components/language-selector";
 import LocationSelector from "@/components/location-selector";
 import AIChat from "@/components/ai-chat";
 import UserAccount from "@/components/user-account-new";
+import UserProfileFullscreen from "@/components/user-profile-fullscreen";
 import EmergencyContactDisplay from "@/components/emergency-contact-display";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -284,14 +285,26 @@ export default function Home() {
         onClose={() => setShowAIChat(false)}
       />
 
-      {/* User Account Modal */}
-      <UserAccount
-        isOpen={showUserAccount}
-        onClose={() => setShowUserAccount(false)}
-        currentUser={currentUser}
-        onLogin={setCurrentUser}
-        onLogout={() => setCurrentUser(null)}
-      />
+      {/* User Account Modal for Login/Signup */}
+      {!currentUser && (
+        <UserAccount
+          isOpen={showUserAccount}
+          onClose={() => setShowUserAccount(false)}
+          currentUser={currentUser}
+          onLogin={setCurrentUser}
+          onLogout={() => setCurrentUser(null)}
+        />
+      )}
+
+      {/* Full Screen Profile for Logged In Users */}
+      {currentUser && (
+        <UserProfileFullscreen
+          isOpen={showUserAccount}
+          onClose={() => setShowUserAccount(false)}
+          currentUser={currentUser}
+          onLogout={() => setCurrentUser(null)}
+        />
+      )}
 
       {/* Emergency Contact Display Modal */}
       <EmergencyContactDisplay

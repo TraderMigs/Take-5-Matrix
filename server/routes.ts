@@ -236,13 +236,18 @@ Now respond specifically to their latest message, acknowledging what they're act
 
   app.put('/api/auth/profile', async (req, res) => {
     try {
-      const { displayName, bio, userId } = req.body;
+      const { displayName, bio, userId, profileImage } = req.body;
       
       if (!userId) {
         return res.status(400).send('User ID required');
       }
 
-      const updatedUser = await storage.updateUserProfile(userId, { displayName, bio });
+      const updateData: any = {};
+      if (displayName !== undefined) updateData.displayName = displayName;
+      if (bio !== undefined) updateData.bio = bio;
+      if (profileImage !== undefined) updateData.profileImage = profileImage;
+
+      const updatedUser = await storage.updateUserProfile(userId, updateData);
       res.json(updatedUser);
     } catch (error) {
       console.error('Profile update error:', error);

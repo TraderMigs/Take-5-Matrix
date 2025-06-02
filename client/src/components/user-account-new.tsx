@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -35,6 +35,27 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
   const [profileImage, setProfileImage] = useState(currentUser?.profileImage || "");
   const { toast } = useToast();
 
+  // Load existing diary entries when user opens profile
+  useEffect(() => {
+    if (currentUser && isOpen) {
+      loadDiaryEntries();
+    }
+  }, [currentUser, isOpen]);
+
+  const loadDiaryEntries = async () => {
+    if (!currentUser) return;
+    
+    try {
+      const response = await fetch(`/api/diary?userId=${currentUser.id}`);
+      if (response.ok) {
+        const entries = await response.json();
+        setDiaryEntries(entries);
+      }
+    } catch (error) {
+      console.error('Failed to load diary entries:', error);
+    }
+  };
+
   // Auto-save profile quote when it changes
   const saveProfileQuote = async (quote: string) => {
     if (!currentUser) return;
@@ -61,6 +82,47 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
     setTimeout(() => {
       saveProfileQuote(trimmedValue);
     }, 1000);
+  };
+
+  const handlePhotoUpload = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          const base64 = e.target?.result as string;
+          setProfileImage(base64);
+          
+          // Save to backend
+          try {
+            await fetch('/api/auth/profile', {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ 
+                userId: currentUser.id, 
+                profileImage: base64 
+              }),
+            });
+            toast({
+              title: "Photo updated",
+              description: "Your profile photo has been saved.",
+              className: "bg-green-800 border-green-700 text-white",
+            });
+          } catch (error) {
+            toast({
+              title: "Upload failed",
+              description: "Could not save your photo. Please try again.",
+              variant: "destructive",
+            });
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
   };
 
 
@@ -219,8 +281,8 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
 
 
 
-  const saveDiaryEntry = async () => {
-    if (!newEntryContent.trim()) return;
+  const handleSaveDiaryEntry = async () => {
+    if (!newEntryTitle.trim() || !newEntryContent.trim()) return;
     
     setIsLoading(true);
     try {
@@ -416,7 +478,7 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
                     className="bg-white dark:bg-black border-2 border-teal-400 text-black dark:text-white"
                   />
                   <div className="flex gap-2">
-                    <Button onClick={saveDiaryEntry} className="bg-teal-500 hover:bg-teal-600 text-white">
+                    <Button onClick={handleSaveDiaryEntry} className="bg-teal-500 hover:bg-teal-600 text-white">
                       Save Entry
                     </Button>
                     <Button 
