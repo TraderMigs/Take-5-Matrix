@@ -154,6 +154,7 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
 
   const handleClose = () => {
     stopBreathing();
+    stopAudio(); // Ensure audio is stopped when modal closes
     onClose();
   };
 
@@ -182,7 +183,7 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
             <p className="text-lg font-medium text-black dark:text-white">
               {phaseInstructions[phase]}
             </p>
-            <p className="text-gray-600 dark:text-gray-400">Follow the timer and breathe deeply</p>
+            <p className="text-gray-600 dark:text-gray-400">Follow the timer and breathe deeply with gentle audio guidance</p>
           </div>
 
           <div className="flex space-x-3">
