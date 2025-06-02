@@ -96,6 +96,9 @@ export async function sendVerificationEmail(
     return true;
   } catch (error) {
     console.error('SendGrid email error:', error);
+    if (error.response) {
+      console.error('SendGrid response body:', error.response.body);
+    }
     return false;
   }
 }

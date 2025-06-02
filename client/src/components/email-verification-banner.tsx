@@ -46,15 +46,15 @@ export default function EmailVerificationBanner({ userEmail, onDismiss }: EmailV
   };
 
   return (
-    <div className="bg-amber-100 dark:bg-amber-900/30 border-l-4 border-amber-500 p-4 mx-4 mt-4 rounded-r-lg">
+    <div className="bg-green-100 dark:bg-green-900/30 border-l-4 border-green-700 p-4 mx-4 mt-4 rounded-r-lg">
       <div className="flex items-start justify-between">
         <div className="flex items-start space-x-3">
-          <Mail className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5" />
+          <Mail className="w-5 h-5 text-green-700 dark:text-green-400 mt-0.5" />
           <div className="flex-1">
-            <h3 className="text-sm font-semibold text-amber-800 dark:text-amber-200">
+            <h3 className="text-sm font-semibold text-green-800 dark:text-green-200">
               Verify your email to unlock full access to Take 5
             </h3>
-            <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
+            <p className="text-sm text-green-700 dark:text-green-300 mt-1">
               We sent a verification link to <strong>{userEmail}</strong>. 
               Click the link in your email to access AI chat, journaling, and all features.
             </p>
@@ -63,11 +63,11 @@ export default function EmailVerificationBanner({ userEmail, onDismiss }: EmailV
                 onClick={handleResendEmail}
                 disabled={isResending}
                 size="sm"
-                className="bg-amber-600 hover:bg-amber-700 text-white text-xs"
+                className="bg-green-700 hover:bg-green-800 text-white text-xs"
               >
                 {isResending ? "Sending..." : "Resend Email"}
               </Button>
-              <span className="text-xs text-amber-600 dark:text-amber-400">
+              <span className="text-xs text-green-700 dark:text-green-400">
                 Check your spam folder if you don't see it
               </span>
             </div>
@@ -76,7 +76,7 @@ export default function EmailVerificationBanner({ userEmail, onDismiss }: EmailV
         {onDismiss && (
           <button
             onClick={onDismiss}
-            className="text-amber-600 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-200"
+            className="text-green-700 dark:text-green-400 hover:text-green-800 dark:hover:text-green-200"
           >
             <X className="w-4 h-4" />
           </button>
