@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, Phone, Heart, Lightbulb, Users, Moon, Sun } from "lucide-react";
+import { Search, Phone, Heart, Lightbulb, Users, Moon, Sun, MessageCircle } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 import { useLanguage } from "@/hooks/use-language";
 import BreathingModal from "@/components/breathing-modal";
@@ -7,6 +7,7 @@ import EmergencySection from "@/components/emergency-section";
 import PersonalContacts from "@/components/personal-contacts";
 import LanguageSelector from "@/components/language-selector";
 import LocationSelector from "@/components/location-selector";
+import AIChat from "@/components/ai-chat";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
   const [showBreathingModal, setShowBreathingModal] = useState(false);
   const [showActionModal, setShowActionModal] = useState(false);
   const [selectedAction, setSelectedAction] = useState<any>(null);
+  const [showAIChat, setShowAIChat] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const { t } = useLanguage();
 
@@ -136,6 +138,28 @@ export default function Home() {
 
         {/* Emergency Support */}
         <EmergencySection />
+
+        {/* AI Chat Support */}
+        <section className="space-y-4">
+          <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-6 rounded-xl shadow-lg text-white">
+            <div className="flex items-center gap-3 mb-3">
+              <MessageCircle className="w-8 h-8" />
+              <div>
+                <h3 className="text-lg font-bold">AI Support Chat</h3>
+                <p className="text-purple-100 text-sm">I'm here. Talk to me.</p>
+              </div>
+            </div>
+            <p className="text-purple-100 text-sm mb-4">
+              Chat with our compassionate AI assistant for immediate support, coping strategies, and someone to listen.
+            </p>
+            <Button
+              onClick={() => setShowAIChat(true)}
+              className="w-full bg-white text-purple-600 hover:bg-purple-50 font-semibold py-3 rounded-lg"
+            >
+              Start Conversation
+            </Button>
+          </div>
+        </section>
 
         {/* Quick Tools */}
         <section className="space-y-4">
