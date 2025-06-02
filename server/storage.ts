@@ -1,4 +1,4 @@
-import { users, contacts, breathingSessions, sessions, type User, type InsertUser, type Contact, type InsertContact, type BreathingSession, type InsertBreathingSession, type Session } from "@shared/schema";
+import { users, contacts, breathingSessions, sessions, diaryEntries, type User, type InsertUser, type Contact, type InsertContact, type BreathingSession, type InsertBreathingSession, type Session, type DiaryEntry, type InsertDiaryEntry } from "@shared/schema";
 import { db } from "./db";
 import { eq, and } from "drizzle-orm";
 
@@ -23,6 +23,12 @@ export interface IStorage {
   // Breathing sessions
   createBreathingSession(session: InsertBreathingSession, userId?: number): Promise<BreathingSession>;
   getBreathingSessions(userId?: number): Promise<BreathingSession[]>;
+  
+  // Diary operations
+  createDiaryEntry(entry: InsertDiaryEntry, userId: number): Promise<DiaryEntry>;
+  getDiaryEntries(userId: number): Promise<DiaryEntry[]>;
+  updateDiaryEntry(entryId: number, updates: Partial<InsertDiaryEntry>): Promise<DiaryEntry>;
+  deleteDiaryEntry(entryId: number): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -119,6 +125,33 @@ export class DatabaseStorage implements IStorage {
   async getBreathingSessions(userId?: number): Promise<BreathingSession[]> {
     if (!userId) return [];
     return await db.select().from(breathingSessions).where(eq(breathingSessions.userId, userId));
+  }
+
+  async createDiaryEntry(entry: InsertDiaryEntry, userId: number): Promise<DiaryEntry> {
+    const [newEntry] = await db
+      .insert(diaryEntries)
+      .values({ ...entry, userId })
+      .returning();
+    return newEntry;
+  }
+
+  async getDiaryEntries(userId: number): Promise<DiaryEntry[]> {
+    return await db.select().from(diaryEntries)
+      .where(eq(diaryEntries.userId, userId))
+      .orderBy(diaryEntries.createdAt);
+  }
+
+  async updateDiaryEntry(entryId: number, updates: Partial<InsertDiaryEntry>): Promise<DiaryEntry> {
+    const [updatedEntry] = await db
+      .update(diaryEntries)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(diaryEntries.id, entryId))
+      .returning();
+    return updatedEntry;
+  }
+
+  async deleteDiaryEntry(entryId: number): Promise<void> {
+    await db.delete(diaryEntries).where(eq(diaryEntries.id, entryId));
   }
 }
 

@@ -21,8 +21,14 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState(currentUser?.displayName || "");
+  const [bio, setBio] = useState(currentUser?.bio || "");
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [diaryEntries, setDiaryEntries] = useState<any[]>([]);
+  const [newEntryTitle, setNewEntryTitle] = useState("");
+  const [newEntryContent, setNewEntryContent] = useState("");
+  const [newEntryMood, setNewEntryMood] = useState("");
+  const [showNewEntry, setShowNewEntry] = useState(false);
   const { toast } = useToast();
 
   const handleLogin = async () => {
@@ -100,7 +106,7 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
       const response = await fetch('/api/auth/profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ displayName }),
+        body: JSON.stringify({ displayName, bio, userId: currentUser.id }),
       });
 
       if (response.ok) {
@@ -116,6 +122,78 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
       toast({
         title: "Error",
         description: "Failed to update profile.",
+        variant: "destructive",
+      });
+    }
+    setIsLoading(false);
+  };
+
+  const handlePhotoUpload = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = (e: any) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const imageUrl = e.target?.result as string;
+          // In a real app, you'd upload to a service like Cloudinary or AWS S3
+          toast({
+            title: "Photo selected",
+            description: "Photo upload functionality will be implemented with cloud storage.",
+          });
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
+  };
+
+  const loadDiaryEntries = async () => {
+    if (!currentUser) return;
+    try {
+      const response = await fetch(`/api/diary?userId=${currentUser.id}`);
+      if (response.ok) {
+        const entries = await response.json();
+        setDiaryEntries(entries);
+      }
+    } catch (error) {
+      console.error('Failed to load diary entries:', error);
+    }
+  };
+
+  const saveDiaryEntry = async () => {
+    if (!newEntryContent.trim()) return;
+    
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/diary', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: currentUser.id,
+          title: newEntryTitle || `Entry for ${new Date().toLocaleDateString()}`,
+          content: newEntryContent,
+          mood: newEntryMood,
+        }),
+      });
+
+      if (response.ok) {
+        setNewEntryTitle("");
+        setNewEntryContent("");
+        setNewEntryMood("");
+        setShowNewEntry(false);
+        loadDiaryEntries();
+        toast({
+          title: "Entry saved",
+          description: "Your diary entry has been saved.",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to save diary entry.",
         variant: "destructive",
       });
     }
@@ -139,81 +217,173 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
   if (currentUser) {
     return (
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <User className="w-5 h-5" />
-              My Profile
+              My Account
             </DialogTitle>
           </DialogHeader>
           
-          <div className="space-y-6">
-            <div className="flex flex-col items-center space-y-4">
-              <div className="relative">
-                <Avatar className="w-20 h-20">
-                  <AvatarImage src={currentUser.profileImage} />
-                  <AvatarFallback className="text-2xl">
-                    {currentUser.displayName?.charAt(0) || currentUser.username?.charAt(0) || 'U'}
-                  </AvatarFallback>
-                </Avatar>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="absolute -bottom-2 -right-2 rounded-full p-2"
-                  onClick={() => {
-                    toast({
-                      title: "Photo upload",
-                      description: "Photo upload feature coming soon!",
-                    });
-                  }}
-                >
-                  <Camera className="w-3 h-3" />
+          <Tabs defaultValue="profile" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="profile">Profile</TabsTrigger>
+              <TabsTrigger value="diary" onClick={loadDiaryEntries}>My Diary</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="profile" className="space-y-6">
+              <div className="flex flex-col items-center space-y-4">
+                <div className="relative">
+                  <Avatar className="w-20 h-20">
+                    <AvatarImage src={currentUser.profileImage} />
+                    <AvatarFallback className="text-2xl">
+                      {currentUser.displayName?.charAt(0) || currentUser.username?.charAt(0) || 'U'}
+                    </AvatarFallback>
+                  </Avatar>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="absolute -bottom-2 -right-2 rounded-full p-2"
+                    onClick={handlePhotoUpload}
+                  >
+                    <Camera className="w-3 h-3" />
+                  </Button>
+                </div>
+                
+                <div className="text-center">
+                  <p className="text-sm text-gray-500">@{currentUser.username}</p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium">Display Name</label>
+                  {isEditing ? (
+                    <Input
+                      value={displayName}
+                      onChange={(e) => setDisplayName(e.target.value)}
+                      placeholder="Enter your display name"
+                    />
+                  ) : (
+                    <p className="text-lg">{currentUser.displayName || currentUser.username}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">About Me</label>
+                  {isEditing ? (
+                    <Textarea
+                      value={bio}
+                      onChange={(e) => setBio(e.target.value)}
+                      placeholder="Tell us a bit about yourself..."
+                      rows={3}
+                    />
+                  ) : (
+                    <p className="text-gray-600 dark:text-gray-400 min-h-[3rem] p-2 bg-gray-50 dark:bg-gray-800 rounded">
+                      {currentUser.bio || "No bio added yet."}
+                    </p>
+                  )}
+                </div>
+
+                <div className="flex gap-2">
+                  {isEditing ? (
+                    <>
+                      <Button onClick={handleUpdateProfile} disabled={isLoading} className="flex-1">
+                        Save Changes
+                      </Button>
+                      <Button variant="outline" onClick={() => setIsEditing(false)} className="flex-1">
+                        Cancel
+                      </Button>
+                    </>
+                  ) : (
+                    <Button onClick={() => setIsEditing(true)} variant="outline" className="flex-1">
+                      <Settings className="w-4 h-4 mr-2" />
+                      Edit Profile
+                    </Button>
+                  )}
+                </div>
+
+                <Button variant="destructive" onClick={handleLogout} className="w-full">
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Log Out
                 </Button>
               </div>
-              
-              <div className="text-center">
-                <p className="text-sm text-gray-500">@{currentUser.username}</p>
-              </div>
-            </div>
+            </TabsContent>
 
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium">Display Name</label>
-                {isEditing ? (
+            <TabsContent value="diary" className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <BookOpen className="w-5 h-5" />
+                  My Private Diary
+                </h3>
+                <Button onClick={() => setShowNewEntry(true)} size="sm">
+                  <PlusCircle className="w-4 h-4 mr-2" />
+                  New Entry
+                </Button>
+              </div>
+
+              {showNewEntry && (
+                <div className="space-y-3 p-4 border rounded-lg bg-gray-50 dark:bg-gray-900">
                   <Input
-                    value={displayName}
-                    onChange={(e) => setDisplayName(e.target.value)}
-                    placeholder="Enter your display name"
+                    value={newEntryTitle}
+                    onChange={(e) => setNewEntryTitle(e.target.value)}
+                    placeholder="Entry title (optional)"
                   />
-                ) : (
-                  <p className="text-lg">{currentUser.displayName || currentUser.username}</p>
-                )}
-              </div>
-
-              <div className="flex gap-2">
-                {isEditing ? (
-                  <>
-                    <Button onClick={handleUpdateProfile} disabled={isLoading} className="flex-1">
-                      Save Changes
+                  <Input
+                    value={newEntryMood}
+                    onChange={(e) => setNewEntryMood(e.target.value)}
+                    placeholder="How are you feeling? (optional)"
+                  />
+                  <Textarea
+                    value={newEntryContent}
+                    onChange={(e) => setNewEntryContent(e.target.value)}
+                    placeholder="Share your thoughts, feelings, or what happened today..."
+                    rows={4}
+                  />
+                  <div className="flex gap-2">
+                    <Button onClick={saveDiaryEntry} disabled={isLoading || !newEntryContent.trim()} className="flex-1">
+                      Save Entry
                     </Button>
-                    <Button variant="outline" onClick={() => setIsEditing(false)} className="flex-1">
+                    <Button variant="outline" onClick={() => setShowNewEntry(false)} className="flex-1">
                       Cancel
                     </Button>
-                  </>
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-3 max-h-64 overflow-y-auto">
+                {diaryEntries.length > 0 ? (
+                  diaryEntries.map((entry, index) => (
+                    <div key={entry.id || index} className="p-3 border rounded-lg">
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="font-medium text-sm">
+                          {entry.title || `Entry ${index + 1}`}
+                        </h4>
+                        <div className="flex items-center text-xs text-gray-500 gap-2">
+                          <Calendar className="w-3 h-3" />
+                          {new Date(entry.createdAt).toLocaleDateString()}
+                        </div>
+                      </div>
+                      {entry.mood && (
+                        <p className="text-sm text-blue-600 dark:text-blue-400 mb-2">
+                          Mood: {entry.mood}
+                        </p>
+                      )}
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                        {entry.content}
+                      </p>
+                    </div>
+                  ))
                 ) : (
-                  <Button onClick={() => setIsEditing(true)} variant="outline" className="flex-1">
-                    <Settings className="w-4 h-4 mr-2" />
-                    Edit Profile
-                  </Button>
+                  <div className="text-center py-8 text-gray-500">
+                    <BookOpen className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                    <p>No diary entries yet.</p>
+                    <p className="text-sm">Start writing to track your thoughts and feelings.</p>
+                  </div>
                 )}
               </div>
-
-              <Button variant="destructive" onClick={handleLogout} className="w-full">
-                <LogOut className="w-4 h-4 mr-2" />
-                Log Out
-              </Button>
-            </div>
-          </div>
+            </TabsContent>
+          </Tabs>
         </DialogContent>
       </Dialog>
     );
