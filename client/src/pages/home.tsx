@@ -129,16 +129,19 @@ export default function Home() {
     <div className="max-w-md mx-auto bg-white dark:bg-black min-h-screen">
       {/* Header */}
       <header className="bg-black dark:bg-black text-white dark:text-white text-center py-8 px-6 relative">
-        <button
-          onClick={toggleTheme}
-          className="absolute top-4 right-4 p-2 rounded-full bg-white/20 dark:bg-black/20 hover:bg-white/30 dark:hover:bg-black/30 transition-colors"
-          aria-label="Toggle theme"
-        >
-          {theme === "light" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
-        </button>
+        <div className="absolute top-4 right-4 flex gap-2">
+          <LanguageSelector />
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full bg-white/20 dark:bg-black/20 hover:bg-white/30 dark:hover:bg-black/30 transition-colors"
+            aria-label="Toggle theme"
+          >
+            {theme === "light" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+          </button>
+        </div>
         
-        <h1 className="text-4xl font-black mb-2" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>Take 5</h1>
-        <p className="text-lg font-bold opacity-90" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>Take a breath. Take back control.</p>
+        <h1 className="text-4xl font-black mb-2" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>{t('appName')}</h1>
+        <p className="text-lg font-bold opacity-90" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>{t('tagline')}</p>
       </header>
 
       <main className="p-6 space-y-6 pb-20 bg-white dark:bg-black">
@@ -147,7 +150,7 @@ export default function Home() {
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black dark:text-white w-4 h-4" />
           <input
             type="text"
-            placeholder={t('searchPlaceholder')}
+            placeholder="Type how you feel: 'I'm alone', 'homeless', 'want to die'..."
             className="search-input w-full pl-10 pr-4 py-3 rounded-xl bg-white dark:bg-black text-black dark:text-white placeholder-gray-500 focus:outline-none text-sm"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
