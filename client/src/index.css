@@ -19,11 +19,11 @@ button, input, div, section {
 
 /* Override for search input border */
 .search-input {
-  border: 2px solid #000000 !important;
+  border: 1px solid #000000 !important;
 }
 
 .dark .search-input {
-  border: 2px solid #ffffff !important;
+  border: 1px solid #ffffff !important;
 }
 
 button:focus, input:focus {
