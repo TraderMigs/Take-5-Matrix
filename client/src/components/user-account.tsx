@@ -116,6 +116,7 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
     toast({
       title: "Google signup",
       description: "Google OAuth integration would be implemented here.",
+      className: "bg-red-800 text-white border-red-800",
     });
   };
 
