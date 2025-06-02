@@ -219,6 +219,12 @@ export default function Home() {
         onClose={() => setShowBreathingModal(false)} 
       />
 
+      {/* AI Chat Modal */}
+      <AIChat
+        isOpen={showAIChat}
+        onClose={() => setShowAIChat(false)}
+      />
+
       {/* Action Options Modal */}
       {showActionModal && selectedAction && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
