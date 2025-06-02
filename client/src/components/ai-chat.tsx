@@ -24,6 +24,8 @@ export default function AIChat({ isOpen, onClose }: AIChatProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [showContactList, setShowContactList] = useState(false);
+  const [contacts, setContacts] = useState<any[]>([]);
   const { t } = useLanguage();
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -65,9 +67,11 @@ export default function AIChat({ isOpen, onClose }: AIChatProps) {
     };
   }, []);
 
-  // Add welcome message when chat opens
+  // Add welcome message when chat opens and load contacts
   useEffect(() => {
     if (isOpen && messages.length === 0) {
+      loadContacts();
+      
       const welcomeMessage: Message = {
         id: Date.now().toString(),
         text: "Hello, I'm here to listen and support you. You're not alone. What's on your mind today?",
@@ -77,6 +81,18 @@ export default function AIChat({ isOpen, onClose }: AIChatProps) {
       setMessages([welcomeMessage]);
     }
   }, [isOpen, messages.length]);
+
+  const loadContacts = async () => {
+    try {
+      const response = await fetch('/api/contacts');
+      if (response.ok) {
+        const contactData = await response.json();
+        setContacts(contactData);
+      }
+    } catch (error) {
+      console.log('No contacts available yet');
+    }
+  };
 
   // Scroll to bottom when new messages arrive
   useEffect(() => {
@@ -125,6 +141,11 @@ export default function AIChat({ isOpen, onClose }: AIChatProps) {
         };
         setMessages(prev => [...prev, aiMessage]);
         setIsTyping(false);
+        
+        // Check if this is a crisis response that should show contacts
+        if (data.showContacts && data.isCrisis) {
+          setShowContactList(true);
+        }
         
         // Optional: Speak the AI response
         if (synthRef.current && data.response.length < 200) {
@@ -273,6 +294,64 @@ export default function AIChat({ isOpen, onClose }: AIChatProps) {
             </Button>
           </div>
         </form>
+
+        {/* Emergency Contact List Overlay */}
+        {showContactList && (
+          <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white dark:bg-gray-900 p-6 rounded-lg max-w-sm w-full mx-4">
+              <h3 className="text-lg font-semibold mb-4 text-center text-gray-900 dark:text-white">
+                Your Trusted Contacts
+              </h3>
+              
+              {contacts.length > 0 ? (
+                <div className="space-y-3">
+                  {contacts.map((contact: any) => (
+                    <div key={contact.id} className="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                      <div>
+                        <p className="font-medium text-gray-900 dark:text-white">{contact.name}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{contact.relationship}</p>
+                      </div>
+                      <Button
+                        onClick={() => window.open(`tel:${contact.phone}`, '_self')}
+                        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2"
+                      >
+                        Call
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center">
+                  <p className="text-gray-600 dark:text-gray-400 mb-4">
+                    You haven't added any trusted contacts yet. You can add them from the main page.
+                  </p>
+                  <p className="text-sm text-gray-500 dark:text-gray-500">
+                    Or call emergency services: 911 (US) or your local emergency number
+                  </p>
+                </div>
+              )}
+              
+              <div className="flex gap-2 mt-6">
+                <Button
+                  onClick={() => setShowContactList(false)}
+                  variant="outline"
+                  className="flex-1"
+                >
+                  Continue Chat
+                </Button>
+                <Button
+                  onClick={() => {
+                    setShowContactList(false);
+                    onClose();
+                  }}
+                  className="flex-1 bg-purple-600 hover:bg-purple-700 text-white"
+                >
+                  Close Chat
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

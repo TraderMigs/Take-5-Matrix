@@ -3,47 +3,61 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import Anthropic from '@anthropic-ai/sdk';
 
+// Crisis keyword detection
+function detectCrisisKeywords(message: string): boolean {
+  const crisisKeywords = [
+    'suicide', 'kill myself', 'end my life', 'want to die', 'better off dead',
+    'hurt myself', 'self harm', 'cut myself', 'harm myself',
+    'kill', 'murder', 'death', 'die', 'dead', 'ending it all',
+    'no point', 'give up', 'can\'t go on', 'worthless', 'burden'
+  ];
+  
+  const lowerMessage = message.toLowerCase();
+  return crisisKeywords.some(keyword => lowerMessage.includes(keyword));
+}
+
 // Fallback response system for testing without API key
-function generateFallbackResponse(message: string, conversationHistory: any[] = []): string {
+function generateFallbackResponse(message: string, conversationHistory: any[] = []): any {
   const lowerMessage = message.toLowerCase();
   
-  // Crisis/Emergency responses
-  if (lowerMessage.includes('suicide') || lowerMessage.includes('kill myself') || lowerMessage.includes('end my life')) {
-    return "I'm really concerned about you right now. Your life has value and you deserve support. Please reach out to a crisis helpline immediately - you can find emergency numbers at the top of this app, or call 988 (Suicide & Crisis Lifeline) if you're in the US. You don't have to face this alone.";
+  // Crisis/Emergency responses with caring tone and contact option
+  if (detectCrisisKeywords(message)) {
+    return {
+      response: "I hear you, and I want you to know that no matter what, there's someone who loves you and is thinking about you right now. These feelings are incredibly difficult, but you don't have to face them alone. We can keep this conversation between you and me, but if you want someone warm and caring to talk to right now, would you like me to show you your trusted contacts so you can reach out to someone who cares about you?",
+      showContacts: true,
+      isCrisis: true
+    };
   }
   
-  if (lowerMessage.includes('hurt myself') || lowerMessage.includes('self harm')) {
-    return "I hear that you're in pain right now. Those feelings are valid, but there are safer ways to cope. Try the breathing exercise in this app, or reach out to a trusted person. If you're in immediate danger, please contact a crisis hotline or emergency services.";
-  }
-  
+  // All other responses return string format for normal chat
   // Anxiety responses
   if (lowerMessage.includes('anxious') || lowerMessage.includes('anxiety') || lowerMessage.includes('panic') || lowerMessage.includes('worried')) {
-    return "Anxiety can feel overwhelming, but you're taking a positive step by reaching out. Try the 4-7-8 breathing technique: breathe in for 4, hold for 7, exhale for 8. You can also try the breathing exercise feature in this app. What's making you feel most anxious right now?";
+    return { response: "Anxiety can feel overwhelming, but you're taking a positive step by reaching out. Try the 4-7-8 breathing technique: breathe in for 4, hold for 7, exhale for 8. You can also try the breathing exercise feature in this app. What's making you feel most anxious right now?" };
   }
   
   // Depression responses
   if (lowerMessage.includes('depressed') || lowerMessage.includes('depression') || lowerMessage.includes('sad') || lowerMessage.includes('hopeless')) {
-    return "I'm sorry you're feeling this way. Depression can make everything feel heavy and difficult. Remember that these feelings are temporary, even when they don't feel like it. Small steps matter - have you eaten or had water today? Sometimes basic self-care can help a little.";
+    return { response: "I'm sorry you're feeling this way. Depression can make everything feel heavy and difficult. Remember that these feelings are temporary, even when they don't feel like it. Small steps matter - have you eaten or had water today? Sometimes basic self-care can help a little." };
   }
   
   // Overwhelmed responses
   if (lowerMessage.includes('overwhelmed') || lowerMessage.includes('too much') || lowerMessage.includes('can\'t cope')) {
-    return "Feeling overwhelmed is a sign that you're dealing with a lot right now. Let's break things down into smaller pieces. Try focusing on just the next 5 minutes. What's one small thing you could do right now to take care of yourself?";
+    return { response: "Feeling overwhelmed is a sign that you're dealing with a lot right now. Let's break things down into smaller pieces. Try focusing on just the next 5 minutes. What's one small thing you could do right now to take care of yourself?" };
   }
   
   // Loneliness responses
   if (lowerMessage.includes('lonely') || lowerMessage.includes('alone') || lowerMessage.includes('isolated')) {
-    return "Loneliness is one of the hardest feelings to bear. You're not alone in feeling this way - many people struggle with loneliness. You took a brave step by reaching out here. Consider connecting with trusted contacts in this app or joining a support group in your area.";
+    return { response: "Loneliness is one of the hardest feelings to bear. You're not alone in feeling this way - many people struggle with loneliness. You took a brave step by reaching out here. Consider connecting with trusted contacts in this app or joining a support group in your area." };
   }
   
   // Stress responses
   if (lowerMessage.includes('stress') || lowerMessage.includes('stressed')) {
-    return "Stress can really take a toll on both your mind and body. Try some grounding techniques - name 5 things you can see, 4 you can touch, 3 you can hear, 2 you can smell, and 1 you can taste. The breathing exercises in this app can also help reduce stress.";
+    return { response: "Stress can really take a toll on both your mind and body. Try some grounding techniques - name 5 things you can see, 4 you can touch, 3 you can hear, 2 you can smell, and 1 you can taste. The breathing exercises in this app can also help reduce stress." };
   }
   
   // Sleep issues
   if (lowerMessage.includes('sleep') || lowerMessage.includes('insomnia') || lowerMessage.includes('tired')) {
-    return "Sleep troubles can make everything harder to handle. Try creating a calming bedtime routine - avoid screens an hour before bed, try gentle breathing exercises, or listen to calming sounds. If sleep problems persist, consider talking to a healthcare provider.";
+    return { response: "Sleep troubles can make everything harder to handle. Try creating a calming bedtime routine - avoid screens an hour before bed, try gentle breathing exercises, or listen to calming sounds. If sleep problems persist, consider talking to a healthcare provider." };
   }
   
   // General support responses
@@ -57,11 +71,11 @@ function generateFallbackResponse(message: string, conversationHistory: any[] = 
   
   // First conversation
   if (!conversationHistory || conversationHistory.length <= 1) {
-    return "I'm glad you decided to talk with me today. This is a safe space where you can share whatever is on your mind. What's been going on for you lately?";
+    return { response: "I'm glad you decided to talk with me today. This is a safe space where you can share whatever is on your mind. What's been going on for you lately?" };
   }
   
   // Random supportive response
-  return supportResponses[Math.floor(Math.random() * supportResponses.length)];
+  return { response: supportResponses[Math.floor(Math.random() * supportResponses.length)] };
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
