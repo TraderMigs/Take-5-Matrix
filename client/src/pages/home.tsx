@@ -30,11 +30,23 @@ export default function Home() {
   const { t } = useLanguage();
   const { toast } = useToast();
 
-  // Check for legal acceptance in localStorage
+  // Check for legal acceptance and saved user session in localStorage
   useEffect(() => {
     const legalAccepted = localStorage.getItem('take5_legal_accepted');
     if (legalAccepted === 'true') {
       setHasAcceptedLegal(true);
+    }
+
+    // Check for saved user session
+    const savedUser = localStorage.getItem('take5_current_user');
+    if (savedUser) {
+      try {
+        const user = JSON.parse(savedUser);
+        setCurrentUser(user);
+      } catch (error) {
+        console.error('Error parsing saved user data:', error);
+        localStorage.removeItem('take5_current_user');
+      }
     }
   }, []);
 
@@ -48,6 +60,8 @@ export default function Home() {
       try {
         const user = JSON.parse(decodeURIComponent(userParam));
         setCurrentUser(user);
+        // Save user session to localStorage for persistence
+        localStorage.setItem('take5_current_user', JSON.stringify(user));
         toast({
           title: "Welcome!",
           description: `Successfully signed in with Google as ${user.displayName || user.email}`,
@@ -365,8 +379,14 @@ export default function Home() {
           isOpen={showUserAccount}
           onClose={() => setShowUserAccount(false)}
           currentUser={currentUser}
-          onLogin={setCurrentUser}
-          onLogout={() => setCurrentUser(null)}
+          onLogin={(user) => {
+            setCurrentUser(user);
+            localStorage.setItem('take5_current_user', JSON.stringify(user));
+          }}
+          onLogout={() => {
+            setCurrentUser(null);
+            localStorage.removeItem('take5_current_user');
+          }}
         />
       )}
 
@@ -376,7 +396,10 @@ export default function Home() {
           isOpen={showUserAccount}
           onClose={() => setShowUserAccount(false)}
           currentUser={currentUser}
-          onLogout={() => setCurrentUser(null)}
+          onLogout={() => {
+            setCurrentUser(null);
+            localStorage.removeItem('take5_current_user');
+          }}
         />
       )}
 
