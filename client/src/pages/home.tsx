@@ -124,7 +124,7 @@ export default function Home() {
   return (
     <div className="max-w-md mx-auto bg-white dark:bg-black min-h-screen">
       {/* Header */}
-      <header className="bg-black dark:bg-white text-white dark:text-black text-center py-8 px-6 relative">
+      <header className="bg-black dark:bg-black text-white dark:text-white text-center py-8 px-6 relative">
         <button
           onClick={toggleTheme}
           className="absolute top-4 right-4 p-2 rounded-full bg-white/20 dark:bg-black/20 hover:bg-white/30 dark:hover:bg-black/30 transition-colors"
@@ -133,8 +133,8 @@ export default function Home() {
           {theme === "light" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
         </button>
         
-        <h1 className="text-4xl font-bold mb-2">Take 5</h1>
-        <p className="text-lg opacity-90">Take a breath. Take back control.</p>
+        <h1 className="text-4xl font-black mb-2" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>Take 5</h1>
+        <p className="text-lg font-bold opacity-90" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>Take a breath. Take back control.</p>
       </header>
 
       <main className="p-6 space-y-6 pb-20 bg-white dark:bg-black">
@@ -155,19 +155,19 @@ export default function Home() {
 
         {/* Quick Tools */}
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-black dark:text-white mb-4">How can we support you right now?</h2>
+          <h2 className="text-xl font-black text-black dark:text-white mb-4" style={{ textShadow: '1px 1px 0px rgba(128,128,128,0.5)' }}>How can we support you right now?</h2>
           <div className="space-y-3">
             {quickTools.map((tool) => (
               <button
                 key={tool.id}
                 onClick={() => handleQuickToolClick(tool)}
-                className="w-full p-4 rounded-xl bg-white dark:bg-black border-2 border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors text-left"
+                className="w-full p-4 rounded-xl bg-white dark:bg-black border-2 border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors text-left shadow-lg"
               >
                 <div className="flex items-start space-x-3">
                   <div className="text-2xl">{tool.icon}</div>
                   <div>
-                    <h3 className="font-medium text-black dark:text-white">{tool.title}</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{tool.subtitle}</p>
+                    <h3 className="font-bold text-black dark:text-white" style={{ textShadow: '1px 1px 0px rgba(128,128,128,0.3)' }}>{tool.title}</h3>
+                    <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 mt-1">{tool.subtitle}</p>
                   </div>
                 </div>
               </button>
@@ -177,17 +177,17 @@ export default function Home() {
 
         {/* Support Modules */}
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-black dark:text-white mb-4">Additional Support</h2>
+          <h2 className="text-xl font-black text-black dark:text-white mb-4" style={{ textShadow: '1px 1px 0px rgba(128,128,128,0.5)' }}>Additional Support</h2>
           <div className="grid grid-cols-2 gap-3">
             {supportModules.map((module) => (
               <button
                 key={module.id}
                 onClick={() => module.action()}
-                className="p-4 rounded-xl bg-white dark:bg-black border-2 border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors text-center"
+                className="p-4 rounded-xl bg-white dark:bg-black border-2 border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors text-center shadow-lg"
               >
                 <div className="text-2xl mb-2">{module.icon}</div>
-                <h3 className="font-medium text-black dark:text-white text-sm">{module.title}</h3>
-                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{module.description}</p>
+                <h3 className="font-bold text-black dark:text-white text-sm" style={{ textShadow: '1px 1px 0px rgba(128,128,128,0.3)' }}>{module.title}</h3>
+                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 mt-1">{module.description}</p>
               </button>
             ))}
           </div>
@@ -197,10 +197,10 @@ export default function Home() {
         <PersonalContacts />
 
         {/* Safe Message */}
-        <section className="bg-black dark:bg-white text-white dark:text-black rounded-xl p-6 text-center space-y-3 border-2 border-black dark:border-white">
-          <h2 className="text-xl font-semibold">You're not alone</h2>
-          <p className="text-lg opacity-95">You matter. Your life has value. Help is always available.</p>
-          <p className="text-sm opacity-90">This moment is temporary. You can get through this.</p>
+        <section className="bg-black dark:bg-black text-white dark:text-white rounded-xl p-6 text-center space-y-3 border-2 border-black dark:border-white">
+          <h2 className="text-xl font-black" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>You're not alone</h2>
+          <p className="text-lg font-bold opacity-95" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>You matter. Your life has value. Help is always available.</p>
+          <p className="text-sm font-semibold opacity-90" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>This moment is temporary. You can get through this.</p>
         </section>
       </main>
 
