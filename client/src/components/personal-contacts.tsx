@@ -20,6 +20,7 @@ export default function PersonalContacts() {
   const [contacts, setContacts] = useLocalStorage<Contact[]>("trusted-contacts", []);
   const [isAddingContact, setIsAddingContact] = useState(false);
   const [editingContact, setEditingContact] = useState<Contact | null>(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [newContact, setNewContact] = useState({
     name: "",
     phone: "",
@@ -77,9 +78,15 @@ export default function PersonalContacts() {
             key={contact.id}
             className="bg-white border border-gray-200 rounded-xl p-4 flex items-center justify-between"
           >
-            <Dialog>
+            <Dialog open={editDialogOpen && editingContact?.id === contact.id} onOpenChange={setEditDialogOpen}>
               <DialogTrigger asChild>
-                <div className="flex items-center flex-1 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors rounded-lg p-2 -m-2">
+                <div 
+                  className="flex items-center flex-1 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors rounded-lg p-2 -m-2"
+                  onClick={() => {
+                    setEditingContact(contact);
+                    setEditDialogOpen(true);
+                  }}
+                >
                   <div className="w-10 h-10 bg-black dark:bg-white rounded-full flex items-center justify-center mr-3">
                     <User className="text-white dark:text-black" size={20} />
                   </div>
@@ -138,6 +145,15 @@ export default function PersonalContacts() {
                     />
                   </div>
                   <div className="flex space-x-2">
+                    <Button 
+                      className="flex-1 bg-green-800 hover:bg-green-900 text-white"
+                      onClick={() => {
+                        setEditDialogOpen(false);
+                        setEditingContact(null);
+                      }}
+                    >
+                      OK
+                    </Button>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button variant="outline" className="flex-1 border-red-600 text-red-600 hover:bg-red-50 dark:hover:bg-red-900">
@@ -154,13 +170,17 @@ export default function PersonalContacts() {
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                           <AlertDialogCancel className="border-black dark:border-white text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800">
-                            Cancel
+                            No
                           </AlertDialogCancel>
                           <AlertDialogAction 
-                            onClick={() => removeContact(contact.id)}
+                            onClick={() => {
+                              removeContact(contact.id);
+                              setEditDialogOpen(false);
+                              setEditingContact(null);
+                            }}
                             className="bg-red-600 hover:bg-red-700 text-white"
                           >
-                            Delete
+                            Yes
                           </AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>
