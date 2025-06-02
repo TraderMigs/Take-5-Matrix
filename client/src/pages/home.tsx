@@ -88,6 +88,7 @@ export default function Home() {
         toast({
           title: "Welcome!",
           description: `Successfully signed in with Google as ${user.displayName || user.email}`,
+          className: "bg-green-800 border-green-700 text-white",
         });
         // Clean up URL
         window.history.replaceState({}, document.title, window.location.pathname);
