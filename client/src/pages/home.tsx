@@ -244,7 +244,11 @@ export default function Home() {
                 }}
                 className="w-full bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 py-3 px-4 rounded-lg transition-colors"
               >
-                Breathing Channel
+                {selectedAction.type === "breathing" ? "Breathing Channel" : 
+                 selectedAction.type === "affirmations" ? "Affirmations Channel" :
+                 selectedAction.type === "music" ? "Calming Channel" :
+                 selectedAction.type === "grounding" ? "Grounding Channel" :
+                 t('visitWebsite')}
               </button>
               
               {selectedAction.customAction && (
