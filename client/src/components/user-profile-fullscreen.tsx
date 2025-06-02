@@ -541,9 +541,9 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                                   e.stopPropagation();
                                   startEditingEntry(entry);
                                 }}
-                                className="bg-stone-200 hover:bg-stone-300 text-white p-2 min-w-0 h-8 w-8"
+                                className="bg-stone-200 hover:bg-stone-300 p-1 min-w-0 h-4 w-4"
                               >
-                                <Edit className="w-3 h-3" />
+                                <Edit className="w-2 h-2 text-black" />
                               </Button>
                               <Button
                                 size="sm"
@@ -551,9 +551,9 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                                   e.stopPropagation();
                                   exportEntry(entry);
                                 }}
-                                className="bg-stone-200 hover:bg-stone-300 text-white p-2 min-w-0 h-8 w-8"
+                                className="bg-stone-200 hover:bg-stone-300 p-1 min-w-0 h-4 w-4"
                               >
-                                <Download className="w-3 h-3" />
+                                <Download className="w-2 h-2 text-black" />
                               </Button>
                               <Button
                                 size="sm"
@@ -561,9 +561,9 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                                   e.stopPropagation();
                                   deleteEntry(entryId);
                                 }}
-                                className="bg-stone-200 hover:bg-stone-300 text-white p-2 min-w-0 h-8 w-8"
+                                className="bg-stone-200 hover:bg-stone-300 p-1 min-w-0 h-4 w-4"
                               >
-                                <Trash2 className="w-3 h-3" />
+                                <Trash2 className="w-2 h-2 text-black" />
                               </Button>
                             </>
                           )}
