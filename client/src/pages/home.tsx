@@ -8,7 +8,14 @@ import PersonalContacts from "@/components/personal-contacts";
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showBreathingModal, setShowBreathingModal] = useState(false);
+  const [showActionModal, setShowActionModal] = useState(false);
+  const [selectedAction, setSelectedAction] = useState<any>(null);
   const { theme, toggleTheme } = useTheme();
+
+  const showActionOptions = (type: string, title: string, resourceUrl: string) => {
+    setSelectedAction({ type, title, resourceUrl });
+    setShowActionModal(true);
+  };
 
   const quickTools = [
     {
@@ -25,7 +32,8 @@ export default function Home() {
       subtitle: "Local resources and immediate assistance", 
       icon: "🏠",
       color: "#6B8E7B",
-      action: () => alert("Connecting you to local homeless assistance resources...")
+      resource: "https://www.nationalhomeless.org/factsheets/Mental_Illness.pdf",
+      action: () => showActionOptions("homeless", "National Homeless Resources", "https://www.nationalhomeless.org/factsheets/Mental_Illness.pdf")
     },
     {
       id: "suicidal",
@@ -33,7 +41,8 @@ export default function Home() {
       subtitle: "Immediate professional support available",
       icon: "💜",
       color: "#47556D", 
-      action: () => alert("Please call emergency services immediately. You matter and help is available.")
+      resource: "https://suicidepreventionlifeline.org/help-yourself/",
+      action: () => showActionOptions("suicidal", "Suicide Prevention Resources", "https://suicidepreventionlifeline.org/help-yourself/")
     },
     {
       id: "talk",
@@ -41,7 +50,8 @@ export default function Home() {
       subtitle: "Connect with trained listeners",
       icon: "💬",
       color: "#6B8E7B",
-      action: () => alert("Connecting you to crisis support lines...")
+      resource: "https://www.7cups.com/",
+      action: () => showActionOptions("talk", "Free Emotional Support - 7 Cups", "https://www.7cups.com/")
     },
     {
       id: "bullied",
@@ -49,7 +59,8 @@ export default function Home() {
       subtitle: "Protection resources and support",
       icon: "🛡️",
       color: "#47556D",
-      action: () => alert("Connecting you to anti-bullying resources and support...")
+      resource: "https://www.stopbullying.gov/resources",
+      action: () => showActionOptions("bullied", "Anti-Bullying Resources", "https://www.stopbullying.gov/resources")
     },
     {
       id: "hurt",
@@ -57,7 +68,8 @@ export default function Home() {
       subtitle: "Safe alternatives and medical guidance",
       icon: "🩹",
       color: "#6B8E7B",
-      action: () => alert("Please seek immediate medical attention. Crisis support is available.")
+      resource: "https://www.selfinjury.bctr.cornell.edu/perch/resources/distraction-techniques.pdf",
+      action: () => showActionOptions("hurt", "Self-Harm Alternatives", "https://www.selfinjury.bctr.cornell.edu/perch/resources/distraction-techniques.pdf")
     },
     {
       id: "quiet",
@@ -65,7 +77,8 @@ export default function Home() {
       subtitle: "Peaceful exercises and affirmations",
       icon: "🕯️",
       color: "#47556D",
-      action: () => alert("Loading calming exercises and affirmations...")
+      resource: "https://www.mindful.org/meditation/mindfulness-getting-started/",
+      action: () => showActionOptions("quiet", "Mindfulness Resources", "https://www.mindful.org/meditation/mindfulness-getting-started/")
     }
   ];
 
@@ -75,6 +88,7 @@ export default function Home() {
       title: "Breathing",
       description: "5-min guide",
       icon: "🫁",
+      resource: "",
       action: () => setShowBreathingModal(true)
     },
     {
@@ -82,21 +96,24 @@ export default function Home() {
       title: "Affirmations",
       description: "Kind words",
       icon: "💭",
-      action: () => console.log("Affirmations")
+      resource: "https://www.mentalhealth.gov/basics/mental-health-myths-facts",
+      action: () => showActionOptions("affirmations", "Mental Health Affirmations", "https://www.mentalhealth.gov/basics/mental-health-myths-facts")
     },
     {
       id: "music",
       title: "Calm Music",
       description: "Soothing sounds",
       icon: "🎵",
-      action: () => console.log("Calm music")
+      resource: "https://www.calm.com/blog/relaxing-music",
+      action: () => showActionOptions("music", "Relaxing Music Resources", "https://www.calm.com/blog/relaxing-music")
     },
     {
       id: "grounding",
       title: "Grounding",
       description: "5-4-3-2-1",
       icon: "🌱",
-      action: () => console.log("Grounding")
+      resource: "https://www.va.gov/WHOLEHEALTHLIBRARY/tools/grounding-exercises.asp",
+      action: () => showActionOptions("grounding", "Grounding Techniques", "https://www.va.gov/WHOLEHEALTHLIBRARY/tools/grounding-exercises.asp")
     }
   ];
 
@@ -192,6 +209,52 @@ export default function Home() {
         isOpen={showBreathingModal} 
         onClose={() => setShowBreathingModal(false)} 
       />
+
+      {/* Action Options Modal */}
+      {showActionModal && selectedAction && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white dark:bg-black border-2 border-black dark:border-white rounded-xl p-6 max-w-sm w-full">
+            <h3 className="text-lg font-semibold text-black dark:text-white mb-4">
+              {selectedAction.title}
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+              Choose how you'd like to get help:
+            </p>
+            
+            <div className="space-y-3">
+              <button
+                onClick={() => {
+                  window.open(selectedAction.resourceUrl, '_blank');
+                  setShowActionModal(false);
+                }}
+                className="w-full bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 py-3 px-4 rounded-lg transition-colors"
+              >
+                Visit Resource Website
+              </button>
+              
+              <button
+                onClick={() => {
+                  // This would trigger emergency call
+                  setShowActionModal(false);
+                  if (confirm("This will call emergency services. Continue?")) {
+                    window.location.href = `tel:191`; // Using Thailand number as detected
+                  }
+                }}
+                className="w-full bg-red-600 text-black hover:bg-red-700 py-3 px-4 rounded-lg transition-colors"
+              >
+                Call Emergency Services
+              </button>
+              
+              <button
+                onClick={() => setShowActionModal(false)}
+                className="w-full bg-white dark:bg-black text-black dark:text-white border-2 border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-900 py-3 px-4 rounded-lg transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

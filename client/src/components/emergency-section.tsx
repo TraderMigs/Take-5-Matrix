@@ -110,14 +110,14 @@ export default function EmergencySection() {
         <div className="space-y-3">
           <Button
             onClick={handleEmergencyCall}
-            className="w-full bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 font-semibold py-4 px-6 rounded-xl transition-colors flex items-center justify-center text-lg border-2 border-black dark:border-white"
+            className="w-full bg-red-600 text-black hover:bg-red-700 font-semibold py-4 px-6 rounded-xl transition-colors flex items-center justify-center text-lg border-2 border-black"
           >
             <Phone className="mr-3" size={20} />
             Call {locationData?.emergency} (Emergency)
           </Button>
           <Button
             onClick={handleCrisisCall}
-            className="w-full bg-white dark:bg-black text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 font-semibold py-4 px-6 rounded-xl transition-colors flex items-center justify-center text-lg border-2 border-black dark:border-white"
+            className="w-full bg-yellow-400 text-black hover:bg-yellow-500 font-semibold py-4 px-6 rounded-xl transition-colors flex items-center justify-center text-lg border-2 border-black"
           >
             <Heart className="mr-3" size={20} />
             Crisis Hotline: Call Now
