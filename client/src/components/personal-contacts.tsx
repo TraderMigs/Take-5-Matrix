@@ -91,7 +91,7 @@ export default function PersonalContacts() {
               Add a trusted contact
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-sm w-full mx-4 bg-white dark:bg-black border-black dark:border-white" aria-describedby="contact-description">
+          <DialogContent className="max-w-sm w-full mx-auto bg-white dark:bg-black border-black dark:border-white fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2" aria-describedby="contact-description">
             <DialogHeader>
               <DialogTitle className="text-black dark:text-white text-center">Add Trusted Contact</DialogTitle>
             </DialogHeader>
