@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Camera, BookOpen, PlusCircle, X, ChevronDown, ChevronUp, Save, Edit, Download, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/hooks/use-language";
 
 interface UserProfileProps {
   isOpen: boolean;
@@ -25,6 +26,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
   const [editingEntries, setEditingEntries] = useState<Set<number>>(new Set());
   const [editedContent, setEditedContent] = useState<{[key: number]: {title: string, content: string}}>({});
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   const toggleEntryExpansion = (entryId: number) => {
     const newExpanded = new Set(expandedEntries);
@@ -335,7 +337,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                   <div className="flex items-center space-x-2">
                     <Input
                       type="text"
-                      placeholder="Add a quote (40 chars max)"
+                      placeholder={t('addQuotePlaceholder')}
                       value={profileQuote}
                       onChange={(e) => handleQuoteChange(e.target.value)}
                       className="bg-white dark:bg-black border-2 border-teal-400 text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 flex-1"

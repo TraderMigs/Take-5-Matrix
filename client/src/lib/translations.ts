@@ -67,6 +67,15 @@ export interface Translation {
   enterPhone: string;
   enterRelationship: string;
   addContact: string;
+  
+  // Profile
+  yourProfile: string;
+  profile: string;
+  privateDiary: string;
+  yourPrivateDiary: string;
+  newEntry: string;
+  addQuotePlaceholder: string;
+  logout: string;
 }
 
 export const translations: Record<string, Translation> = {
@@ -121,7 +130,16 @@ export const translations: Record<string, Translation> = {
     enterName: "Enter name",
     enterPhone: "Enter phone number",
     enterRelationship: "e.g., Therapist, Friend, Family",
-    addContact: "Add Contact"
+    addContact: "Add Contact",
+    
+    // Profile
+    yourProfile: "Your Profile",
+    profile: "Profile",
+    privateDiary: "Private Diary",
+    yourPrivateDiary: "Your Private Diary",
+    newEntry: "New Entry",
+    addQuotePlaceholder: "Add a quote (40 chars max)",
+    logout: "Logout"
   },
   th: {
     appName: "Take 5",
@@ -174,7 +192,16 @@ export const translations: Record<string, Translation> = {
     enterName: "ใส่ชื่อ",
     enterPhone: "ใส่หมายเลขโทรศัพท์",
     enterRelationship: "เช่น นักบำบัด เพื่อน ครอบครัว",
-    addContact: "เพิ่มผู้ติดต่อ"
+    addContact: "เพิ่มผู้ติดต่อ",
+    
+    // Profile
+    yourProfile: "โปรไฟล์ของคุณ",
+    profile: "โปรไฟล์",
+    privateDiary: "ไดอารี่ส่วนตัว",
+    yourPrivateDiary: "ไดอารี่ส่วนตัวของคุณ",
+    newEntry: "เรื่องใหม่",
+    addQuotePlaceholder: "เพิ่มคำพูด (สูงสุด 40 ตัวอักษร)",
+    logout: "ออกจากระบบ"
   },
   es: {
     appName: "Take 5",
@@ -223,7 +250,16 @@ export const translations: Record<string, Translation> = {
     enterName: "Ingresar nombre",
     enterPhone: "Ingresar número de teléfono",
     enterRelationship: "ej., Terapeuta, Amigo, Familia",
-    addContact: "Agregar Contacto"
+    addContact: "Agregar Contacto",
+    
+    // Profile
+    yourProfile: "Tu Perfil",
+    profile: "Perfil",
+    privateDiary: "Diario Privado",
+    yourPrivateDiary: "Tu Diario Privado",
+    newEntry: "Nueva Entrada",
+    addQuotePlaceholder: "Agregar una cita (máx. 40 caracteres)",
+    logout: "Cerrar Sesión"
   },
   fr: {
     appName: "Take 5",
