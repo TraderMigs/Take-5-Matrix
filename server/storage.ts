@@ -1,6 +1,6 @@
 import { users, contacts, breathingSessions, sessions, type User, type InsertUser, type Contact, type InsertContact, type BreathingSession, type InsertBreathingSession, type Session } from "@shared/schema";
 import { db } from "./db";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 
 export interface IStorage {
   // User operations

@@ -251,6 +251,22 @@ export default function Home() {
         onClose={() => setShowAIChat(false)}
       />
 
+      {/* User Account Modal */}
+      <UserAccount
+        isOpen={showUserAccount}
+        onClose={() => setShowUserAccount(false)}
+        currentUser={currentUser}
+        onLogin={setCurrentUser}
+        onLogout={() => setCurrentUser(null)}
+      />
+
+      {/* Emergency Contact Display Modal */}
+      <EmergencyContactDisplay
+        isOpen={showEmergencyContacts}
+        onClose={() => setShowEmergencyContacts(false)}
+        currentUser={currentUser}
+      />
+
       {/* Action Options Modal */}
       {showActionModal && selectedAction && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
