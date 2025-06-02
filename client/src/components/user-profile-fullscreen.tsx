@@ -18,6 +18,8 @@ interface UserProfileProps {
 export default function UserProfileFullscreen({ isOpen, onClose, currentUser, onLogout }: UserProfileProps) {
   const [profileQuote, setProfileQuote] = useState(currentUser?.bio || "");
   const [profileImage, setProfileImage] = useState(currentUser?.profileImage || "");
+  const [username, setUsername] = useState(currentUser?.username || "");
+  const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [diaryEntries, setDiaryEntries] = useState<any[]>([]);
   const [newEntryTitle, setNewEntryTitle] = useState("");
   const [newEntryContent, setNewEntryContent] = useState("");
@@ -200,6 +202,38 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
     }
   };
 
+  const saveUsername = async () => {
+    try {
+      const response = await fetch('/api/auth/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          userId: currentUser.id, 
+          username: username 
+        }),
+      });
+
+      if (response.ok) {
+        setIsEditingUsername(false);
+        toast({
+          title: "Username Saved",
+          description: "Your username has been updated successfully.",
+          className: "bg-green-800 border-green-700 text-white",
+        });
+        // Update the current user object
+        currentUser.username = username;
+      } else {
+        throw new Error('Failed to save username');
+      }
+    } catch (error) {
+      toast({
+        title: "Save Failed",
+        description: "Could not save your username. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handlePhotoUpload = () => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -329,9 +363,54 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
               
               <div className="text-center w-full max-w-md">
                 <h2 className="text-2xl font-bold text-black dark:text-white mb-2">
-                  {currentUser.displayName || currentUser.username}
+                  {currentUser.displayName || username}
                 </h2>
-                <p className="text-lg text-black dark:text-white mb-4">@{currentUser.username}</p>
+                
+                {/* Username Section */}
+                <div className="mb-4">
+                  {isEditingUsername ? (
+                    <div className="flex items-center space-x-2 justify-center">
+                      <span className="text-lg text-black dark:text-white">@</span>
+                      <Input
+                        type="text"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        className="bg-white dark:bg-black border-2 border-teal-400 text-black dark:text-white text-center w-40"
+                        maxLength={20}
+                      />
+                      <Button
+                        onClick={saveUsername}
+                        size="sm"
+                        className="bg-teal-500 hover:bg-teal-600 text-white px-2"
+                      >
+                        <Save className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          setUsername(currentUser.username);
+                          setIsEditingUsername(false);
+                        }}
+                        size="sm"
+                        variant="outline"
+                        className="px-2"
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center space-x-2 justify-center">
+                      <p className="text-lg text-black dark:text-white">@{username}</p>
+                      <Button
+                        onClick={() => setIsEditingUsername(true)}
+                        size="sm"
+                        variant="ghost"
+                        className="p-1"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  )}
+                </div>
                 
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2">
