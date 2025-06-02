@@ -135,7 +135,7 @@ export default function AIChat({ isOpen, onClose }: AIChatProps) {
       setTimeout(() => {
         const aiMessage: Message = {
           id: (Date.now() + 1).toString(),
-          text: data.response,
+          text: typeof data.response === 'string' ? data.response : data.response.response || data.response,
           sender: "ai",
           timestamp: new Date()
         };

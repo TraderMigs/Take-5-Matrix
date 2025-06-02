@@ -19,8 +19,8 @@ export default function Home() {
   const { theme, toggleTheme } = useTheme();
   const { t } = useLanguage();
 
-  const showActionOptions = (type: string, title: string, resourceUrl: string) => {
-    setSelectedAction({ type, title, resourceUrl });
+  const showActionOptions = (type: string, title: string, resourceUrl: string, customAction?: () => void) => {
+    setSelectedAction({ type, title, resourceUrl, customAction });
     setShowActionModal(true);
   };
 
@@ -68,32 +68,32 @@ export default function Home() {
       title: t('breathing'),
       description: t('breathingGuide'),
       icon: "🫁",
-      resource: "",
-      action: () => setShowBreathingModal(true)
+      resource: "https://www.youtube.com/watch?v=ZXh-IGyBegQ",
+      action: () => showActionOptions("breathing", "Breathing Exercises", "https://www.youtube.com/watch?v=ZXh-IGyBegQ", () => setShowBreathingModal(true))
     },
     {
       id: "affirmations", 
       title: t('affirmations'),
       description: t('kindWords'),
       icon: "💭",
-      resource: "https://www.mentalhealth.gov/basics/mental-health-myths-facts",
-      action: () => showActionOptions("affirmations", "Mental Health Affirmations", "https://www.mentalhealth.gov/basics/mental-health-myths-facts")
+      resource: "https://www.youtube.com/user/TheHonestGuys",
+      action: () => showActionOptions("affirmations", "Mental Health Affirmations", "https://www.youtube.com/user/TheHonestGuys")
     },
     {
       id: "music",
       title: t('calmMusic'),
       description: t('soothingSounds'),
       icon: "🎵",
-      resource: "https://www.calm.com/blog/relaxing-music",
-      action: () => showActionOptions("music", "Relaxing Music Resources", "https://www.calm.com/blog/relaxing-music")
+      resource: "https://www.youtube.com/@sleepeasyrelax",
+      action: () => showActionOptions("music", "Relaxing Music Resources", "https://www.youtube.com/@sleepeasyrelax")
     },
     {
       id: "grounding",
       title: t('grounding'),
       description: t('groundingTechnique'),
       icon: "🌱",
-      resource: "https://www.va.gov/WHOLEHEALTHLIBRARY/tools/grounding-exercises.asp",
-      action: () => showActionOptions("grounding", "Grounding Techniques", "https://www.va.gov/WHOLEHEALTHLIBRARY/tools/grounding-exercises.asp")
+      resource: "https://www.youtube.com/@GreatMeditation",
+      action: () => showActionOptions("grounding", "Grounding Techniques", "https://www.youtube.com/@GreatMeditation")
     }
   ];
 
@@ -244,18 +244,29 @@ export default function Home() {
                 }}
                 className="w-full bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 py-3 px-4 rounded-lg transition-colors"
               >
-{t('visitWebsite')}
+                {t('visitWebsite')} (YouTube)
               </button>
+              
+              {selectedAction.customAction && (
+                <button
+                  onClick={() => {
+                    selectedAction.customAction();
+                    setShowActionModal(false);
+                  }}
+                  className="w-full bg-purple-600 text-white hover:bg-purple-700 py-3 px-4 rounded-lg transition-colors"
+                >
+                  Try Built-in Tool
+                </button>
+              )}
               
               <button
                 onClick={() => {
-                  // This would trigger emergency call
                   setShowActionModal(false);
                   if (confirm("This will call emergency services. Continue?")) {
                     window.location.href = `tel:191`; // Using Thailand number as detected
                   }
                 }}
-                className="w-full bg-red-600 text-black hover:bg-red-700 py-3 px-4 rounded-lg transition-colors"
+                className="w-full bg-red-600 text-white hover:bg-red-700 py-3 px-4 rounded-lg transition-colors"
               >
                 Call Emergency Services
               </button>
