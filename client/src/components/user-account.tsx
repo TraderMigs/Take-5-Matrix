@@ -92,6 +92,7 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
         toast({
           title: "Account created!",
           description: "Welcome to Take 5. Your account is ready.",
+          className: "bg-green-800 border-green-700 text-white",
         });
         onClose();
       } else {
