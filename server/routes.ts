@@ -195,9 +195,10 @@ Now respond specifically to their latest message, acknowledging what they're act
         password: hashedPassword,
         dateOfBirth,
         displayName: displayName || username,
+        emailVerified: true, // Temporarily auto-verify for immediate access
       });
 
-      // Generate verification token and send email
+      // Try to send verification email but don't block account creation
       const token = generateVerificationToken();
       const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
       
@@ -207,11 +208,11 @@ Now respond specifically to their latest message, acknowledging what they're act
       const emailSent = await sendVerificationEmail(email, username, token, baseUrl);
       
       if (!emailSent) {
-        console.error('Failed to send verification email');
+        console.error('Failed to send verification email - email service needs configuration');
       }
 
       res.json({ 
-        message: 'Account created successfully. Please check your email to verify your account.',
+        message: 'Account created successfully. You can now access all features.',
         userId: newUser.id,
         email: newUser.email
       });
