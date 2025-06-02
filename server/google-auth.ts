@@ -80,7 +80,9 @@ export function setupGoogleAuth(app: Express) {
       // Handle OAuth errors from Google
       if (error) {
         console.error('OAuth error from Google:', error, error_description);
-        return res.redirect(`/?auth=error&details=${encodeURIComponent(error_description || error)}`);
+        const errorMsg = typeof error_description === 'string' ? error_description : 
+                        typeof error === 'string' ? error : 'unknown_error';
+        return res.redirect(`/?auth=error&details=${encodeURIComponent(errorMsg)}`);
       }
       
       if (!code || typeof code !== 'string') {
@@ -107,6 +109,8 @@ export function setupGoogleAuth(app: Express) {
       }
 
       console.log('Creating user from Google data...');
+      console.log('Google payload:', payload);
+      
       // Extract user information
       const googleUser = {
         email: payload.email!,
@@ -116,11 +120,25 @@ export function setupGoogleAuth(app: Express) {
         dateOfBirth: new Date().toISOString().split('T')[0], // Default date, user can update later
       };
 
-      // Check if user already exists
-      let user = await storage.getUserByUsername(googleUser.username);
+      console.log('Generated user data:', googleUser);
+
+      // Check if user already exists by email first
+      let user = await storage.getUserByEmail(googleUser.email);
+      console.log('Existing user by email:', user);
       
       if (!user) {
+        // Check by username
+        const existingByUsername = await storage.getUserByUsername(googleUser.username);
+        console.log('Existing user by username:', existingByUsername);
+        
+        if (existingByUsername) {
+          // Username conflict - append random suffix
+          googleUser.username = googleUser.username + '_' + Math.random().toString(36).substring(2, 8);
+          console.log('Username conflict resolved, new username:', googleUser.username);
+        }
+        
         // Create new user
+        console.log('Creating new user with data:', googleUser);
         user = await storage.createUser({
           email: googleUser.email,
           username: googleUser.username,
@@ -129,6 +147,9 @@ export function setupGoogleAuth(app: Express) {
           displayName: googleUser.displayName,
           profileImage: googleUser.profileImage,
         });
+        console.log('Created user:', user);
+      } else {
+        console.log('User already exists, using existing user');
       }
 
       console.log('OAuth success, redirecting to frontend...');
@@ -136,7 +157,8 @@ export function setupGoogleAuth(app: Express) {
       res.redirect(`/?auth=success&user=${encodeURIComponent(JSON.stringify(user))}`);
     } catch (error) {
       console.error('Google OAuth error:', error);
-      res.redirect(`/?auth=error&details=${encodeURIComponent(error.message)}`);
+      const errorMsg = error instanceof Error ? error.message : 'unknown_error';
+      res.redirect(`/?auth=error&details=${encodeURIComponent(errorMsg)}`);
     }
   });
 }
