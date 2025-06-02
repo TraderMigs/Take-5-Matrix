@@ -317,17 +317,7 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
     setIsLoading(false);
   };
 
-  const loadDiaryEntries = async () => {
-    try {
-      const response = await fetch(`/api/diary/${currentUser.id}`);
-      if (response.ok) {
-        const entries = await response.json();
-        setDiaryEntries(entries);
-      }
-    } catch (error) {
-      console.error('Failed to load diary entries:', error);
-    }
-  };
+
 
   const handleLogout = async () => {
     try {
