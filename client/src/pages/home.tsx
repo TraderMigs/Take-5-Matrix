@@ -25,65 +25,38 @@ export default function Home() {
   const quickTools = [
     {
       id: "overwhelmed",
-      title: "I Feel Overwhelmed",
-      subtitle: "Breathing exercises and grounding techniques",
+      title: t('feelOverwhelmed'),
+      subtitle: t('breathingDescription'),
       icon: "💨",
       color: "#47556D",
       action: () => setShowBreathingModal(true)
     },
     {
-      id: "homeless",
-      title: "I'm Homeless",
-      subtitle: "Local resources and immediate assistance", 
-      icon: "🏠",
+      id: "anxious",
+      title: t('feelAnxious'),
+      subtitle: t('anxiousDescription'),
+      icon: "😰",
       color: "#6B8E7B",
-      resource: "https://www.nationalhomeless.org/factsheets/Mental_Illness.pdf",
-      action: () => showActionOptions("homeless", "National Homeless Resources", "https://www.nationalhomeless.org/factsheets/Mental_Illness.pdf")
+      resource: "https://www.nimh.nih.gov/health/topics/anxiety-disorders",
+      action: () => showActionOptions("anxious", "Anxiety Management Resources", "https://www.nimh.nih.gov/health/topics/anxiety-disorders")
     },
     {
-      id: "suicidal",
-      title: "I Feel Suicidal",
-      subtitle: "Immediate professional support available",
-      icon: "💜",
-      color: "#47556D", 
-      resource: "https://suicidepreventionlifeline.org/help-yourself/",
-      action: () => showActionOptions("suicidal", "Suicide Prevention Resources", "https://suicidepreventionlifeline.org/help-yourself/")
+      id: "depressed", 
+      title: t('feelDepressed'),
+      subtitle: t('depressedDescription'),
+      icon: "😢",
+      color: "#47556D",
+      resource: "https://www.nimh.nih.gov/health/topics/depression",
+      action: () => showActionOptions("depressed", "Depression Support Resources", "https://www.nimh.nih.gov/health/topics/depression")
     },
     {
       id: "talk",
-      title: "I Need Someone To Talk To",
-      subtitle: "Connect with trained listeners",
+      title: t('needToTalk'),
+      subtitle: t('talkDescription'),
       icon: "💬",
       color: "#6B8E7B",
       resource: "https://www.7cups.com/",
       action: () => showActionOptions("talk", "Free Emotional Support - 7 Cups", "https://www.7cups.com/")
-    },
-    {
-      id: "bullied",
-      title: "I'm Being Bullied",
-      subtitle: "Protection resources and support",
-      icon: "🛡️",
-      color: "#47556D",
-      resource: "https://www.stopbullying.gov/resources",
-      action: () => showActionOptions("bullied", "Anti-Bullying Resources", "https://www.stopbullying.gov/resources")
-    },
-    {
-      id: "hurt",
-      title: "I've Hurt Myself", 
-      subtitle: "Safe alternatives and medical guidance",
-      icon: "🩹",
-      color: "#6B8E7B",
-      resource: "https://www.selfinjury.bctr.cornell.edu/perch/resources/distraction-techniques.pdf",
-      action: () => showActionOptions("hurt", "Self-Harm Alternatives", "https://www.selfinjury.bctr.cornell.edu/perch/resources/distraction-techniques.pdf")
-    },
-    {
-      id: "quiet",
-      title: "I Just Want Quiet Support",
-      subtitle: "Peaceful exercises and affirmations",
-      icon: "🕯️",
-      color: "#47556D",
-      resource: "https://www.mindful.org/meditation/mindfulness-getting-started/",
-      action: () => showActionOptions("quiet", "Mindfulness Resources", "https://www.mindful.org/meditation/mindfulness-getting-started/")
     }
   ];
 
@@ -154,7 +127,7 @@ export default function Home() {
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black dark:text-white w-4 h-4" />
           <input
             type="text"
-            placeholder="Type how you feel: 'I'm alone', 'homeless', 'want to die'..."
+            placeholder={t('searchPlaceholder')}
             className="search-input w-full pl-10 pr-4 py-3 rounded-xl bg-white dark:bg-black text-black dark:text-white placeholder-gray-500 focus:outline-none text-sm"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -166,7 +139,7 @@ export default function Home() {
 
         {/* Quick Tools */}
         <section className="space-y-4">
-          <h2 className="text-xl font-black text-black dark:text-white mb-4" style={{ textShadow: '1px 1px 0px rgba(128,128,128,0.5)' }}>How can we support you right now?</h2>
+          <h2 className="text-xl font-black text-black dark:text-white mb-4" style={{ textShadow: '1px 1px 0px rgba(128,128,128,0.5)' }}>{t('howCanWeSupport')}</h2>
           <div className="space-y-3">
             {quickTools.map((tool) => (
               <button
@@ -188,7 +161,7 @@ export default function Home() {
 
         {/* Support Modules */}
         <section className="space-y-4">
-          <h2 className="text-xl font-black text-black dark:text-white mb-4 text-center" style={{ textShadow: '1px 1px 0px rgba(128,128,128,0.5)' }}>Additional Support</h2>
+          <h2 className="text-xl font-black text-black dark:text-white mb-4 text-center" style={{ textShadow: '1px 1px 0px rgba(128,128,128,0.5)' }}>{t('additionalSupport')}</h2>
           <div className="grid grid-cols-2 gap-3">
             {supportModules.map((module) => (
               <button
@@ -241,7 +214,7 @@ export default function Home() {
                 }}
                 className="w-full bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 py-3 px-4 rounded-lg transition-colors"
               >
-                Visit Resource Website
+{t('visitWebsite')}
               </button>
               
               <button
