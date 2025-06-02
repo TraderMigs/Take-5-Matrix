@@ -64,11 +64,13 @@ export default function EmergencySection() {
 
   return (
     <section className="border-2 border-black dark:border-white rounded-xl p-4 bg-white dark:bg-black">
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-center mb-3">
         <div className="flex items-center">
           <TriangleAlert className="mr-2 text-black dark:text-white" size={20} />
           <h2 className="text-lg font-semibold text-black dark:text-white">Emergency Support</h2>
         </div>
+      </div>
+      <div className="flex items-center justify-end mb-3 -mt-8">
         <div className="flex items-center space-x-2">
           {locationData && (
             <div className="flex items-center space-x-1 text-xs text-black dark:text-white">
