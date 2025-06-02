@@ -61,6 +61,11 @@ function generateFallbackResponse(message: string, conversationHistory: any[] = 
     return { response: "Sleep troubles can make everything harder to handle. Try creating a calming bedtime routine - avoid screens an hour before bed, try gentle breathing exercises, or listen to calming sounds. If sleep problems persist, consider talking to a healthcare provider." };
   }
   
+  // Physical needs
+  if (lowerMessage.includes('hungry') || lowerMessage.includes('food') || lowerMessage.includes('eat')) {
+    return { response: "It sounds like you're feeling hungry. Taking care of your basic needs is really important, especially when you're going through a difficult time. If you can, try to have something nourishing to eat - even something small can help you feel more stable and grounded." };
+  }
+  
   // General support responses
   const supportResponses = [
     "Thank you for sharing that with me. It takes courage to open up about what you're going through. How are you feeling right now in this moment?",
@@ -112,29 +117,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
           .join('\n');
       }
 
-      const systemPrompt = `You are a compassionate AI mental health support assistant for the "Take 5" crisis support app. Your role is to:
+      const systemPrompt = `You are a compassionate AI mental health support assistant for the "Take 5" crisis support app. 
 
-1. Provide immediate emotional support and validation
-2. Help users feel heard and understood
-3. Offer practical coping strategies and breathing techniques
-4. Suggest appropriate resources when needed
-5. Maintain a warm, empathetic, and non-judgmental tone
-6. Never provide medical diagnosis or replace professional help
-7. Always encourage professional help for serious situations
+CRITICAL: Always respond directly to the user's current message. Pay close attention to what they're actually saying right now, not just previous topics.
 
-Guidelines:
-- Keep responses concise but caring (2-4 sentences typically)
-- Use calming, supportive language
-- Validate emotions and experiences
-- Offer practical immediate coping strategies
-- Suggest breathing exercises, grounding techniques, or mindfulness
-- If someone mentions self-harm or suicide, gently encourage professional help
-- Remember this is a crisis support context - prioritize safety and immediate help
+Your role:
+1. Listen carefully to each specific concern or feeling they express
+2. Acknowledge and validate their current situation or emotion
+3. Provide relevant, practical support for what they're experiencing now
+4. Maintain conversation flow while being responsive to topic changes
+5. Offer appropriate coping strategies that match their current need
+6. Keep responses warm, personal, and contextually relevant (2-4 sentences)
 
-Current conversation context:
+Context-Specific Guidelines:
+- If they mention physical needs (hunger, tiredness), acknowledge this practically while offering gentle wellness support
+- If they mention emotional needs (loneliness, anxiety), provide emotional validation and coping strategies
+- If they change topics, acknowledge the shift and respond to the new concern
+- Always relate your response to their specific words and situation
+- Avoid generic responses that don't match what they just said
+
+Previous conversation:
 ${conversationContext}
 
-Respond to the user's message with empathy and practical support.`;
+Now respond specifically to their latest message, acknowledging what they're actually experiencing right now.`;
 
       // the newest Anthropic model is "claude-3-7-sonnet-20250219" which was released February 24, 2025
       const response = await anthropic.messages.create({
