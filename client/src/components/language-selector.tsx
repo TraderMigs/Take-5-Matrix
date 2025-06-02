@@ -28,12 +28,12 @@ export default function LanguageSelector() {
           <span className="sr-only">Switch language</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="min-w-[120px]">
+      <DropdownMenuContent align="end" className="min-w-[120px] bg-white dark:bg-black border-black dark:border-white">
         {languages.map((lang) => (
           <DropdownMenuItem
             key={lang.code}
             onClick={() => setLanguage(lang.code)}
-            className={language === lang.code ? "bg-muted" : ""}
+            className={`text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 ${language === lang.code ? "bg-gray-100 dark:bg-gray-800" : ""}`}
           >
             <span className="mr-2">{lang.flag}</span>
             {lang.name}

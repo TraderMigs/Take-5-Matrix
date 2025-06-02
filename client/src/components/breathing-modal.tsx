@@ -79,9 +79,9 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-sm w-full mx-4 rounded-2xl" aria-describedby="breathing-description">
+      <DialogContent className="max-w-sm w-full mx-4 rounded-2xl bg-white dark:bg-black border-black dark:border-white" aria-describedby="breathing-description">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-semibold text-gray-800 text-center">
+          <DialogTitle className="text-2xl font-semibold text-black dark:text-white text-center">
             Guided Breathing
           </DialogTitle>
         </DialogHeader>
@@ -99,10 +99,10 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
           </div>
 
           <div className="space-y-2 text-center">
-            <p className="text-lg font-medium text-gray-800">
+            <p className="text-lg font-medium text-black dark:text-white">
               {phaseInstructions[phase]}
             </p>
-            <p className="text-gray-600">Follow the timer and breathe deeply</p>
+            <p className="text-gray-600 dark:text-gray-400">Follow the timer and breathe deeply</p>
           </div>
 
           <div className="flex space-x-3">
