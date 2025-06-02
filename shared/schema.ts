@@ -13,6 +13,9 @@ export const users = pgTable("users", {
   profileImage: text("profile_image"),
   bio: text("bio"),
   emergencyContactId: integer("emergency_contact_id"),
+  emailVerified: boolean("email_verified").default(false),
+  emailVerificationToken: text("email_verification_token"),
+  emailVerificationExpires: timestamp("email_verification_expires"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

@@ -6,8 +6,11 @@ export interface IStorage {
   // User operations
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUserProfile(userId: number, data: Partial<User>): Promise<User>;
+  setEmailVerificationToken(userId: number, token: string, expires: Date): Promise<void>;
+  verifyEmailWithToken(token: string): Promise<User | null>;
   
   // Contact operations (support both logged in and anonymous users)
   getContacts(userId?: number): Promise<Contact[]>;
@@ -40,6 +43,55 @@ export class DatabaseStorage implements IStorage {
   async getUserByUsername(username: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.username, username));
     return user || undefined;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user || undefined;
+  }
+
+  async setEmailVerificationToken(userId: number, token: string, expires: Date): Promise<void> {
+    await db
+      .update(users)
+      .set({
+        emailVerificationToken: token,
+        emailVerificationExpires: expires,
+      })
+      .where(eq(users.id, userId));
+  }
+
+  async verifyEmailWithToken(token: string): Promise<User | null> {
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(
+        and(
+          eq(users.emailVerificationToken, token),
+          eq(users.emailVerified, false)
+        )
+      );
+
+    if (!user || !user.emailVerificationExpires) {
+      return null;
+    }
+
+    // Check if token is expired
+    if (new Date() > user.emailVerificationExpires) {
+      return null;
+    }
+
+    // Mark email as verified and clear token
+    const [verifiedUser] = await db
+      .update(users)
+      .set({
+        emailVerified: true,
+        emailVerificationToken: null,
+        emailVerificationExpires: null,
+      })
+      .where(eq(users.id, user.id))
+      .returning();
+
+    return verifiedUser;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
