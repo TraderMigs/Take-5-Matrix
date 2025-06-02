@@ -8,7 +8,7 @@ import PersonalContacts from "@/components/personal-contacts";
 import LanguageSelector from "@/components/language-selector";
 import LocationSelector from "@/components/location-selector";
 import AIChat from "@/components/ai-chat";
-import UserAccount from "@/components/user-account";
+import UserAccount from "@/components/user-account-new";
 import EmergencyContactDisplay from "@/components/emergency-contact-display";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";

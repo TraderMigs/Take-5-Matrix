@@ -214,6 +214,26 @@ Now respond specifically to their latest message, acknowledging what they're act
     res.json({ success: true });
   });
 
+  app.put('/api/auth/complete-profile', async (req, res) => {
+    try {
+      const { userId, fullName, displayName, dateOfBirth, profileQuote } = req.body;
+      
+      if (!userId) {
+        return res.status(400).send('User ID required');
+      }
+
+      const updatedUser = await storage.updateUserProfile(userId, { 
+        displayName, 
+        dateOfBirth, 
+        bio: profileQuote 
+      });
+      res.json(updatedUser);
+    } catch (error) {
+      console.error('Profile completion error:', error);
+      res.status(500).json({ error: 'Failed to complete profile' });
+    }
+  });
+
   app.put('/api/auth/profile', async (req, res) => {
     try {
       const { displayName, bio, userId } = req.body;

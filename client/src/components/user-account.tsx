@@ -20,17 +20,17 @@ interface UserAccountProps {
 export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onLogout }: UserAccountProps) {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [dateOfBirth, setDateOfBirth] = useState("");
-  const [displayName, setDisplayName] = useState(currentUser?.displayName || "");
-  const [bio, setBio] = useState(currentUser?.bio || "");
-  const [isEditing, setIsEditing] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showProfileCompletion, setShowProfileCompletion] = useState(false);
+  const [fullName, setFullName] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState("");
+  const [profileQuote, setProfileQuote] = useState("");
   const [diaryEntries, setDiaryEntries] = useState<any[]>([]);
   const [newEntryTitle, setNewEntryTitle] = useState("");
   const [newEntryContent, setNewEntryContent] = useState("");
-  const [newEntryMood, setNewEntryMood] = useState("");
   const [showNewEntry, setShowNewEntry] = useState(false);
   const { toast } = useToast();
 
@@ -69,10 +69,19 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
   };
 
   const handleSignup = async () => {
-    if (!email || !username || !password || !dateOfBirth) {
+    if (!email || !password || !confirmPassword) {
       toast({
         title: "Missing information",
-        description: "Please fill in all required fields: email, username, password, and date of birth.",
+        description: "Please fill in email, password, and confirm password.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      toast({
+        title: "Password mismatch",
+        description: "Passwords do not match. Please try again.",
         variant: "destructive",
       });
       return;
@@ -83,23 +92,28 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
       const response = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, username, password, dateOfBirth, displayName }),
+        body: JSON.stringify({ 
+          email, 
+          username: email.split('@')[0], // Use email prefix as username
+          password, 
+          dateOfBirth: "1990-01-01", // Temporary, will be set in profile completion
+          displayName: ""
+        }),
       });
 
       if (response.ok) {
         const user = await response.json();
-        onLogin(user);
+        setShowProfileCompletion(true);
         toast({
           title: "Account created!",
-          description: "Welcome to Take 5. Your account is ready.",
+          description: "Please complete your profile to continue.",
           className: "bg-green-800 border-green-700 text-white",
         });
-        onClose();
       } else {
         const error = await response.text();
         toast({
           title: "Signup failed",
-          description: error || "Username might already exist.",
+          description: error || "Email might already exist.",
           variant: "destructive",
         });
       }
