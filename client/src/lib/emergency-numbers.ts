@@ -38,6 +38,13 @@ export function getLocationBasedNumbers(countryCode?: string) {
   return emergencyData[countryCode || "DEFAULT"] || emergencyData.DEFAULT;
 }
 
+export function getAllCountries() {
+  return Object.entries(emergencyData)
+    .filter(([code]) => code !== 'DEFAULT')
+    .map(([code, data]) => ({ code, name: data.name }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
 export async function detectUserLocation(): Promise<{ country: string; countryCode: string } | null> {
   try {
     // Ask for location permission first

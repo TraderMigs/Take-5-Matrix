@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Phone, Heart, TriangleAlert, MapPin } from "lucide-react";
-import { getLocationBasedNumbers, detectUserLocation } from "@/lib/emergency-numbers";
+import { Phone, Heart, TriangleAlert, MapPin, Settings } from "lucide-react";
+import { getLocationBasedNumbers, detectUserLocation, getAllCountries } from "@/lib/emergency-numbers";
 
 export default function EmergencySection() {
   const [locationData, setLocationData] = useState<{
@@ -10,10 +10,23 @@ export default function EmergencySection() {
     name: string;
   } | null>(null);
   const [isDetecting, setIsDetecting] = useState(true);
+  const [showLocationSelector, setShowLocationSelector] = useState(false);
+  const [savedLocation, setSavedLocation] = useState<string | null>(null);
 
   useEffect(() => {
     const getLocationNumbers = async () => {
       try {
+        // Check if user has saved a manual location
+        const saved = localStorage.getItem('selectedLocation');
+        if (saved) {
+          const numbers = getLocationBasedNumbers(saved);
+          setLocationData(numbers);
+          setSavedLocation(saved);
+          setIsDetecting(false);
+          return;
+        }
+
+        // Otherwise detect location
         const location = await detectUserLocation();
         const numbers = getLocationBasedNumbers(location?.countryCode);
         setLocationData(numbers);
@@ -29,6 +42,14 @@ export default function EmergencySection() {
     getLocationNumbers();
   }, []);
 
+  const handleLocationSelect = (countryCode: string) => {
+    const numbers = getLocationBasedNumbers(countryCode);
+    setLocationData(numbers);
+    setSavedLocation(countryCode);
+    localStorage.setItem('selectedLocation', countryCode);
+    setShowLocationSelector(false);
+  };
+
   const handleEmergencyCall = () => {
     if (locationData && confirm("This will call emergency services. Continue?")) {
       window.location.href = `tel:${locationData.emergency}`;
@@ -42,36 +63,61 @@ export default function EmergencySection() {
   };
 
   return (
-    <section className="bg-red-50 dark:bg-red-900/20 rounded-xl p-4">
+    <section className="border-2 border-black dark:border-white rounded-xl p-4 bg-white dark:bg-black">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center">
-          <TriangleAlert className="mr-2 text-red-600" size={20} />
-          <h2 className="text-lg font-semibold text-red-800 dark:text-red-300">Emergency Support</h2>
+          <TriangleAlert className="mr-2 text-black dark:text-white" size={20} />
+          <h2 className="text-lg font-semibold text-black dark:text-white">Emergency Support</h2>
         </div>
-        {locationData && (
-          <div className="flex items-center space-x-1 text-xs text-red-600 dark:text-red-400">
-            <MapPin className="w-3 h-3" />
-            <span>{locationData.name}</span>
-          </div>
-        )}
+        <div className="flex items-center space-x-2">
+          {locationData && (
+            <div className="flex items-center space-x-1 text-xs text-black dark:text-white">
+              <MapPin className="w-3 h-3" />
+              <span>{locationData.name}</span>
+            </div>
+          )}
+          <button
+            onClick={() => setShowLocationSelector(!showLocationSelector)}
+            className="p-1 rounded text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+          >
+            <Settings className="w-4 h-4" />
+          </button>
+        </div>
       </div>
+
+      {showLocationSelector && (
+        <div className="mb-4 p-3 border border-black dark:border-white rounded-lg bg-gray-50 dark:bg-gray-900">
+          <h3 className="text-sm font-medium text-black dark:text-white mb-2">Select Location:</h3>
+          <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto">
+            {getAllCountries().map((country) => (
+              <button
+                key={country.code}
+                onClick={() => handleLocationSelect(country.code)}
+                className="text-xs p-2 text-left border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-800 text-black dark:text-white"
+              >
+                {country.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
       
       {isDetecting ? (
         <div className="text-center py-4">
-          <div className="text-sm text-gray-600 dark:text-gray-400">Detecting your location...</div>
+          <div className="text-sm text-black dark:text-white">Detecting your location...</div>
         </div>
       ) : (
         <div className="space-y-3">
           <Button
             onClick={handleEmergencyCall}
-            className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-4 px-6 rounded-xl transition-colors flex items-center justify-center text-lg"
+            className="w-full bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 font-semibold py-4 px-6 rounded-xl transition-colors flex items-center justify-center text-lg border-2 border-black dark:border-white"
           >
             <Phone className="mr-3" size={20} />
             Call {locationData?.emergency} (Emergency)
           </Button>
           <Button
             onClick={handleCrisisCall}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-6 rounded-xl transition-colors flex items-center justify-center text-lg"
+            className="w-full bg-white dark:bg-black text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 font-semibold py-4 px-6 rounded-xl transition-colors flex items-center justify-center text-lg border-2 border-black dark:border-white"
           >
             <Heart className="mr-3" size={20} />
             Crisis Hotline: Call Now
@@ -79,7 +125,7 @@ export default function EmergencySection() {
         </div>
       )}
       
-      <p className="text-xs text-red-600 dark:text-red-400 mt-3 text-center">
+      <p className="text-xs text-black dark:text-white mt-3 text-center">
         If you're in immediate danger, call emergency services
       </p>
     </section>
