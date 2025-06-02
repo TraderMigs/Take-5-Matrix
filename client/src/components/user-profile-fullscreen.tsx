@@ -359,14 +359,14 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                 onClick={onLogout}
                 className="mt-8 bg-red-600 hover:bg-red-700 text-white"
               >
-                Logout
+                {t('logout')}
               </Button>
             </div>
           </TabsContent>
 
           <TabsContent value="diary" className="space-y-6 mt-6">
             <div className="flex justify-between items-center">
-              <h3 className="text-xl font-semibold text-black dark:text-white">Your Private Diary</h3>
+              <h3 className="text-xl font-semibold text-black dark:text-white">{t('yourPrivateDiary')}</h3>
               <Button 
                 onClick={() => setShowNewEntry(true)}
                 className="bg-teal-500 hover:bg-teal-600 text-white"
