@@ -30,14 +30,14 @@ export default function Home() {
   const { t } = useLanguage();
   const { toast } = useToast();
 
-  // Check for legal acceptance and saved user session in localStorage
+  // Check for legal acceptance and saved user session
   useEffect(() => {
     const legalAccepted = localStorage.getItem('take5_legal_accepted');
     if (legalAccepted === 'true') {
       setHasAcceptedLegal(true);
     }
 
-    // Check for saved user session
+    // Check for saved user session in localStorage first
     const savedUser = localStorage.getItem('take5_current_user');
     if (savedUser) {
       try {
@@ -48,6 +48,19 @@ export default function Home() {
         localStorage.removeItem('take5_current_user');
       }
     }
+
+    // Also check server-side session for persistent login
+    fetch('/api/auth/session')
+      .then(response => response.json())
+      .then(data => {
+        if (data.authenticated && data.userData) {
+          setCurrentUser(data.userData);
+          localStorage.setItem('take5_current_user', JSON.stringify(data.userData));
+        }
+      })
+      .catch(error => {
+        console.error('Error checking server session:', error);
+      });
   }, []);
 
   // Handle Google OAuth callback
@@ -62,6 +75,16 @@ export default function Home() {
         setCurrentUser(user);
         // Save user session to localStorage for persistence
         localStorage.setItem('take5_current_user', JSON.stringify(user));
+        
+        // Also save to server-side session for extended persistence
+        fetch('/api/auth/session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: user.id, userData: user })
+        }).catch(error => {
+          console.error('Error saving server session:', error);
+        });
+        
         toast({
           title: "Welcome!",
           description: `Successfully signed in with Google as ${user.displayName || user.email}`,
@@ -382,10 +405,22 @@ export default function Home() {
           onLogin={(user) => {
             setCurrentUser(user);
             localStorage.setItem('take5_current_user', JSON.stringify(user));
+            // Save to server session
+            fetch('/api/auth/session', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ userId: user.id, userData: user })
+            }).catch(error => {
+              console.error('Error saving server session:', error);
+            });
           }}
           onLogout={() => {
             setCurrentUser(null);
             localStorage.removeItem('take5_current_user');
+            // Clear server session
+            fetch('/api/auth/session', { method: 'DELETE' }).catch(error => {
+              console.error('Error clearing server session:', error);
+            });
           }}
         />
       )}
@@ -399,6 +434,10 @@ export default function Home() {
           onLogout={() => {
             setCurrentUser(null);
             localStorage.removeItem('take5_current_user');
+            // Clear server session
+            fetch('/api/auth/session', { method: 'DELETE' }).catch(error => {
+              console.error('Error clearing server session:', error);
+            });
           }}
         />
       )}

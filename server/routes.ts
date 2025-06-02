@@ -6,6 +6,14 @@ import { setupGoogleAuth } from './google-auth';
 import { generateVerificationToken, sendVerificationEmail, sendWelcomeEmail } from './email-service';
 import bcrypt from 'bcryptjs';
 
+// Extend Express session with user data
+declare module "express-session" {
+  interface SessionData {
+    userId?: number;
+    userData?: any;
+  }
+}
+
 // Crisis keyword detection
 function detectCrisisKeywords(message: string): boolean {
   const crisisKeywords = [
@@ -95,6 +103,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // use storage to perform CRUD operations on the storage interface
   // e.g. storage.insertUser(user) or storage.getUserByUsername(username)
+
+  // Session management for persistent login
+  app.post("/api/auth/session", (req: any, res) => {
+    const { userId, userData } = req.body;
+    if (userId && userData) {
+      req.session.userId = userId;
+      req.session.userData = userData;
+      res.json({ success: true, message: "Session saved" });
+    } else {
+      res.status(400).json({ error: "Missing user data" });
+    }
+  });
+
+  app.get("/api/auth/session", (req: any, res) => {
+    if (req.session.userId && req.session.userData) {
+      res.json({ 
+        authenticated: true, 
+        userId: req.session.userId,
+        userData: req.session.userData 
+      });
+    } else {
+      res.json({ authenticated: false });
+    }
+  });
+
+  app.delete("/api/auth/session", (req: any, res) => {
+    req.session.destroy((err: any) => {
+      if (err) {
+        res.status(500).json({ error: "Failed to destroy session" });
+      } else {
+        res.clearCookie('connect.sid');
+        res.json({ success: true, message: "Session destroyed" });
+      }
+    });
+  });
 
   // AI Chat endpoint
   app.post("/api/ai-chat", async (req, res) => {
