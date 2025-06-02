@@ -201,4 +201,22 @@ button:focus, input:focus {
   .hover\:border-sage-green:hover {
     border-color: hsl(var(--sage-green));
   }
+
+  /* Force remove all yellow colors */
+  .text-yellow-400,
+  .text-yellow-500,
+  .text-yellow-600,
+  .bg-yellow-400,
+  .bg-yellow-500,
+  .bg-yellow-600,
+  [style*="yellow"] {
+    color: #b91c1c !important; /* red-700 */
+    background-color: transparent !important;
+  }
+
+  .dark .text-yellow-400,
+  .dark .text-yellow-500,
+  .dark .text-yellow-600 {
+    color: #fca5a5 !important; /* red-300 */
+  }
 }
