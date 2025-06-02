@@ -11,6 +11,8 @@ import AIChat from "@/components/ai-chat";
 import UserAccount from "@/components/user-account-clean";
 import UserProfileFullscreen from "@/components/user-profile-fullscreen";
 import RotatingAffirmations from "@/components/rotating-affirmations";
+import LegalAcceptance from "@/components/legal-acceptance";
+import LegalModal from "@/components/legal-modal";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
@@ -21,11 +23,19 @@ export default function Home() {
   const [selectedAction, setSelectedAction] = useState<any>(null);
   const [showAIChat, setShowAIChat] = useState(false);
   const [showUserAccount, setShowUserAccount] = useState(false);
-
+  const [hasAcceptedLegal, setHasAcceptedLegal] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const { theme, toggleTheme } = useTheme();
   const { t } = useLanguage();
   const { toast } = useToast();
+
+  // Check for legal acceptance in localStorage
+  useEffect(() => {
+    const legalAccepted = localStorage.getItem('take5_legal_accepted');
+    if (legalAccepted === 'true') {
+      setHasAcceptedLegal(true);
+    }
+  }, []);
 
   // Handle Google OAuth callback
   useEffect(() => {
@@ -56,6 +66,11 @@ export default function Home() {
       window.history.replaceState({}, document.title, window.location.pathname);
     }
   }, [toast]);
+
+  const handleLegalAcceptance = () => {
+    setHasAcceptedLegal(true);
+    localStorage.setItem('take5_legal_accepted', 'true');
+  };
 
   const showActionOptions = (type: string, title: string, resourceUrl: string, customAction?: () => void) => {
     setSelectedAction({ type, title, resourceUrl, customAction });

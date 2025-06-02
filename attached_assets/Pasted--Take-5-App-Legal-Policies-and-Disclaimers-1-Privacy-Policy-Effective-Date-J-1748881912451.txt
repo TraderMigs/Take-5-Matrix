@@ -1,0 +1,95 @@
+**Take 5 App - Legal Policies and Disclaimers**
+
+---
+
+**1. Privacy Policy**
+
+Effective Date: June 6, 2025
+
+**Take 5** ("we," "us," or "our") values your privacy. This Privacy Policy explains how we collect, use, disclose, and protect your personal information when you use the Take 5 app (the "App").
+
+**1.1 Information We Collect:**
+- Personal details you provide (e.g., name, email address, emergency contact info)
+- Journaling entries (stored locally or securely encrypted if on our servers)
+- Usage data (pages visited, buttons clicked, interactions with the app)
+- Device data (device type, operating system, browser type)
+
+**1.2 How We Use Your Data:**
+- To operate and maintain the App
+- To allow you to use personalized features (e.g., diary, emergency contacts)
+- To improve user experience and develop new features
+- To send occasional updates or alerts if you opt-in
+
+**1.3 Sharing of Data:**
+- We do **not** sell your data
+- We do **not** share your private data with third parties unless legally required
+- We may use third-party services (e.g., YouTube API, Google Analytics), and their data collection practices are governed by their own policies
+
+**1.4 Data Security:**
+- We implement industry-standard encryption and access controls
+- Users may request data deletion by emailing tradermigs@gmail.com
+
+**1.5 Your Rights (GDPR, CCPA, etc.):**
+- Right to access, correct, or delete your data
+- Right to withdraw consent or opt-out of communications
+- Right to lodge a complaint with a data protection authority
+
+---
+
+**2. Terms & Conditions**
+
+**Effective Date:** June 6, 2025
+
+By using the Take 5 app, you agree to the following terms. If you do not agree, do not use the App.
+
+**2.1 Eligibility:**
+- You must be 18 years or older to use the App.
+- By using the App, you represent that you are at least 18 years old.
+
+**2.2 No Medical Advice:**
+- The App is for informational and motivational purposes only.
+- **Take 5 does not provide medical advice, diagnosis, or treatment.**
+- Content within the App (quotes, affirmations, AI chat, linked videos) is not intended to replace professional mental health or medical care.
+- Always consult a qualified healthcare provider for mental health issues.
+
+**2.3 AI and Content Usage:**
+- The AI chatbot is a basic conversational assistant. It is **not** a therapist, licensed counselor, or crisis worker.
+- Linked YouTube content is curated for convenience and positivity but is provided by third parties.
+
+**2.4 Emergency Feature Disclaimer:**
+- The emergency contact or services button is a user-triggered tool. **We do not monitor or respond to emergency calls or messages.**
+
+**2.5 Limitation of Liability:**
+- Use of the App is entirely at your own risk.
+- You agree that Take 5, its creators, affiliates, and team shall not be held liable for any direct, indirect, incidental, or consequential damages resulting from use of the App.
+
+**2.6 Account and Data:**
+- You are responsible for maintaining the confidentiality of your data and password if account-based login is used.
+- You may request data deletion at any time via tradermigs@gmail.com
+
+**2.7 Changes to the Terms:**
+- These Terms may be updated periodically. Continued use after updates means you accept the changes.
+
+---
+
+**3. Disclaimer Notice**
+
+> **DISCLAIMER:** Take 5 is a supportive app created by an individual with personal experience in mental health. It is not a professional service. The App does not provide any diagnosis, treatment, therapy, or emergency support. By using this App, you agree that you are solely responsible for your actions and experiences. If you are experiencing a mental health crisis, please contact local emergency services or a licensed mental health provider immediately.
+
+**If you do not agree with any part of these notices, do not use the App.**
+
+Before using the App, users must check a box that confirms:
+
+> "I am 18 years or older. I have read and agree to the Privacy Policy, Terms & Conditions, and Disclaimer. I understand that Take 5 is not a substitute for professional help."
+
+---
+
+**Contact Us**
+
+If you have any questions about your data, rights, or the terms listed here, contact:
+
+**Email:** tradermigs@gmail.com  
+**App Creator:** U.S. Citizen residing in Thailand  
+**Governing Jurisdiction:** United States (federal law), with international use acknowledged
+
+---
