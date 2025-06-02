@@ -281,14 +281,14 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
     <div className="fixed inset-0 z-50 bg-purple-200 dark:bg-purple-900 overflow-y-auto">
       <div className="min-h-screen p-4">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-black dark:text-white">Your Profile</h1>
+          <h1 className="text-2xl font-bold text-black dark:text-white">{t('yourProfile')}</h1>
           <Button 
             variant="outline" 
             onClick={onClose}
             className="bg-white dark:bg-black border-2 border-black dark:border-white text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
           >
             <X className="w-4 h-4 mr-2" />
-            Close
+            {t('close')}
           </Button>
         </div>
 
@@ -298,13 +298,13 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
               value="profile" 
               className="text-black dark:text-white data-[state=active]:bg-green-800 data-[state=active]:text-white"
             >
-              Profile
+              {t('profile')}
             </TabsTrigger>
             <TabsTrigger 
               value="diary" 
               className="text-black dark:text-white data-[state=active]:bg-green-800 data-[state=active]:text-white"
             >
-              Private Diary
+              {t('privateDiary')}
             </TabsTrigger>
           </TabsList>
           
@@ -380,13 +380,13 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
               <div className="p-4 bg-white dark:bg-black rounded-lg border-2 border-teal-400 space-y-4">
                 <Input
                   type="text"
-                  placeholder="Entry title..."
+                  placeholder={t('entryTitlePlaceholder')}
                   value={newEntryTitle}
                   onChange={(e) => setNewEntryTitle(e.target.value)}
                   className="bg-white dark:bg-black border-2 border-teal-400 text-black dark:text-white"
                 />
                 <Textarea
-                  placeholder="Write your thoughts..."
+                  placeholder={t('writeThoughtsPlaceholder')}
                   value={newEntryContent}
                   onChange={(e) => setNewEntryContent(e.target.value)}
                   rows={4}
@@ -394,14 +394,13 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                 />
                 <div className="flex gap-2">
                   <Button onClick={saveDiaryEntry} className="bg-teal-500 hover:bg-teal-600 text-white">
-                    Save Entry
+                    {t('saveEntry')}
                   </Button>
                   <Button 
                     onClick={() => setShowNewEntry(false)} 
-                    variant="outline"
-                    className="border-teal-400 text-black dark:text-white hover:bg-teal-50 dark:hover:bg-teal-900"
+                    className="bg-stone-200 hover:bg-stone-300 text-white"
                   >
-                    Cancel
+                    {t('cancel')}
                   </Button>
                 </div>
               </div>
@@ -534,8 +533,8 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
               {diaryEntries.length === 0 && !showNewEntry && (
                 <div className="text-center py-12">
                   <BookOpen className="w-16 h-16 text-teal-400 mx-auto mb-4" />
-                  <p className="text-black dark:text-white text-lg">Start writing to track your thoughts and feelings.</p>
-                  <p className="text-black dark:text-white text-sm mt-2">Your entries are saved permanently and only visible to you.</p>
+                  <p className="text-black dark:text-white text-lg">{t('startWriting')}</p>
+                  <p className="text-black dark:text-white text-sm mt-2">{t('entriesSaved')}</p>
                 </div>
               )}
             </div>
