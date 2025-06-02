@@ -255,7 +255,7 @@ export default function Home() {
                   }}
                   className="w-full bg-purple-600 text-white hover:bg-purple-700 py-3 px-4 rounded-lg transition-colors"
                 >
-                  Try Built-in Tool
+                  In-app Relaxation
                 </button>
               )}
               
