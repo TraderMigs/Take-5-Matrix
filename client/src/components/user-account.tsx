@@ -323,28 +323,31 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
               </div>
 
               {showNewEntry && (
-                <div className="space-y-3 p-4 border rounded-lg bg-gray-50 dark:bg-gray-900">
+                <div className="space-y-3 p-4 border rounded-lg bg-purple-600 border-purple-700">
                   <Input
                     value={newEntryTitle}
                     onChange={(e) => setNewEntryTitle(e.target.value)}
                     placeholder="Entry title (optional)"
+                    className="bg-white/20 border-purple-400 text-white placeholder:text-purple-100 font-semibold"
                   />
                   <Input
                     value={newEntryMood}
                     onChange={(e) => setNewEntryMood(e.target.value)}
                     placeholder="How are you feeling? (optional)"
+                    className="bg-white/20 border-purple-400 text-white placeholder:text-purple-100 font-semibold"
                   />
                   <Textarea
                     value={newEntryContent}
                     onChange={(e) => setNewEntryContent(e.target.value)}
                     placeholder="Share your thoughts, feelings, or what happened today..."
                     rows={4}
+                    className="bg-white/20 border-purple-400 text-white placeholder:text-purple-100 font-semibold"
                   />
                   <div className="flex gap-2">
-                    <Button onClick={saveDiaryEntry} disabled={isLoading || !newEntryContent.trim()} className="flex-1">
+                    <Button onClick={saveDiaryEntry} disabled={isLoading || !newEntryContent.trim()} className="flex-1 bg-purple-800 hover:bg-purple-900 text-white font-bold">
                       Save Entry
                     </Button>
-                    <Button variant="outline" onClick={() => setShowNewEntry(false)} className="flex-1">
+                    <Button variant="outline" onClick={() => setShowNewEntry(false)} className="flex-1 border-purple-300 text-white hover:bg-purple-700 font-bold">
                       Cancel
                     </Button>
                   </div>

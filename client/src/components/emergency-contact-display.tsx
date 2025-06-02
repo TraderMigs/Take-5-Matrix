@@ -54,16 +54,16 @@ export default function EmergencyContactDisplay({ isOpen, onClose, currentUser }
         <div className="space-y-4">
           {currentUser ? (
             <>
-              <div className="bg-red-50 dark:bg-red-950 p-4 rounded-lg border border-red-200 dark:border-red-800">
+              <div className="bg-purple-600 p-4 rounded-lg border border-purple-700">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900 flex items-center justify-center">
-                    <User className="w-6 h-6 text-red-600" />
+                  <div className="w-12 h-12 rounded-full bg-purple-700 flex items-center justify-center">
+                    <User className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-red-900 dark:text-red-100">
+                    <h3 className="font-bold text-white">
                       {currentUser.displayName || currentUser.username}
                     </h3>
-                    <p className="text-sm text-red-700 dark:text-red-300">Phone Owner</p>
+                    <p className="text-sm font-semibold text-purple-100">Phone Owner</p>
                   </div>
                 </div>
               </div>
