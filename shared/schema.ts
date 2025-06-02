@@ -87,8 +87,10 @@ export const diaryEntriesRelations = relations(diaryEntries, ({ one }) => ({
 }));
 
 export const insertUserSchema = createInsertSchema(users).pick({
+  email: true,
   username: true,
   password: true,
+  dateOfBirth: true,
   displayName: true,
   profileImage: true,
   bio: true,

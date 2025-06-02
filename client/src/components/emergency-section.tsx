@@ -106,7 +106,7 @@ export default function EmergencySection() {
           </Button>
           <Button
             onClick={handleCrisisCall}
-            className="w-full bg-yellow-400 text-black hover:bg-yellow-500 font-semibold py-4 px-6 rounded-xl transition-colors flex items-center justify-center text-lg border-2 border-black"
+            className="w-full bg-white dark:bg-black text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 font-semibold py-4 px-6 rounded-xl transition-colors flex items-center justify-center text-lg border-2 border-black dark:border-white"
           >
             <Heart className="mr-3" size={20} />
 {t('crisisHotline')}: {t('crisisHotlineCall')}

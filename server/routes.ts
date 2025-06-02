@@ -159,7 +159,11 @@ Respond to the user's message with empathy and practical support.`;
   // Authentication routes
   app.post('/api/auth/signup', async (req, res) => {
     try {
-      const { username, password, displayName } = req.body;
+      const { email, username, password, dateOfBirth, displayName } = req.body;
+      
+      if (!email || !username || !password || !dateOfBirth) {
+        return res.status(400).send('Email, username, password, and date of birth are required');
+      }
       
       const existingUser = await storage.getUserByUsername(username);
       if (existingUser) {
@@ -167,8 +171,10 @@ Respond to the user's message with empathy and practical support.`;
       }
 
       const newUser = await storage.createUser({
+        email,
         username,
         password,
+        dateOfBirth,
         displayName: displayName || username,
       });
 
