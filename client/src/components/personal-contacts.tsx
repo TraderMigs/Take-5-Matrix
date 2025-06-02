@@ -85,7 +85,7 @@ export default function PersonalContacts() {
           <DialogTrigger asChild>
             <Button
               variant="outline"
-              className="w-full bg-yellow-600 hover:bg-yellow-700 border-2 border-yellow-700 hover:border-yellow-800 p-4 rounded-xl transition-colors text-center text-black"
+              className="w-full bg-yellow-400 hover:bg-yellow-500 border-2 border-black p-4 rounded-xl transition-colors text-center text-black"
             >
               <Plus className="mr-2" size={16} />
               Add a trusted contact
