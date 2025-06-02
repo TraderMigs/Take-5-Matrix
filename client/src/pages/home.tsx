@@ -10,7 +10,7 @@ import LocationSelector from "@/components/location-selector";
 import AIChat from "@/components/ai-chat";
 import UserAccount from "@/components/user-account-clean";
 import UserProfileFullscreen from "@/components/user-profile-fullscreen";
-import EmergencyContactDisplay from "@/components/emergency-contact-display";
+import RotatingAffirmations from "@/components/rotating-affirmations";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
@@ -21,7 +21,7 @@ export default function Home() {
   const [selectedAction, setSelectedAction] = useState<any>(null);
   const [showAIChat, setShowAIChat] = useState(false);
   const [showUserAccount, setShowUserAccount] = useState(false);
-  const [showEmergencyContacts, setShowEmergencyContacts] = useState(false);
+
   const [currentUser, setCurrentUser] = useState<any>(null);
   const { theme, toggleTheme } = useTheme();
   const { t } = useLanguage();
@@ -258,19 +258,8 @@ export default function Home() {
           <p className="text-sm font-semibold opacity-90" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>{t('footerMessage4')}</p>
         </section>
 
-        {/* Emergency Contact Button */}
-        <section className="mt-6">
-          <Button
-            onClick={() => setShowEmergencyContacts(true)}
-            className="w-full bg-red-600 hover:bg-red-700 text-white py-4 text-lg font-semibold border-2 border-red-700"
-          >
-            <Shield className="w-5 h-5 mr-2" />
-            User Emergency Contact
-          </Button>
-          <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-2">
-            For emergencies: Shows contact info if phone owner has an account
-          </p>
-        </section>
+        {/* Rotating Affirmations */}
+        <RotatingAffirmations />
       </main>
 
       {/* Breathing Modal */}
@@ -305,13 +294,6 @@ export default function Home() {
           onLogout={() => setCurrentUser(null)}
         />
       )}
-
-      {/* Emergency Contact Display Modal */}
-      <EmergencyContactDisplay
-        isOpen={showEmergencyContacts}
-        onClose={() => setShowEmergencyContacts(false)}
-        currentUser={currentUser}
-      />
 
       {/* Action Options Modal */}
       {showActionModal && selectedAction && (
