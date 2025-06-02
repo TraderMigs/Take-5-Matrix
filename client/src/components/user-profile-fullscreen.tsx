@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Camera, BookOpen, PlusCircle, X } from "lucide-react";
+import { Camera, BookOpen, PlusCircle, X, ChevronDown, ChevronUp } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface UserProfileProps {
@@ -21,7 +21,18 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
   const [newEntryTitle, setNewEntryTitle] = useState("");
   const [newEntryContent, setNewEntryContent] = useState("");
   const [showNewEntry, setShowNewEntry] = useState(false);
+  const [expandedEntries, setExpandedEntries] = useState<Set<number>>(new Set());
   const { toast } = useToast();
+
+  const toggleEntryExpansion = (entryId: number) => {
+    const newExpanded = new Set(expandedEntries);
+    if (newExpanded.has(entryId)) {
+      newExpanded.delete(entryId);
+    } else {
+      newExpanded.add(entryId);
+    }
+    setExpandedEntries(newExpanded);
+  };
 
   // Load diary entries when profile opens
   useEffect(() => {
@@ -260,17 +271,41 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
             )}
 
             <div className="space-y-4">
-              {diaryEntries.map((entry, index) => (
-                <div key={entry.id || index} className="p-4 bg-white dark:bg-black rounded-lg border-2 border-teal-400">
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-medium text-black dark:text-white">{entry.title}</h4>
-                    <span className="text-sm text-black dark:text-white">
-                      {new Date(entry.createdAt).toLocaleDateString()}
-                    </span>
+              {diaryEntries.map((entry, index) => {
+                const entryId = entry.id || index;
+                const isExpanded = expandedEntries.has(entryId);
+                
+                return (
+                  <div key={entryId} className="bg-white dark:bg-black rounded-lg border-2 border-teal-400 overflow-hidden">
+                    <div 
+                      className="p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors"
+                      onClick={() => toggleEntryExpansion(entryId)}
+                    >
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center space-x-3 flex-1">
+                          <h4 className="font-medium text-black dark:text-white">{entry.title}</h4>
+                          <span className="text-sm text-gray-500 dark:text-gray-400">
+                            {new Date(entry.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <div className="flex-shrink-0">
+                          {isExpanded ? (
+                            <ChevronUp className="w-5 h-5 text-teal-500" />
+                          ) : (
+                            <ChevronDown className="w-5 h-5 text-teal-500" />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {isExpanded && (
+                      <div className="px-4 pb-4 border-t border-gray-200 dark:border-gray-700">
+                        <p className="text-black dark:text-white mt-3 leading-relaxed">{entry.content}</p>
+                      </div>
+                    )}
                   </div>
-                  <p className="text-black dark:text-white">{entry.content}</p>
-                </div>
-              ))}
+                );
+              })}
               
               {diaryEntries.length === 0 && !showNewEntry && (
                 <div className="text-center py-12">
