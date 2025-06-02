@@ -497,7 +497,7 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
           <Button
             variant="outline"
             onClick={() => setIsLogin(!isLogin)}
-            className="w-full bg-white dark:bg-black text-black dark:text-white border-2 border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-900 font-semibold"
+            className="w-full bg-white dark:bg-black text-red-800 dark:text-red-400 border-2 border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-900 font-semibold"
           >
             {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
           </Button>
