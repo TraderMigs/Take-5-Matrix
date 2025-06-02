@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Camera, BookOpen, PlusCircle, X, ChevronDown, ChevronUp } from "lucide-react";
+import { Camera, BookOpen, PlusCircle, X, ChevronDown, ChevronUp, Save } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface UserProfileProps {
@@ -53,22 +53,37 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
     }
   };
 
-  const handleQuoteChange = async (value: string) => {
+  const handleQuoteChange = (value: string) => {
     const trimmedValue = value.slice(0, 40);
     setProfileQuote(trimmedValue);
-    
-    // Auto-save immediately
+  };
+
+  const saveProfileQuote = async () => {
     try {
-      await fetch('/api/auth/profile', {
+      const response = await fetch('/api/auth/profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           userId: currentUser.id, 
-          bio: trimmedValue 
+          bio: profileQuote 
         }),
       });
+
+      if (response.ok) {
+        toast({
+          title: "Quote Saved",
+          description: "Your profile quote has been saved successfully.",
+          className: "bg-green-800 border-green-700 text-white",
+        });
+      } else {
+        throw new Error('Failed to save quote');
+      }
     } catch (error) {
-      console.error('Failed to save quote:', error);
+      toast({
+        title: "Save Failed",
+        description: "Could not save your profile quote. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -206,14 +221,23 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                 <p className="text-lg text-black dark:text-white mb-4">@{currentUser.username}</p>
                 
                 <div className="space-y-2">
-                  <Input
-                    type="text"
-                    placeholder="Add a quote (40 chars max)"
-                    value={profileQuote}
-                    onChange={(e) => handleQuoteChange(e.target.value)}
-                    className="bg-white dark:bg-black border-2 border-teal-400 text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400"
-                    maxLength={40}
-                  />
+                  <div className="flex items-center space-x-2">
+                    <Input
+                      type="text"
+                      placeholder="Add a quote (40 chars max)"
+                      value={profileQuote}
+                      onChange={(e) => handleQuoteChange(e.target.value)}
+                      className="bg-white dark:bg-black border-2 border-teal-400 text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 flex-1"
+                      maxLength={40}
+                    />
+                    <Button
+                      onClick={saveProfileQuote}
+                      size="sm"
+                      className="bg-teal-500 hover:bg-teal-600 text-white px-3"
+                    >
+                      <Save className="w-4 h-4" />
+                    </Button>
+                  </div>
                   <p className="text-sm text-black dark:text-white">{profileQuote.length}/40</p>
                 </div>
               </div>
