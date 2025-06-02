@@ -202,21 +202,27 @@ button:focus, input:focus {
     border-color: hsl(var(--sage-green));
   }
 
-  /* Force remove all yellow colors */
+  /* Force remove all yellow colors globally */
   .text-yellow-400,
   .text-yellow-500,
   .text-yellow-600,
   .bg-yellow-400,
   .bg-yellow-500,
   .bg-yellow-600,
-  [style*="yellow"] {
-    color: #b91c1c !important; /* red-700 */
+  [style*="yellow"],
+  *:hover .text-yellow-400,
+  *:hover .text-yellow-500,
+  *:hover .text-yellow-600 {
+    color: #000000 !important; /* black */
     background-color: transparent !important;
   }
 
   .dark .text-yellow-400,
   .dark .text-yellow-500,
-  .dark .text-yellow-600 {
-    color: #fca5a5 !important; /* red-300 */
+  .dark .text-yellow-600,
+  .dark *:hover .text-yellow-400,
+  .dark *:hover .text-yellow-500,
+  .dark *:hover .text-yellow-600 {
+    color: #ffffff !important; /* white */
   }
 }
