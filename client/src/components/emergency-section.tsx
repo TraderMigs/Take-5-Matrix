@@ -86,14 +86,14 @@ export default function EmergencySection() {
       </div>
 
       {showLocationSelector && (
-        <div className="mb-4 p-3 border border-black dark:border-white rounded-lg bg-gray-50 dark:bg-gray-900">
+        <div className="mb-4 p-3 border border-black dark:border-white rounded-lg bg-white dark:bg-black">
           <h3 className="text-sm font-medium text-black dark:text-white mb-2">Select Location:</h3>
           <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto">
-            {getAllCountries().map((country) => (
+            {getAllCountries().map((country: { code: string; name: string }) => (
               <button
                 key={country.code}
                 onClick={() => handleLocationSelect(country.code)}
-                className="text-xs p-2 text-left border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-800 text-black dark:text-white"
+                className="text-xs p-2 text-left border border-black dark:border-white rounded hover:bg-gray-100 dark:hover:bg-gray-900 text-black dark:text-white"
               >
                 {country.name}
               </button>

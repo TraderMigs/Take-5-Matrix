@@ -105,7 +105,7 @@ export default function Home() {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white dark:bg-gray-900 min-h-screen">
+    <div className="max-w-md mx-auto bg-white dark:bg-black min-h-screen">
       {/* Header */}
       <header className="bg-black dark:bg-white text-white dark:text-black text-center py-8 px-6 relative">
         <button
