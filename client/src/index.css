@@ -26,6 +26,15 @@ button, input, div, section {
   border: 1px solid #ffffff !important;
 }
 
+/* Override for contact input borders */
+.contact-input {
+  border: 1px solid #000000 !important;
+}
+
+.dark .contact-input {
+  border: 1px solid #ffffff !important;
+}
+
 /* Force consistent popup/modal theming */
 [data-radix-popper-content-wrapper],
 [data-radix-dialog-content],
