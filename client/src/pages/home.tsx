@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, Phone, Heart, Lightbulb, Users, Moon, Sun, MessageCircle, User, Shield } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 import { useLanguage } from "@/hooks/use-language";
@@ -11,6 +11,7 @@ import AIChat from "@/components/ai-chat";
 import UserAccount from "@/components/user-account";
 import EmergencyContactDisplay from "@/components/emergency-contact-display";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -23,6 +24,37 @@ export default function Home() {
   const [currentUser, setCurrentUser] = useState<any>(null);
   const { theme, toggleTheme } = useTheme();
   const { t } = useLanguage();
+  const { toast } = useToast();
+
+  // Handle Google OAuth callback
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const authStatus = urlParams.get('auth');
+    const userParam = urlParams.get('user');
+
+    if (authStatus === 'success' && userParam) {
+      try {
+        const user = JSON.parse(decodeURIComponent(userParam));
+        setCurrentUser(user);
+        toast({
+          title: "Welcome!",
+          description: `Successfully signed in with Google as ${user.displayName || user.email}`,
+        });
+        // Clean up URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+      }
+    } else if (authStatus === 'error') {
+      toast({
+        title: "Sign in failed",
+        description: "There was an issue signing in with Google. Please try again.",
+        variant: "destructive",
+      });
+      // Clean up URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, [toast]);
 
   const showActionOptions = (type: string, title: string, resourceUrl: string, customAction?: () => void) => {
     setSelectedAction({ type, title, resourceUrl, customAction });

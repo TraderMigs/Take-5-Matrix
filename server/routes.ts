@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import Anthropic from '@anthropic-ai/sdk';
+import { setupGoogleAuth } from './google-auth';
 
 // Crisis keyword detection
 function detectCrisisKeywords(message: string): boolean {
@@ -79,6 +80,9 @@ function generateFallbackResponse(message: string, conversationHistory: any[] = 
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Setup Google OAuth routes
+  setupGoogleAuth(app);
+
   // put application routes here
   // prefix all routes with /api
 

@@ -112,12 +112,8 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
   };
 
   const handleGoogleSignup = () => {
-    // This would integrate with Google OAuth in a real implementation
-    toast({
-      title: "Google signup",
-      description: "Google OAuth integration would be implemented here.",
-      className: "!bg-red-800 !text-white !border-red-800",
-    });
+    // Redirect to Google OAuth flow
+    window.location.href = '/api/auth/google';
   };
 
   const handleUpdateProfile = async () => {
