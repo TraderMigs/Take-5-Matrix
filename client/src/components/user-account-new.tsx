@@ -315,8 +315,8 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
         <DialogContent className="sm:max-w-2xl bg-purple-200 dark:bg-purple-900 border-2 border-purple-300 dark:border-purple-700">
           <Tabs defaultValue="profile" className="w-full">
             <TabsList className="grid w-full grid-cols-2 bg-teal-200 dark:bg-teal-800">
-              <TabsTrigger value="profile" className="text-black dark:text-white">Profile</TabsTrigger>
-              <TabsTrigger value="diary" className="text-black dark:text-white">Private Diary</TabsTrigger>
+              <TabsTrigger value="profile" className="text-black dark:text-white data-[state=active]:bg-green-800 data-[state=active]:text-white">Profile</TabsTrigger>
+              <TabsTrigger value="diary" className="text-black dark:text-white data-[state=active]:bg-green-800 data-[state=active]:text-white">Private Diary</TabsTrigger>
             </TabsList>
             
             <TabsContent value="profile" className="space-y-6 mt-6">
