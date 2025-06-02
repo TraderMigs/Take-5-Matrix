@@ -373,9 +373,29 @@ Now respond specifically to their latest message, acknowledging what they're act
     }
   });
 
+  app.get('/api/auth/profile', async (req, res) => {
+    try {
+      const userId = parseInt(req.query.userId as string);
+      
+      if (!userId) {
+        return res.status(400).json({ error: 'User ID required' });
+      }
+
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      res.json(user);
+    } catch (error) {
+      console.error('Profile fetch error:', error);
+      res.status(500).json({ error: 'Failed to fetch profile' });
+    }
+  });
+
   app.put('/api/auth/profile', async (req, res) => {
     try {
-      const { displayName, bio, userId, profileImage } = req.body;
+      const { displayName, bio, userId, profileImage, username } = req.body;
       
       if (!userId) {
         return res.status(400).send('User ID required');
@@ -385,6 +405,7 @@ Now respond specifically to their latest message, acknowledging what they're act
       if (displayName !== undefined) updateData.displayName = displayName;
       if (bio !== undefined) updateData.bio = bio;
       if (profileImage !== undefined) updateData.profileImage = profileImage;
+      if (username !== undefined) updateData.username = username;
 
       const updatedUser = await storage.updateUserProfile(userId, updateData);
       res.json(updatedUser);

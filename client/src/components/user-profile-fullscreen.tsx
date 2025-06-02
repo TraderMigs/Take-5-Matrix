@@ -149,12 +149,27 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
     }
   };
 
-  // Load diary entries when profile opens
+  // Load user profile and diary entries when profile opens
   useEffect(() => {
     if (currentUser && isOpen) {
+      loadUserProfile();
       loadDiaryEntries();
     }
   }, [currentUser, isOpen]);
+
+  const loadUserProfile = async () => {
+    try {
+      const response = await fetch(`/api/auth/profile?userId=${currentUser.id}`);
+      if (response.ok) {
+        const profileData = await response.json();
+        setProfileQuote(profileData.bio || "");
+        setUsername(profileData.username || currentUser.username);
+        setProfileImage(profileData.profileImage || currentUser.profileImage || "");
+      }
+    } catch (error) {
+      console.error('Failed to load user profile:', error);
+    }
+  };
 
   const loadDiaryEntries = async () => {
     try {
