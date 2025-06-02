@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Phone, Heart, TriangleAlert, MapPin, Settings } from "lucide-react";
 import { getLocationBasedNumbers, detectUserLocation, getAllCountries } from "@/lib/emergency-numbers";
+import { useLanguage } from "@/hooks/use-language";
 
 export default function EmergencySection() {
+  const { t } = useLanguage();
   const [locationData, setLocationData] = useState<{
     emergency: string;
     crisis: string;
@@ -67,7 +69,7 @@ export default function EmergencySection() {
       <div className="flex items-center justify-center mb-3">
         <div className="flex items-center">
           <TriangleAlert className="mr-2 text-black dark:text-white" size={20} />
-          <h2 className="text-lg font-semibold text-black dark:text-white">Emergency Support</h2>
+          <h2 className="text-lg font-semibold text-black dark:text-white">{t('emergencySupport')}</h2>
         </div>
       </div>
 
@@ -100,20 +102,20 @@ export default function EmergencySection() {
             className="w-full bg-red-600 text-black hover:bg-red-700 font-semibold py-4 px-6 rounded-xl transition-colors flex items-center justify-center text-lg border-2 border-black"
           >
             <Phone className="mr-3" size={20} />
-            Call {locationData?.emergency} (Emergency)
+{t('callEmergency', { number: locationData?.emergency || '911' })}
           </Button>
           <Button
             onClick={handleCrisisCall}
             className="w-full bg-yellow-400 text-black hover:bg-yellow-500 font-semibold py-4 px-6 rounded-xl transition-colors flex items-center justify-center text-lg border-2 border-black"
           >
             <Heart className="mr-3" size={20} />
-            Crisis Hotline: Call Now
+{t('crisisHotline')}: {t('crisisHotlineCall')}
           </Button>
         </div>
       )}
       
       <p className="text-xs text-black dark:text-white mt-3 text-center">
-        If you're in immediate danger, call emergency services
+{t('emergencyWarning')}
       </p>
     </section>
   );

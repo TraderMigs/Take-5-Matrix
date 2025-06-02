@@ -48,6 +48,25 @@ export interface Translation {
   hold: string;
   exhale: string;
   close: string;
+  
+  // Support modules
+  breathing: string;
+  breathingGuide: string;
+  affirmations: string;
+  kindWords: string;
+  calmMusic: string;
+  soothingSounds: string;
+  grounding: string;
+  groundingTechnique: string;
+  
+  // Contact form
+  name: string;
+  phoneNumber: string;
+  relationship: string;
+  enterName: string;
+  enterPhone: string;
+  enterRelationship: string;
+  addContact: string;
 }
 
 export const translations: Record<string, Translation> = {
@@ -83,7 +102,26 @@ export const translations: Record<string, Translation> = {
     inhale: "Inhale",
     hold: "Hold",
     exhale: "Exhale",
-    close: "Close"
+    close: "Close",
+    
+    // Support modules
+    breathing: "Breathing",
+    breathingGuide: "5-min guide",
+    affirmations: "Affirmations",
+    kindWords: "Kind words",
+    calmMusic: "Calm Music",
+    soothingSounds: "Soothing sounds",
+    grounding: "Grounding",
+    groundingTechnique: "5-4-3-2-1",
+    
+    // Contact form
+    name: "Name",
+    phoneNumber: "Phone Number",
+    relationship: "Relationship",
+    enterName: "Enter name",
+    enterPhone: "Enter phone number",
+    enterRelationship: "e.g., Therapist, Friend, Family",
+    addContact: "Add Contact"
   },
   th: {
     appName: "Take 5",
