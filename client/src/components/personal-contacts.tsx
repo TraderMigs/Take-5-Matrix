@@ -44,7 +44,7 @@ export default function PersonalContacts() {
 
   return (
     <section className="space-y-4">
-      <h2 className="text-xl font-semibold text-gray-800">Your Trusted Contacts</h2>
+      <h2 className="text-xl font-semibold text-gray-800 dark:text-white text-center">Your Trusted Contacts</h2>
 
       <div className="space-y-3">
         {contacts.map((contact) => (
@@ -85,7 +85,7 @@ export default function PersonalContacts() {
           <DialogTrigger asChild>
             <Button
               variant="outline"
-              className="w-full border-2 border-dashed border-muted hover:border-navy-blue p-4 rounded-xl transition-colors text-center text-light-gray hover:text-navy-blue"
+              className="w-full border-2 border-dashed border-muted hover:border-navy-blue p-4 rounded-xl transition-colors text-center text-gray-800 dark:text-white hover:text-navy-blue"
             >
               <Plus className="mr-2" size={16} />
               Add a trusted contact
