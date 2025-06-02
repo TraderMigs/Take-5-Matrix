@@ -13,6 +13,7 @@ import UserProfileFullscreen from "@/components/user-profile-fullscreen";
 import RotatingAffirmations from "@/components/rotating-affirmations";
 import LegalAcceptance from "@/components/legal-acceptance";
 import LegalModal from "@/components/legal-modal";
+import EmailVerificationBanner from "@/components/email-verification-banner";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 

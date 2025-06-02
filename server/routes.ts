@@ -3,6 +3,8 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import Anthropic from '@anthropic-ai/sdk';
 import { setupGoogleAuth } from './google-auth';
+import { generateVerificationToken, sendVerificationEmail, sendWelcomeEmail } from './email-service';
+import bcrypt from 'bcryptjs';
 
 // Crisis keyword detection
 function detectCrisisKeywords(message: string): boolean {
@@ -179,15 +181,40 @@ Now respond specifically to their latest message, acknowledging what they're act
         return res.status(400).send('Username already exists');
       }
 
+      const existingEmail = await storage.getUserByEmail(email);
+      if (existingEmail) {
+        return res.status(400).send('Email already exists');
+      }
+
+      // Hash password before storing
+      const hashedPassword = await bcrypt.hash(password, 10);
+
       const newUser = await storage.createUser({
         email,
         username,
-        password,
+        password: hashedPassword,
         dateOfBirth,
         displayName: displayName || username,
       });
 
-      res.json(newUser);
+      // Generate verification token and send email
+      const token = generateVerificationToken();
+      const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+      
+      await storage.setEmailVerificationToken(newUser.id, token, expires);
+      
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+      const emailSent = await sendVerificationEmail(email, username, token, baseUrl);
+      
+      if (!emailSent) {
+        console.error('Failed to send verification email');
+      }
+
+      res.json({ 
+        message: 'Account created successfully. Please check your email to verify your account.',
+        userId: newUser.id,
+        email: newUser.email
+      });
     } catch (error) {
       console.error('Signup error:', error);
       res.status(500).json({ error: 'Failed to create account' });
@@ -199,7 +226,12 @@ Now respond specifically to their latest message, acknowledging what they're act
       const { username, password } = req.body;
       
       const user = await storage.getUserByUsername(username);
-      if (!user || user.password !== password) {
+      if (!user) {
+        return res.status(401).send('Invalid credentials');
+      }
+
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (!passwordMatch) {
         return res.status(401).send('Invalid credentials');
       }
 
@@ -212,6 +244,69 @@ Now respond specifically to their latest message, acknowledging what they're act
 
   app.post('/api/auth/logout', async (req, res) => {
     res.json({ success: true });
+  });
+
+  // Email verification routes
+  app.get('/verify-email', async (req, res) => {
+    try {
+      const { token } = req.query;
+      
+      if (!token || typeof token !== 'string') {
+        return res.status(400).send('Invalid verification token');
+      }
+
+      const user = await storage.verifyEmailWithToken(token);
+      
+      if (!user) {
+        return res.status(400).send('Invalid or expired verification token');
+      }
+
+      // Send welcome email
+      await sendWelcomeEmail(user.email, user.username);
+
+      // Redirect to app with success message
+      res.redirect('/?verified=true');
+    } catch (error) {
+      console.error('Email verification error:', error);
+      res.status(500).send('Email verification failed');
+    }
+  });
+
+  app.post('/api/auth/resend-verification', async (req, res) => {
+    try {
+      const { email } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ error: 'Email is required' });
+      }
+
+      const user = await storage.getUserByEmail(email);
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      if (user.emailVerified) {
+        return res.status(400).json({ error: 'Email already verified' });
+      }
+
+      // Generate new verification token
+      const token = generateVerificationToken();
+      const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+      
+      await storage.setEmailVerificationToken(user.id, token, expires);
+      
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+      const emailSent = await sendVerificationEmail(user.email, user.username, token, baseUrl);
+      
+      if (!emailSent) {
+        return res.status(500).json({ error: 'Failed to send verification email' });
+      }
+
+      res.json({ message: 'Verification email sent successfully' });
+    } catch (error) {
+      console.error('Resend verification error:', error);
+      res.status(500).json({ error: 'Failed to resend verification email' });
+    }
   });
 
   app.put('/api/auth/complete-profile', async (req, res) => {
