@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { User, Phone, Plus } from "lucide-react";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useLanguage } from "@/hooks/use-language";
@@ -55,30 +56,52 @@ export default function PersonalContacts() {
             className="bg-white border border-gray-200 rounded-xl p-4 flex items-center justify-between"
           >
             <div className="flex items-center">
-              <div className="w-10 h-10 bg-sage-green rounded-full flex items-center justify-center mr-3">
-                <User className="text-white" size={20} />
+              <div className="w-10 h-10 bg-black dark:bg-white rounded-full flex items-center justify-center mr-3">
+                <User className="text-white dark:text-black" size={20} />
               </div>
               <div>
-                <p className="font-medium text-gray-800">{contact.name}</p>
-                <p className="text-sm text-gray-600">{contact.relationship}</p>
+                <p className="font-medium text-gray-800 dark:text-white">{contact.name}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">{contact.relationship}</p>
               </div>
             </div>
             <div className="flex items-center space-x-2">
               <Button
                 onClick={() => handleCallContact(contact.phone)}
-                className="bg-sage-green hover:bg-navy-blue text-white px-4 py-2 rounded-lg transition-colors"
+                className="bg-green-800 hover:bg-green-900 text-white px-4 py-2 rounded-lg transition-colors"
                 size="sm"
               >
                 <Phone size={16} />
               </Button>
-              <Button
-                onClick={() => removeContact(contact.id)}
-                variant="outline"
-                size="sm"
-                className="text-red-600 hover:text-red-700"
-              >
-                Remove
-              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="xs"
+                    className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-300 text-xs px-2 py-1"
+                  >
+                    Remove
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent className="bg-white dark:bg-black border-black dark:border-white">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="text-black dark:text-white">Delete Contact</AlertDialogTitle>
+                    <AlertDialogDescription className="text-gray-600 dark:text-gray-300">
+                      Are you sure you want to remove "{contact.name}" from your trusted contacts? This action cannot be undone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel className="border-black dark:border-white text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800">
+                      No, Keep Contact
+                    </AlertDialogCancel>
+                    <AlertDialogAction 
+                      onClick={() => removeContact(contact.id)}
+                      className="bg-red-600 hover:bg-red-700 text-white"
+                    >
+                      Yes, Remove
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </div>
         ))}
