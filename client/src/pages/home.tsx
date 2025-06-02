@@ -85,7 +85,17 @@ export default function Home() {
       icon: "💨",
       color: "#47556D",
       resource: "https://www.youtube.com/watch?v=nX4dpGQ5wF4",
-      action: () => showActionOptions("overwhelmed", "Feeling Overwhelmed Support", "https://www.youtube.com/watch?v=nX4dpGQ5wF4", () => setShowBreathingModal(true))
+      action: () => {
+        if (!hasAcceptedLegal) {
+          toast({
+            title: "Terms Required",
+            description: "Please accept the legal terms to use this feature.",
+            variant: "destructive",
+          });
+          return;
+        }
+        showActionOptions("overwhelmed", "Feeling Overwhelmed Support", "https://www.youtube.com/watch?v=nX4dpGQ5wF4", () => setShowBreathingModal(true));
+      }
     },
     {
       id: "anxious",
@@ -214,7 +224,17 @@ export default function Home() {
               Chat with our compassionate AI assistant for immediate support, coping strategies, and someone to listen.
             </p>
             <Button
-              onClick={() => setShowAIChat(true)}
+              onClick={() => {
+                if (!hasAcceptedLegal) {
+                  toast({
+                    title: "Terms Required",
+                    description: "Please accept the legal terms to use the AI chat feature.",
+                    variant: "destructive",
+                  });
+                  return;
+                }
+                setShowAIChat(true);
+              }}
               className="w-full bg-white text-purple-600 hover:bg-purple-50 font-semibold py-3 rounded-lg"
             >
               Start Conversation
@@ -275,6 +295,15 @@ export default function Home() {
 
         {/* Rotating Affirmations */}
         <RotatingAffirmations />
+        
+        {/* Footer with Legal Link */}
+        <footer className="mt-8 text-center pb-4">
+          <LegalModal>
+            <button className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white underline">
+              Legal Policies & Disclaimers
+            </button>
+          </LegalModal>
+        </footer>
       </main>
 
       {/* Breathing Modal */}
@@ -370,6 +399,12 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      {/* Legal Acceptance Modal - Required on First Visit */}
+      <LegalAcceptance
+        isOpen={!hasAcceptedLegal}
+        onAccept={handleLegalAcceptance}
+      />
     </div>
   );
 }
