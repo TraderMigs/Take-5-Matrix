@@ -70,22 +70,7 @@ export default function EmergencySection() {
           <h2 className="text-lg font-semibold text-black dark:text-white">Emergency Support</h2>
         </div>
       </div>
-      <div className="flex items-center justify-end mb-3 -mt-8">
-        <div className="flex items-center space-x-2">
-          {locationData && (
-            <div className="flex items-center space-x-1 text-xs text-black dark:text-white">
-              <MapPin className="w-3 h-3" />
-              <span>{locationData.name}</span>
-            </div>
-          )}
-          <button
-            onClick={() => setShowLocationSelector(!showLocationSelector)}
-            className="p-1 rounded text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
-          >
-            <Settings className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
+
 
       {showLocationSelector && (
         <div className="mb-4 p-3 border border-black dark:border-white rounded-lg bg-white dark:bg-black">
