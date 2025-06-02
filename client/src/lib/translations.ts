@@ -155,7 +155,26 @@ export const translations: Record<string, Translation> = {
     inhale: "หายใจเข้า",
     hold: "กลั้น",
     exhale: "หายใจออก",
-    close: "ปิด"
+    close: "ปิด",
+    
+    // Support modules
+    breathing: "การหายใจ",
+    breathingGuide: "คู่มือ 5 นาที",
+    affirmations: "คำยืนยัน",
+    kindWords: "คำพูดดีๆ",
+    calmMusic: "เพลงผ่อนคลาย",
+    soothingSounds: "เสียงที่ผ่อนคลาย",
+    grounding: "การจดจ่อ",
+    groundingTechnique: "5-4-3-2-1",
+    
+    // Contact form
+    name: "ชื่อ",
+    phoneNumber: "หมายเลขโทรศัพท์",
+    relationship: "ความสัมพันธ์",
+    enterName: "ใส่ชื่อ",
+    enterPhone: "ใส่หมายเลขโทรศัพท์",
+    enterRelationship: "เช่น นักบำบัด เพื่อน ครอบครัว",
+    addContact: "เพิ่มผู้ติดต่อ"
   },
   es: {
     appName: "Take 5",
@@ -189,7 +208,22 @@ export const translations: Record<string, Translation> = {
     inhale: "Inhala",
     hold: "Mantén",
     exhale: "Exhala",
-    close: "Cerrar"
+    close: "Cerrar",
+    breathing: "Respiración",
+    breathingGuide: "Guía de 5 min",
+    affirmations: "Afirmaciones",
+    kindWords: "Palabras amables",
+    calmMusic: "Música Relajante",
+    soothingSounds: "Sonidos relajantes",
+    grounding: "Conexión a tierra",
+    groundingTechnique: "5-4-3-2-1",
+    name: "Nombre",
+    phoneNumber: "Número de Teléfono",
+    relationship: "Relación",
+    enterName: "Ingresar nombre",
+    enterPhone: "Ingresar número de teléfono",
+    enterRelationship: "ej., Terapeuta, Amigo, Familia",
+    addContact: "Agregar Contacto"
   },
   fr: {
     appName: "Take 5",
@@ -223,7 +257,22 @@ export const translations: Record<string, Translation> = {
     inhale: "Inspirez",
     hold: "Retenez",
     exhale: "Expirez",
-    close: "Fermer"
+    close: "Fermer",
+    breathing: "Respiration",
+    breathingGuide: "Guide 5 min",
+    affirmations: "Affirmations",
+    kindWords: "Mots gentils",
+    calmMusic: "Musique Calme",
+    soothingSounds: "Sons apaisants",
+    grounding: "Ancrage",
+    groundingTechnique: "5-4-3-2-1",
+    name: "Nom",
+    phoneNumber: "Numéro de Téléphone",
+    relationship: "Relation",
+    enterName: "Entrez le nom",
+    enterPhone: "Entrez le numéro",
+    enterRelationship: "ex., Thérapeute, Ami, Famille",
+    addContact: "Ajouter Contact"
   },
   de: {
     appName: "Take 5",

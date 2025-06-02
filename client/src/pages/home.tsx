@@ -63,32 +63,32 @@ export default function Home() {
   const supportModules = [
     {
       id: "breathing",
-      title: "Breathing",
-      description: "5-min guide",
+      title: t('breathing'),
+      description: t('breathingGuide'),
       icon: "🫁",
       resource: "",
       action: () => setShowBreathingModal(true)
     },
     {
       id: "affirmations", 
-      title: "Affirmations",
-      description: "Kind words",
+      title: t('affirmations'),
+      description: t('kindWords'),
       icon: "💭",
       resource: "https://www.mentalhealth.gov/basics/mental-health-myths-facts",
       action: () => showActionOptions("affirmations", "Mental Health Affirmations", "https://www.mentalhealth.gov/basics/mental-health-myths-facts")
     },
     {
       id: "music",
-      title: "Calm Music",
-      description: "Soothing sounds",
+      title: t('calmMusic'),
+      description: t('soothingSounds'),
       icon: "🎵",
       resource: "https://www.calm.com/blog/relaxing-music",
       action: () => showActionOptions("music", "Relaxing Music Resources", "https://www.calm.com/blog/relaxing-music")
     },
     {
       id: "grounding",
-      title: "Grounding",
-      description: "5-4-3-2-1",
+      title: t('grounding'),
+      description: t('groundingTechnique'),
       icon: "🌱",
       resource: "https://www.va.gov/WHOLEHEALTHLIBRARY/tools/grounding-exercises.asp",
       action: () => showActionOptions("grounding", "Grounding Techniques", "https://www.va.gov/WHOLEHEALTHLIBRARY/tools/grounding-exercises.asp")
