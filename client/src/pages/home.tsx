@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Search, Phone, Heart, Lightbulb, Users, Moon, Sun } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
+import { useLanguage } from "@/hooks/use-language";
 import BreathingModal from "@/components/breathing-modal";
 import EmergencySection from "@/components/emergency-section";
 import PersonalContacts from "@/components/personal-contacts";
+import LanguageSelector from "@/components/language-selector";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -11,6 +14,7 @@ export default function Home() {
   const [showActionModal, setShowActionModal] = useState(false);
   const [selectedAction, setSelectedAction] = useState<any>(null);
   const { theme, toggleTheme } = useTheme();
+  const { t } = useLanguage();
 
   const showActionOptions = (type: string, title: string, resourceUrl: string) => {
     setSelectedAction({ type, title, resourceUrl });
@@ -143,7 +147,7 @@ export default function Home() {
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black dark:text-white w-4 h-4" />
           <input
             type="text"
-            placeholder="Type how you feel: 'I'm alone', 'homeless', 'want to die'..."
+            placeholder={t('searchPlaceholder')}
             className="search-input w-full pl-10 pr-4 py-3 rounded-xl bg-white dark:bg-black text-black dark:text-white placeholder-gray-500 focus:outline-none text-sm"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
