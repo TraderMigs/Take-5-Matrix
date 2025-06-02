@@ -7,21 +7,32 @@ export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
+  displayName: text("display_name"),
+  profileImage: text("profile_image"),
+  emergencyContactId: integer("emergency_contact_id"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export const contacts = pgTable("contacts", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").references(() => users.id).notNull(),
+  userId: integer("user_id").references(() => users.id),
   name: text("name").notNull(),
   phone: text("phone").notNull(),
   relationship: text("relationship").notNull(),
+  isEmergencyContact: boolean("is_emergency_contact").default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const sessions = pgTable("user_sessions", {
+  id: text("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id).notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export const breathingSessions = pgTable("breathing_sessions", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").references(() => users.id).notNull(),
+  userId: integer("user_id").references(() => users.id),
   duration: integer("duration").notNull(), // in seconds
   completed: boolean("completed").notNull().default(false),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -30,11 +41,19 @@ export const breathingSessions = pgTable("breathing_sessions", {
 export const usersRelations = relations(users, ({ many }) => ({
   contacts: many(contacts),
   breathingSessions: many(breathingSessions),
+  sessions: many(sessions),
 }));
 
 export const contactsRelations = relations(contacts, ({ one }) => ({
   user: one(users, {
     fields: [contacts.userId],
+    references: [users.id],
+  }),
+}));
+
+export const sessionsRelations = relations(sessions, ({ one }) => ({
+  user: one(users, {
+    fields: [sessions.userId],
     references: [users.id],
   }),
 }));
@@ -49,12 +68,15 @@ export const breathingSessionsRelations = relations(breathingSessions, ({ one })
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
+  displayName: true,
+  profileImage: true,
 });
 
 export const insertContactSchema = createInsertSchema(contacts).pick({
   name: true,
   phone: true,
   relationship: true,
+  isEmergencyContact: true,
 });
 
 export const insertBreathingSessionSchema = createInsertSchema(breathingSessions).pick({
@@ -68,3 +90,4 @@ export type Contact = typeof contacts.$inferSelect;
 export type InsertContact = z.infer<typeof insertContactSchema>;
 export type BreathingSession = typeof breathingSessions.$inferSelect;
 export type InsertBreathingSession = z.infer<typeof insertBreathingSessionSchema>;
+export type Session = typeof sessions.$inferSelect;
