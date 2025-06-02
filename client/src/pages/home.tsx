@@ -73,6 +73,23 @@ export default function Home() {
     localStorage.setItem('take5_legal_accepted', 'true');
   };
 
+  // Check for verification success
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('verified') === 'true') {
+      toast({
+        title: "Email Verified!",
+        description: "Welcome to Take 5! You now have full access to all features.",
+        className: "bg-green-800 border-green-700 text-white",
+      });
+      // Clean up URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, [toast]);
+
+  const isEmailVerified = currentUser?.emailVerified || false;
+  const needsVerification = currentUser && !isEmailVerified;
+
   const showActionOptions = (type: string, title: string, resourceUrl: string, customAction?: () => void) => {
     setSelectedAction({ type, title, resourceUrl, customAction });
     setShowActionModal(true);
@@ -91,6 +108,14 @@ export default function Home() {
           toast({
             title: "Terms Required",
             description: "Please accept the legal terms to use this feature.",
+            variant: "destructive",
+          });
+          return;
+        }
+        if (needsVerification) {
+          toast({
+            title: "Email Verification Required",
+            description: "Please verify your email to access breathing exercises.",
             variant: "destructive",
           });
           return;
@@ -168,6 +193,13 @@ export default function Home() {
 
   return (
     <div className="max-w-md mx-auto bg-white dark:bg-black min-h-screen">
+      {/* Email Verification Banner */}
+      {needsVerification && (
+        <EmailVerificationBanner 
+          userEmail={currentUser.email}
+        />
+      )}
+
       {/* Header */}
       <header className="bg-black dark:bg-black text-white dark:text-white text-center py-8 px-6 relative">
         <div className="absolute top-4 left-4">
@@ -230,6 +262,14 @@ export default function Home() {
                   toast({
                     title: "Terms Required",
                     description: "Please accept the legal terms to use the AI chat feature.",
+                    variant: "destructive",
+                  });
+                  return;
+                }
+                if (needsVerification) {
+                  toast({
+                    title: "Email Verification Required",
+                    description: "Please verify your email to access AI chat support.",
                     variant: "destructive",
                   });
                   return;
