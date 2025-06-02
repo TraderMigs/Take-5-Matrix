@@ -57,8 +57,8 @@ export default function Home() {
       subtitle: t('talkDescription'),
       icon: "💬",
       color: "#6B8E7B",
-      resource: "https://www.7cups.com/",
-      action: () => showActionOptions("talk", "Free Emotional Support - 7 Cups", "https://www.7cups.com/")
+      resource: "https://www.youtube.com/@KatiMorton",
+      action: () => showActionOptions("talk", "Mental Health Support", "https://www.youtube.com/@KatiMorton")
     }
   ];
 
