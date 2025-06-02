@@ -18,8 +18,10 @@ interface UserAccountProps {
 
 export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onLogout }: UserAccountProps) {
   const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState("");
   const [displayName, setDisplayName] = useState(currentUser?.displayName || "");
   const [bio, setBio] = useState(currentUser?.bio || "");
   const [isEditing, setIsEditing] = useState(false);
@@ -66,12 +68,21 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
   };
 
   const handleSignup = async () => {
+    if (!email || !username || !password || !dateOfBirth) {
+      toast({
+        title: "Missing information",
+        description: "Please fill in all required fields: email, username, password, and date of birth.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
     try {
       const response = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password, displayName }),
+        body: JSON.stringify({ email, username, password, dateOfBirth, displayName }),
       });
 
       if (response.ok) {
@@ -98,6 +109,14 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
       });
     }
     setIsLoading(false);
+  };
+
+  const handleGoogleSignup = () => {
+    // This would integrate with Google OAuth in a real implementation
+    toast({
+      title: "Google signup",
+      description: "Google OAuth integration would be implemented here.",
+    });
   };
 
   const handleUpdateProfile = async () => {
@@ -407,9 +426,31 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
           </p>
           
           <div className="space-y-3">
+            {!isLogin && (
+              <>
+                <Input
+                  type="email"
+                  placeholder="Email *"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="bg-white dark:bg-black border-2 border-black dark:border-white text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-semibold"
+                />
+                
+                <Button
+                  onClick={handleGoogleSignup}
+                  variant="outline"
+                  className="w-full bg-white dark:bg-black text-black dark:text-white border-2 border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-900 font-semibold"
+                >
+                  Sign up with Gmail
+                </Button>
+                
+                <div className="text-center text-xs text-gray-500 dark:text-gray-400">or</div>
+              </>
+            )}
+            
             <Input
               type="text"
-              placeholder="Username"
+              placeholder={isLogin ? "Username" : "Username *"}
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="bg-white dark:bg-black border-2 border-black dark:border-white text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-semibold"
@@ -417,26 +458,36 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
             
             <Input
               type="password"
-              placeholder="Password"
+              placeholder={isLogin ? "Password" : "Password *"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="bg-white dark:bg-black border-2 border-black dark:border-white text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-semibold"
             />
             
             {!isLogin && (
-              <Input
-                type="text"
-                placeholder="Display Name (optional)"
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
-                className="bg-white dark:bg-black border-2 border-black dark:border-white text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-semibold"
-              />
+              <>
+                <Input
+                  type="date"
+                  placeholder="Date of Birth *"
+                  value={dateOfBirth}
+                  onChange={(e) => setDateOfBirth(e.target.value)}
+                  className="bg-white dark:bg-black border-2 border-black dark:border-white text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-semibold"
+                />
+                
+                <Input
+                  type="text"
+                  placeholder="Display Name (optional)"
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  className="bg-white dark:bg-black border-2 border-black dark:border-white text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-semibold"
+                />
+              </>
             )}
           </div>
 
           <Button 
             onClick={isLogin ? handleLogin : handleSignup}
-            disabled={isLoading || !username || !password}
+            disabled={isLoading || !username || !password || (!isLogin && (!email || !dateOfBirth))}
             className="w-full bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 border-2 border-black dark:border-white font-bold"
           >
             {isLoading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Create Account')}
