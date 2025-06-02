@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { User, Settings, LogOut, Camera, BookOpen, PlusCircle, Calendar, Mail } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import googleIcon from "@assets/goolge-icon.png";
 
 interface UserAccountProps {
   isOpen: boolean;
@@ -436,9 +437,9 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
                 <Button
                   onClick={handleGoogleSignup}
                   variant="outline"
-                  className="w-full bg-white dark:bg-black text-black dark:text-white border-2 border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-900 font-semibold flex items-center justify-center"
+                  className="w-full bg-white dark:bg-black text-black dark:text-white border-2 border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-900 hover:text-green-700 dark:hover:text-green-400 font-semibold flex items-center justify-center"
                 >
-                  <Mail className="mr-2" size={16} />
+                  <img src={googleIcon} alt="Google" className="mr-2 w-4 h-4" />
                   Sign up with Gmail
                 </Button>
                 
