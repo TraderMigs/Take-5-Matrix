@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { User, Settings, LogOut, Camera, BookOpen, PlusCircle, Calendar } from "lucide-react";
+import { User, Settings, LogOut, Camera, BookOpen, PlusCircle, Calendar, Mail } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface UserAccountProps {
@@ -116,7 +116,7 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
     toast({
       title: "Google signup",
       description: "Google OAuth integration would be implemented here.",
-      className: "bg-red-800 text-white border-red-800",
+      className: "!bg-red-800 !text-white !border-red-800",
     });
   };
 
@@ -440,8 +440,9 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
                 <Button
                   onClick={handleGoogleSignup}
                   variant="outline"
-                  className="w-full bg-white dark:bg-black text-black dark:text-white border-2 border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-900 font-semibold"
+                  className="w-full bg-white dark:bg-black text-black dark:text-white border-2 border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-900 font-semibold flex items-center justify-center"
                 >
+                  <Mail className="mr-2" size={16} />
                   Sign up with Gmail
                 </Button>
                 
