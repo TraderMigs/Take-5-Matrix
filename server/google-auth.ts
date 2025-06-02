@@ -62,25 +62,38 @@ export function setupGoogleAuth(app: Express) {
     const authUrl = client.generateAuthUrl({
       access_type: 'offline',
       scope: scopes,
-      prompt: 'consent'
+      prompt: 'select_account',
+      include_granted_scopes: true,
+      state: 'state_parameter_passthrough_value'
     });
 
+    console.log('Generated OAuth URL:', authUrl);
     res.redirect(authUrl);
   });
 
   // Handle OAuth callback
   app.get('/api/auth/google/callback', async (req, res) => {
     try {
-      const { code } = req.query;
+      console.log('OAuth callback received:', req.query);
+      const { code, error, error_description, state } = req.query;
+      
+      // Handle OAuth errors from Google
+      if (error) {
+        console.error('OAuth error from Google:', error, error_description);
+        return res.redirect(`/?auth=error&details=${encodeURIComponent(error_description || error)}`);
+      }
       
       if (!code || typeof code !== 'string') {
-        return res.status(400).json({ error: 'Authorization code missing' });
+        console.error('Authorization code missing from callback');
+        return res.redirect('/?auth=error&details=no_code');
       }
 
+      console.log('Exchanging code for tokens...');
       // Exchange code for tokens
       const { tokens } = await client.getToken(code);
       client.setCredentials(tokens);
 
+      console.log('Verifying ID token...');
       // Get user info
       const ticket = await client.verifyIdToken({
         idToken: tokens.id_token!,
@@ -89,9 +102,11 @@ export function setupGoogleAuth(app: Express) {
 
       const payload = ticket.getPayload();
       if (!payload) {
-        return res.status(400).json({ error: 'Invalid token payload' });
+        console.error('Invalid token payload');
+        return res.redirect('/?auth=error&details=invalid_payload');
       }
 
+      console.log('Creating user from Google data...');
       // Extract user information
       const googleUser = {
         email: payload.email!,
@@ -116,11 +131,12 @@ export function setupGoogleAuth(app: Express) {
         });
       }
 
+      console.log('OAuth success, redirecting to frontend...');
       // Redirect to frontend with success
       res.redirect(`/?auth=success&user=${encodeURIComponent(JSON.stringify(user))}`);
     } catch (error) {
       console.error('Google OAuth error:', error);
-      res.redirect('/?auth=error');
+      res.redirect(`/?auth=error&details=${encodeURIComponent(error.message)}`);
     }
   });
 }
