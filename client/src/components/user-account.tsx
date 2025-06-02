@@ -394,13 +394,13 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md bg-white dark:bg-black border-2 border-black dark:border-white">
         <DialogHeader>
-          <DialogTitle>{isLogin ? 'Welcome Back' : 'Create Account'}</DialogTitle>
+          <DialogTitle className="text-black dark:text-white font-bold">{isLogin ? 'Welcome Back' : 'Create Account'}</DialogTitle>
         </DialogHeader>
         
         <div className="space-y-4">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-black dark:text-white font-medium">
             {isLogin 
               ? 'Sign in to save your contacts and personalize your experience.' 
               : 'Create an account to save your emergency contacts and customize your profile.'}
@@ -412,6 +412,7 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
               placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              className="bg-white dark:bg-black border-2 border-black dark:border-white text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-semibold"
             />
             
             <Input
@@ -419,6 +420,7 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className="bg-white dark:bg-black border-2 border-black dark:border-white text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-semibold"
             />
             
             {!isLogin && (
@@ -427,6 +429,7 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
                 placeholder="Display Name (optional)"
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
+                className="bg-white dark:bg-black border-2 border-black dark:border-white text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 font-semibold"
               />
             )}
           </div>
@@ -434,7 +437,7 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
           <Button 
             onClick={isLogin ? handleLogin : handleSignup}
             disabled={isLoading || !username || !password}
-            className="w-full"
+            className="w-full bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 border-2 border-black dark:border-white font-bold"
           >
             {isLoading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Create Account')}
           </Button>
@@ -442,7 +445,7 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
           <Button
             variant="ghost"
             onClick={() => setIsLogin(!isLogin)}
-            className="w-full"
+            className="w-full text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 font-semibold"
           >
             {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
           </Button>
