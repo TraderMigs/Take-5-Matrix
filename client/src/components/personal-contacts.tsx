@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { User, Phone, Plus } from "lucide-react";
 import { useLocalStorage } from "@/hooks/use-local-storage";
+import { useLanguage } from "@/hooks/use-language";
 
 interface Contact {
   id: string;
@@ -14,6 +15,7 @@ interface Contact {
 }
 
 export default function PersonalContacts() {
+  const { t } = useLanguage();
   const [contacts, setContacts] = useLocalStorage<Contact[]>("trusted-contacts", []);
   const [isAddingContact, setIsAddingContact] = useState(false);
   const [newContact, setNewContact] = useState({
@@ -44,7 +46,7 @@ export default function PersonalContacts() {
 
   return (
     <section className="space-y-4">
-      <h2 className="text-xl font-semibold text-gray-800 dark:text-white text-center">Your Trusted Contacts</h2>
+      <h2 className="text-xl font-semibold text-gray-800 dark:text-white text-center">{t('trustedContacts')}</h2>
 
       <div className="space-y-3">
         {contacts.map((contact) => (
@@ -88,7 +90,7 @@ export default function PersonalContacts() {
               className="w-full bg-yellow-400 hover:bg-yellow-500 border-2 border-black p-4 rounded-xl transition-colors text-center text-black"
             >
               <Plus className="mr-2" size={16} />
-              Add a trusted contact
+{t('addTrustedContact')}
             </Button>
           </DialogTrigger>
           <DialogContent className="w-80 bg-white dark:bg-black border-black dark:border-white" aria-describedby="contact-description">

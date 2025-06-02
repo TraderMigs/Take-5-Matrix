@@ -182,10 +182,10 @@ export default function Home() {
 
         {/* Safe Message */}
         <section className="bg-black dark:bg-black text-white dark:text-white rounded-xl p-6 text-center space-y-3 border-2 border-black dark:border-white">
-          <h2 className="text-xl font-black" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>You're not alone</h2>
-          <p className="text-lg font-bold opacity-95" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>You matter. Your life has value.</p>
-          <p className="text-lg font-bold opacity-95" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>Help is always available.</p>
-          <p className="text-sm font-semibold opacity-90" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>This moment is temporary. You got this!</p>
+          <h2 className="text-xl font-black" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>{t('footerMessage1')}</h2>
+          <p className="text-lg font-bold opacity-95" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>{t('footerMessage2')}</p>
+          <p className="text-lg font-bold opacity-95" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>{t('footerMessage3')}</p>
+          <p className="text-sm font-semibold opacity-90" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>{t('footerMessage4')}</p>
         </section>
       </main>
 
@@ -234,7 +234,7 @@ export default function Home() {
                 onClick={() => setShowActionModal(false)}
                 className="w-full bg-white dark:bg-black text-black dark:text-white border-2 border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-900 py-3 px-4 rounded-lg transition-colors"
               >
-                Cancel
+{t('cancel')}
               </button>
             </div>
           </div>
