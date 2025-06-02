@@ -106,7 +106,7 @@ export default function PersonalContacts() {
                   value={newContact.name}
                   onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
                   placeholder="Enter name"
-                  className="contact-input bg-white dark:bg-black text-black dark:text-white border border-black dark:border-white"
+                  className="contact-input bg-white dark:bg-black text-black dark:text-white border border-black dark:border-white placeholder:text-green-800 placeholder:opacity-50 placeholder:font-light"
                 />
               </div>
               <div>
@@ -117,7 +117,7 @@ export default function PersonalContacts() {
                   value={newContact.phone}
                   onChange={(e) => setNewContact({ ...newContact, phone: e.target.value })}
                   placeholder="Enter phone number"
-                  className="contact-input bg-white dark:bg-black text-black dark:text-white border border-black dark:border-white"
+                  className="contact-input bg-white dark:bg-black text-black dark:text-white border border-black dark:border-white placeholder:text-green-800 placeholder:opacity-50 placeholder:font-light"
                 />
               </div>
               <div>
@@ -127,7 +127,7 @@ export default function PersonalContacts() {
                   value={newContact.relationship}
                   onChange={(e) => setNewContact({ ...newContact, relationship: e.target.value })}
                   placeholder="e.g., Therapist, Friend, Family"
-                  className="contact-input bg-white dark:bg-black text-black dark:text-white border border-black dark:border-white"
+                  className="contact-input bg-white dark:bg-black text-black dark:text-white border border-black dark:border-white placeholder:text-green-800 placeholder:opacity-50 placeholder:font-light"
                 />
               </div>
               <div className="flex space-x-2">
