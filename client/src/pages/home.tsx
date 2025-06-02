@@ -177,7 +177,7 @@ export default function Home() {
 
         {/* Support Modules */}
         <section className="space-y-4">
-          <h2 className="text-xl font-black text-black dark:text-white mb-4" style={{ textShadow: '1px 1px 0px rgba(128,128,128,0.5)' }}>Additional Support</h2>
+          <h2 className="text-xl font-black text-black dark:text-white mb-4 text-center" style={{ textShadow: '1px 1px 0px rgba(128,128,128,0.5)' }}>Additional Support</h2>
           <div className="grid grid-cols-2 gap-3">
             {supportModules.map((module) => (
               <button
