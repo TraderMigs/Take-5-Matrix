@@ -11,10 +11,23 @@ function initializeGoogleAuth() {
     return null;
   }
 
+  // Determine the correct redirect URI based on environment
+  let redirectUri;
+  if (process.env.REPLIT_DOMAINS) {
+    // Production: use the first domain from REPLIT_DOMAINS
+    const domain = process.env.REPLIT_DOMAINS.split(',')[0];
+    redirectUri = `https://${domain}/api/auth/google/callback`;
+  } else {
+    // Development
+    redirectUri = 'http://localhost:5000/api/auth/google/callback';
+  }
+
+  console.log('Google OAuth redirect URI:', redirectUri);
+
   googleClient = new OAuth2Client(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-    `${process.env.REPLIT_DOMAINS?.split(',')[0] || 'localhost:5000'}/api/auth/google/callback`
+    redirectUri
   );
 
   return googleClient;
