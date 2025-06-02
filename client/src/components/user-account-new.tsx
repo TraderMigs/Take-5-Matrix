@@ -27,12 +27,43 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
   const [fullName, setFullName] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
-  const [profileQuote, setProfileQuote] = useState("");
+  const [profileQuote, setProfileQuote] = useState(currentUser?.bio || "");
   const [diaryEntries, setDiaryEntries] = useState<any[]>([]);
   const [newEntryTitle, setNewEntryTitle] = useState("");
   const [newEntryContent, setNewEntryContent] = useState("");
   const [showNewEntry, setShowNewEntry] = useState(false);
+  const [profileImage, setProfileImage] = useState(currentUser?.profileImage || "");
   const { toast } = useToast();
+
+  // Auto-save profile quote when it changes
+  const saveProfileQuote = async (quote: string) => {
+    if (!currentUser) return;
+    
+    try {
+      await fetch('/api/auth/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          userId: currentUser.id, 
+          bio: quote 
+        }),
+      });
+    } catch (error) {
+      console.error('Failed to save quote:', error);
+    }
+  };
+
+  const handleQuoteChange = (value: string) => {
+    const trimmedValue = value.slice(0, 40);
+    setProfileQuote(trimmedValue);
+    
+    // Auto-save after 1 second of no typing
+    setTimeout(() => {
+      saveProfileQuote(trimmedValue);
+    }, 1000);
+  };
+
+
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -186,22 +217,7 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
     setIsLoading(false);
   };
 
-  const handlePhotoUpload = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = (e: any) => {
-      const file = e.target.files[0];
-      if (file) {
-        toast({
-          title: "Photo selected",
-          description: "Photo upload functionality will be implemented with cloud storage.",
-          className: "bg-green-800 border-green-700 text-white",
-        });
-      }
-    };
-    input.click();
-  };
+
 
   const saveDiaryEntry = async () => {
     if (!newEntryContent.trim()) return;
@@ -311,8 +327,18 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
   // Main profile screen for logged in users
   if (currentUser) {
     return (
-      <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="sm:max-w-2xl bg-purple-200 dark:bg-purple-900 border-2 border-purple-300 dark:border-purple-700">
+      <div className="fixed inset-0 z-50 bg-purple-200 dark:bg-purple-900 overflow-y-auto">
+        <div className="min-h-screen p-4">
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-2xl font-bold text-black dark:text-white">Your Profile</h1>
+            <Button 
+              variant="outline" 
+              onClick={onClose}
+              className="bg-white dark:bg-black border-2 border-black dark:border-white text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              ✕ Close
+            </Button>
+          </div>
           <Tabs defaultValue="profile" className="w-full">
             <TabsList className="grid w-full grid-cols-2 bg-teal-200 dark:bg-teal-800">
               <TabsTrigger value="profile" className="text-black dark:text-white data-[state=active]:bg-green-800 data-[state=active]:text-white">Profile</TabsTrigger>
@@ -425,8 +451,8 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
               </div>
             </TabsContent>
           </Tabs>
-        </DialogContent>
-      </Dialog>
+        </div>
+      </div>
     );
   }
 
