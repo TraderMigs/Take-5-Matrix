@@ -139,12 +139,12 @@ export default function Home() {
 
       <main className="p-6 space-y-6 pb-20 bg-white dark:bg-black">
         {/* Search Bar */}
-        <div className="relative">
+        <div className="relative border-2 border-black dark:border-white rounded-xl">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black dark:text-white w-4 h-4" />
           <input
             type="text"
             placeholder="Type how you feel: 'I'm alone', 'homeless', 'want to die'..."
-            className="w-full pl-10 pr-4 py-3 rounded-xl bg-white dark:bg-black text-black dark:text-white placeholder-gray-500 border-2 border-black dark:border-white focus:outline-none text-sm"
+            className="w-full pl-10 pr-4 py-3 rounded-xl bg-white dark:bg-black text-black dark:text-white placeholder-gray-500 border-0 focus:outline-none text-sm"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
