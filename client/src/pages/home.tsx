@@ -144,7 +144,7 @@ export default function Home() {
           <input
             type="text"
             placeholder="Type how you feel: 'I'm alone', 'homeless', 'want to die'..."
-            className="w-full pl-10 pr-4 py-3 rounded-xl bg-white dark:bg-black text-black dark:text-white placeholder-gray-500 border-4 border-black dark:border-white focus:outline-none text-sm"
+            className="search-input w-full pl-10 pr-4 py-3 rounded-xl bg-white dark:bg-black text-black dark:text-white placeholder-gray-500 focus:outline-none text-sm"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
