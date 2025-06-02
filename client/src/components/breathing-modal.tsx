@@ -108,7 +108,7 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
           <div className="flex space-x-3">
             <Button
               onClick={isActive ? stopBreathing : startBreathing}
-              className="flex-1 bg-navy-blue hover:bg-sage-green text-white py-3 px-6 rounded-xl transition-colors"
+              className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-colors"
             >
               {isActive ? "Stop" : "Start"}
             </Button>

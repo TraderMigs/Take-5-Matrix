@@ -103,11 +103,11 @@ export default function Home() {
     <div className="max-w-md mx-auto bg-white dark:bg-black min-h-screen">
       {/* Header */}
       <header className="bg-black dark:bg-black text-white dark:text-white text-center py-8 px-6 relative">
-        <div className="absolute top-4 left-4 flex gap-2">
+        <div className="absolute top-4 left-4">
           <LocationSelector />
-          <LanguageSelector />
         </div>
         <div className="absolute top-4 right-4 flex gap-2">
+          <LanguageSelector />
           <button
             onClick={toggleTheme}
             className="p-2 rounded-full bg-white/20 dark:bg-black/20 hover:bg-white/30 dark:hover:bg-black/30 transition-colors"
