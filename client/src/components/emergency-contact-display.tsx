@@ -43,10 +43,10 @@ export default function EmergencyContactDisplay({ isOpen, onClose, currentUser }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md bg-blue-900 dark:bg-green-800">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-red-600">
-            <Heart className="w-5 h-5" />
+            <Heart className="w-5 h-5 text-yellow-400" />
             Emergency Contacts
           </DialogTitle>
         </DialogHeader>
@@ -105,14 +105,14 @@ export default function EmergencyContactDisplay({ isOpen, onClose, currentUser }
             </>
           ) : (
             <div className="text-center py-6">
-              <Heart className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              <Heart className="w-16 h-16 text-yellow-400 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-white mb-2">
                 Emergency Contact Info
               </h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">
+              <p className="text-white mb-4">
                 This feature shows emergency contacts for phone owners who have created an account.
               </p>
-              <p className="text-sm text-gray-500 dark:text-gray-500">
+              <p className="text-sm text-gray-200">
                 If you found this phone, please contact local authorities or check for emergency information in the phone's emergency settings.
               </p>
             </div>
