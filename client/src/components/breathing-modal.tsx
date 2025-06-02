@@ -12,6 +12,11 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
   const [phase, setPhase] = useState<"inhale" | "hold" | "exhale" | "pause">("inhale");
   const [count, setCount] = useState(4);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Audio refs for breathing sounds
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const oscillatorRef = useRef<OscillatorNode | null>(null);
+  const gainNodeRef = useRef<GainNode | null>(null);
 
   const phaseInstructions = {
     inhale: "Breathe in slowly",
@@ -27,10 +32,76 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
     pause: 2,
   };
 
+  // Initialize audio context for breathing sounds
+  const initAudio = () => {
+    if (!audioContextRef.current) {
+      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+    }
+  };
+
+  // Create gentle breathing sound effect
+  const createBreathingSound = (type: "inhale" | "exhale") => {
+    if (!audioContextRef.current) return;
+
+    // Stop any existing oscillator
+    if (oscillatorRef.current) {
+      oscillatorRef.current.stop();
+      oscillatorRef.current = null;
+    }
+
+    const audioContext = audioContextRef.current;
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    // Set frequency for gentle breathing sound
+    const baseFrequency = type === "inhale" ? 200 : 150;
+    oscillator.frequency.setValueAtTime(baseFrequency, audioContext.currentTime);
+
+    // Create smooth volume envelope
+    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.05, audioContext.currentTime + 0.5); // Very gentle volume
+    gainNode.gain.linearRampToValueAtTime(0.02, audioContext.currentTime + 2);
+    gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 4);
+
+    // Use sine wave for soft, natural sound
+    oscillator.type = "sine";
+    
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 4);
+
+    oscillatorRef.current = oscillator;
+    gainNodeRef.current = gainNode;
+  };
+
+  // Stop all audio
+  const stopAudio = () => {
+    if (oscillatorRef.current) {
+      try {
+        oscillatorRef.current.stop();
+      } catch (e) {
+        // Oscillator may already be stopped
+      }
+      oscillatorRef.current = null;
+    }
+    if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
+      audioContextRef.current.close();
+      audioContextRef.current = null;
+    }
+  };
+
   const startBreathing = () => {
+    initAudio(); // Initialize audio context
     setIsActive(true);
     setPhase("inhale");
     setCount(4);
+
+    // Start with inhale sound
+    setTimeout(() => {
+      createBreathingSound("inhale");
+    }, 100);
 
     intervalRef.current = setInterval(() => {
       setCount((prevCount) => {
@@ -39,6 +110,14 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
             const phases: Array<"inhale" | "hold" | "exhale" | "pause"> = ["inhale", "hold", "exhale", "pause"];
             const currentIndex = phases.indexOf(prevPhase);
             const nextPhase = phases[(currentIndex + 1) % phases.length];
+            
+            // Play breathing sounds for inhale and exhale phases
+            if (nextPhase === "inhale") {
+              setTimeout(() => createBreathingSound("inhale"), 100);
+            } else if (nextPhase === "exhale") {
+              setTimeout(() => createBreathingSound("exhale"), 100);
+            }
+            
             return nextPhase;
           });
           return phaseDurations[phase] || 4;
@@ -54,6 +133,7 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
+    stopAudio(); // Stop all audio when stopping the exercise
     setPhase("inhale");
     setCount(4);
   };
