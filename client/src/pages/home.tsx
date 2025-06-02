@@ -68,7 +68,8 @@ export default function Home() {
       subtitle: t('breathingDescription'),
       icon: "💨",
       color: "#47556D",
-      action: () => setShowBreathingModal(true)
+      resource: "https://www.youtube.com/watch?v=nX4dpGQ5wF4",
+      action: () => showActionOptions("overwhelmed", "Feeling Overwhelmed Support", "https://www.youtube.com/watch?v=nX4dpGQ5wF4", () => setShowBreathingModal(true))
     },
     {
       id: "anxious",
@@ -76,8 +77,8 @@ export default function Home() {
       subtitle: t('anxiousDescription'),
       icon: "😰",
       color: "#6B8E7B",
-      resource: "https://www.nimh.nih.gov/health/topics/anxiety-disorders",
-      action: () => showActionOptions("anxious", "Anxiety Management Resources", "https://www.nimh.nih.gov/health/topics/anxiety-disorders")
+      resource: "https://www.youtube.com/watch?v=SA1Dz8BloUY",
+      action: () => showActionOptions("anxious", "Anxiety Management Resources", "https://www.youtube.com/watch?v=SA1Dz8BloUY")
     },
     {
       id: "depressed", 
@@ -85,8 +86,8 @@ export default function Home() {
       subtitle: t('depressedDescription'),
       icon: "😢",
       color: "#47556D",
-      resource: "https://www.nimh.nih.gov/health/topics/depression",
-      action: () => showActionOptions("depressed", "Depression Support Resources", "https://www.nimh.nih.gov/health/topics/depression")
+      resource: "https://www.youtube.com/watch?v=sWfNosruPPw",
+      action: () => showActionOptions("depressed", "Depression Support Resources", "https://www.youtube.com/watch?v=sWfNosruPPw")
     },
     {
       id: "talk",
