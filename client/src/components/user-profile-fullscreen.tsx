@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Camera, BookOpen, PlusCircle, X, ChevronDown, ChevronUp, Save } from "lucide-react";
+import { Camera, BookOpen, PlusCircle, X, ChevronDown, ChevronUp, Save, Edit, Download, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface UserProfileProps {
@@ -22,6 +22,8 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
   const [newEntryContent, setNewEntryContent] = useState("");
   const [showNewEntry, setShowNewEntry] = useState(false);
   const [expandedEntries, setExpandedEntries] = useState<Set<number>>(new Set());
+  const [editingEntries, setEditingEntries] = useState<Set<number>>(new Set());
+  const [editedContent, setEditedContent] = useState<{[key: number]: {title: string, content: string}}>({});
   const { toast } = useToast();
 
   const toggleEntryExpansion = (entryId: number) => {
@@ -32,6 +34,115 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
       newExpanded.add(entryId);
     }
     setExpandedEntries(newExpanded);
+  };
+
+  const startEditingEntry = (entry: any) => {
+    const entryId = entry.id;
+    setEditingEntries(prev => new Set(prev).add(entryId));
+    setEditedContent(prev => ({
+      ...prev,
+      [entryId]: {
+        title: entry.title,
+        content: entry.content
+      }
+    }));
+  };
+
+  const cancelEditingEntry = (entryId: number) => {
+    setEditingEntries(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(entryId);
+      return newSet;
+    });
+    setEditedContent(prev => {
+      const newContent = { ...prev };
+      delete newContent[entryId];
+      return newContent;
+    });
+  };
+
+  const saveEditedEntry = async (entryId: number) => {
+    try {
+      const editedData = editedContent[entryId];
+      if (!editedData) return;
+
+      const response = await fetch(`/api/diary/${entryId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: editedData.title,
+          content: editedData.content
+        }),
+      });
+
+      if (response.ok) {
+        const updatedEntry = await response.json();
+        setDiaryEntries(prev => prev.map(entry => 
+          entry.id === entryId ? updatedEntry : entry
+        ));
+        cancelEditingEntry(entryId);
+        toast({
+          title: "Entry updated",
+          description: "Your diary entry has been saved successfully.",
+        });
+      } else {
+        throw new Error('Failed to update entry');
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to save changes. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const exportEntry = (entry: any) => {
+    const exportData = `Title: ${entry.title}\nDate: ${new Date(entry.createdAt).toLocaleDateString()}\n\n${entry.content}`;
+    const blob = new Blob([exportData], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `diary-entry-${entry.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    toast({
+      title: "Entry exported",
+      description: "Your diary entry has been downloaded as a text file.",
+    });
+  };
+
+  const deleteEntry = async (entryId: number) => {
+    if (!confirm('Are you sure you want to delete this diary entry? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/diary/${entryId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        setDiaryEntries(prev => prev.filter(entry => entry.id !== entryId));
+        toast({
+          title: "Entry deleted",
+          description: "Your diary entry has been permanently removed.",
+        });
+      } else {
+        throw new Error('Failed to delete entry');
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete entry. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   // Load diary entries when profile opens
@@ -298,33 +409,123 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
               {diaryEntries.map((entry, index) => {
                 const entryId = entry.id || index;
                 const isExpanded = expandedEntries.has(entryId);
+                const isEditing = editingEntries.has(entryId);
+                const editData = editedContent[entryId];
                 
                 return (
                   <div key={entryId} className="bg-white dark:bg-black rounded-lg border-2 border-teal-400 overflow-hidden">
                     <div 
                       className="p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors"
-                      onClick={() => toggleEntryExpansion(entryId)}
+                      onClick={() => !isEditing && toggleEntryExpansion(entryId)}
                     >
                       <div className="flex justify-between items-center">
                         <div className="flex items-center space-x-3 flex-1">
-                          <h4 className="font-medium text-black dark:text-white">{entry.title}</h4>
+                          {isEditing ? (
+                            <Input
+                              value={editData?.title || entry.title}
+                              onChange={(e) => setEditedContent(prev => ({
+                                ...prev,
+                                [entryId]: { ...prev[entryId], title: e.target.value }
+                              }))}
+                              className="font-medium bg-white dark:bg-black border border-teal-400 text-black dark:text-white"
+                              onClick={(e) => e.stopPropagation()}
+                            />
+                          ) : (
+                            <h4 className="font-medium text-black dark:text-white">{entry.title}</h4>
+                          )}
                           <span className="text-sm text-gray-500 dark:text-gray-400">
                             {new Date(entry.createdAt).toLocaleDateString()}
                           </span>
                         </div>
-                        <div className="flex-shrink-0">
-                          {isExpanded ? (
-                            <ChevronUp className="w-5 h-5 text-teal-500" />
-                          ) : (
-                            <ChevronDown className="w-5 h-5 text-teal-500" />
+                        <div className="flex items-center space-x-2">
+                          {!isEditing && (
+                            <>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  startEditingEntry(entry);
+                                }}
+                                className="border-teal-400 text-teal-600 hover:bg-teal-50 dark:hover:bg-teal-900"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  exportEntry(entry);
+                                }}
+                                className="border-blue-400 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900"
+                              >
+                                <Download className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  deleteEntry(entryId);
+                                }}
+                                className="border-red-400 text-red-600 hover:bg-red-50 dark:hover:bg-red-900"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </>
                           )}
+                          {isEditing && (
+                            <>
+                              <Button
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  saveEditedEntry(entryId);
+                                }}
+                                className="bg-green-800 hover:bg-green-900 text-white"
+                              >
+                                <Save className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  cancelEditingEntry(entryId);
+                                }}
+                                className="border-gray-400 text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-900"
+                              >
+                                <X className="w-4 h-4" />
+                              </Button>
+                            </>
+                          )}
+                          <div className="flex-shrink-0">
+                            {isExpanded ? (
+                              <ChevronUp className="w-5 h-5 text-teal-500" />
+                            ) : (
+                              <ChevronDown className="w-5 h-5 text-teal-500" />
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
                     
                     {isExpanded && (
                       <div className="px-4 pb-4 border-t border-gray-200 dark:border-gray-700">
-                        <p className="text-black dark:text-white mt-3 leading-relaxed">{entry.content}</p>
+                        {isEditing ? (
+                          <Textarea
+                            value={editData?.content || entry.content}
+                            onChange={(e) => setEditedContent(prev => ({
+                              ...prev,
+                              [entryId]: { ...prev[entryId], content: e.target.value }
+                            }))}
+                            rows={6}
+                            className="mt-3 bg-white dark:bg-black border border-teal-400 text-black dark:text-white"
+                          />
+                        ) : (
+                          <p className="text-black dark:text-white mt-3 leading-relaxed">{entry.content}</p>
+                        )}
                       </div>
                     )}
                   </div>
