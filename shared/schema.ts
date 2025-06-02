@@ -39,10 +39,21 @@ export const breathingSessions = pgTable("breathing_sessions", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const diaryEntries = pgTable("diary_entries", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id).notNull(),
+  title: text("title"),
+  content: text("content").notNull(),
+  mood: text("mood"), // optional mood tracking
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 export const usersRelations = relations(users, ({ many }) => ({
   contacts: many(contacts),
   breathingSessions: many(breathingSessions),
   sessions: many(sessions),
+  diaryEntries: many(diaryEntries),
 }));
 
 export const contactsRelations = relations(contacts, ({ one }) => ({
@@ -66,11 +77,19 @@ export const breathingSessionsRelations = relations(breathingSessions, ({ one })
   }),
 }));
 
+export const diaryEntriesRelations = relations(diaryEntries, ({ one }) => ({
+  user: one(users, {
+    fields: [diaryEntries.userId],
+    references: [users.id],
+  }),
+}));
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
   displayName: true,
   profileImage: true,
+  bio: true,
 });
 
 export const insertContactSchema = createInsertSchema(contacts).pick({
@@ -85,10 +104,18 @@ export const insertBreathingSessionSchema = createInsertSchema(breathingSessions
   completed: true,
 });
 
+export const insertDiaryEntrySchema = createInsertSchema(diaryEntries).pick({
+  title: true,
+  content: true,
+  mood: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type Contact = typeof contacts.$inferSelect;
 export type InsertContact = z.infer<typeof insertContactSchema>;
 export type BreathingSession = typeof breathingSessions.$inferSelect;
 export type InsertBreathingSession = z.infer<typeof insertBreathingSessionSchema>;
+export type DiaryEntry = typeof diaryEntries.$inferSelect;
+export type InsertDiaryEntry = z.infer<typeof insertDiaryEntrySchema>;
 export type Session = typeof sessions.$inferSelect;
