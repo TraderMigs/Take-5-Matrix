@@ -95,53 +95,53 @@ export default function PersonalContacts() {
           </DialogTrigger>
           <DialogContent className="w-80 bg-white dark:bg-black border-black dark:border-white" aria-describedby="contact-description">
             <DialogHeader>
-              <DialogTitle className="text-black dark:text-white text-center">Add Trusted Contact</DialogTitle>
+              <DialogTitle className="text-black dark:text-white text-center">{t('addTrustedContact')}</DialogTitle>
             </DialogHeader>
             <div id="contact-description" className="sr-only">
               Add a trusted person you can reach out to during difficult times
             </div>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="name" className="text-black dark:text-white">Name</Label>
+                <Label htmlFor="name" className="text-black dark:text-white">{t('name')}</Label>
                 <Input
                   id="name"
                   value={newContact.name}
                   onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
-                  placeholder="Enter name"
+                  placeholder={t('enterName')}
                   className="contact-input bg-white dark:bg-black text-black dark:text-white border border-black dark:border-white placeholder:text-green-800 placeholder:opacity-50 placeholder:font-light"
                 />
               </div>
               <div>
-                <Label htmlFor="phone" className="text-black dark:text-white">Phone Number</Label>
+                <Label htmlFor="phone" className="text-black dark:text-white">{t('phoneNumber')}</Label>
                 <Input
                   id="phone"
                   type="tel"
                   value={newContact.phone}
                   onChange={(e) => setNewContact({ ...newContact, phone: e.target.value })}
-                  placeholder="Enter phone number"
+                  placeholder={t('enterPhone')}
                   className="contact-input bg-white dark:bg-black text-black dark:text-white border border-black dark:border-white placeholder:text-green-800 placeholder:opacity-50 placeholder:font-light"
                 />
               </div>
               <div>
-                <Label htmlFor="relationship" className="text-black dark:text-white">Relationship</Label>
+                <Label htmlFor="relationship" className="text-black dark:text-white">{t('relationship')}</Label>
                 <Input
                   id="relationship"
                   value={newContact.relationship}
                   onChange={(e) => setNewContact({ ...newContact, relationship: e.target.value })}
-                  placeholder="e.g., Therapist, Friend, Family"
+                  placeholder={t('enterRelationship')}
                   className="contact-input bg-white dark:bg-black text-black dark:text-white border border-black dark:border-white placeholder:text-green-800 placeholder:opacity-50 placeholder:font-light"
                 />
               </div>
               <div className="flex space-x-2">
                 <Button onClick={handleAddContact} className="flex-1 bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200">
-                  Add Contact
+                  {t('addContact')}
                 </Button>
                 <Button
                   variant="outline"
                   onClick={() => setIsAddingContact(false)}
                   className="flex-1 bg-white dark:bg-black text-black dark:text-white border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-900"
                 >
-                  Cancel
+                  {t('cancel')}
                 </Button>
               </div>
             </div>
