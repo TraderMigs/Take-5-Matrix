@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, Phone, Heart, Lightbulb, Users, Moon, Sun, MessageCircle } from "lucide-react";
+import { Search, Phone, Heart, Lightbulb, Users, Moon, Sun, MessageCircle, User, Shield } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 import { useLanguage } from "@/hooks/use-language";
 import BreathingModal from "@/components/breathing-modal";
@@ -8,6 +8,8 @@ import PersonalContacts from "@/components/personal-contacts";
 import LanguageSelector from "@/components/language-selector";
 import LocationSelector from "@/components/location-selector";
 import AIChat from "@/components/ai-chat";
+import UserAccount from "@/components/user-account";
+import EmergencyContactDisplay from "@/components/emergency-contact-display";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
@@ -16,6 +18,9 @@ export default function Home() {
   const [showActionModal, setShowActionModal] = useState(false);
   const [selectedAction, setSelectedAction] = useState<any>(null);
   const [showAIChat, setShowAIChat] = useState(false);
+  const [showUserAccount, setShowUserAccount] = useState(false);
+  const [showEmergencyContacts, setShowEmergencyContacts] = useState(false);
+  const [currentUser, setCurrentUser] = useState<any>(null);
   const { theme, toggleTheme } = useTheme();
   const { t } = useLanguage();
 
@@ -117,6 +122,13 @@ export default function Home() {
           >
             {theme === "light" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
           </button>
+          <button
+            onClick={() => setShowUserAccount(true)}
+            className="p-2 rounded-full bg-white/20 dark:bg-black/20 hover:bg-white/30 dark:hover:bg-black/30 transition-colors"
+            aria-label="User account"
+          >
+            <User className="w-5 h-5" />
+          </button>
         </div>
         
         <h1 className="text-4xl font-black mb-2" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>{t('appName')}</h1>
@@ -210,6 +222,20 @@ export default function Home() {
           <p className="text-lg font-bold opacity-95" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>{t('footerMessage2')}</p>
           <p className="text-lg font-bold opacity-95" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>{t('footerMessage3')}</p>
           <p className="text-sm font-semibold opacity-90" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>{t('footerMessage4')}</p>
+        </section>
+
+        {/* Emergency Contact Button */}
+        <section className="mt-6">
+          <Button
+            onClick={() => setShowEmergencyContacts(true)}
+            className="w-full bg-red-600 hover:bg-red-700 text-white py-4 text-lg font-semibold border-2 border-red-700"
+          >
+            <Shield className="w-5 h-5 mr-2" />
+            User Emergency Contact
+          </Button>
+          <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-2">
+            For emergencies: Shows contact info if phone owner has an account
+          </p>
         </section>
       </main>
 
