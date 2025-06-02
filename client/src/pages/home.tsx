@@ -244,7 +244,7 @@ export default function Home() {
                 }}
                 className="w-full bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 py-3 px-4 rounded-lg transition-colors"
               >
-                {t('visitWebsite')} (YouTube)
+                Breathing Channel
               </button>
               
               {selectedAction.customAction && (
