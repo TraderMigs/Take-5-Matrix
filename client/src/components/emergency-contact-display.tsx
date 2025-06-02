@@ -129,7 +129,7 @@ export default function EmergencyContactDisplay({ isOpen, onClose, currentUser }
               <Button
                 onClick={onClose}
                 variant="outline"
-                className="flex-1"
+                className="flex-1 border-gray-400 text-black dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
               >
                 Close
               </Button>
