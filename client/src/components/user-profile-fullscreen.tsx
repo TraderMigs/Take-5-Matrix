@@ -372,7 +372,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                 className="bg-teal-500 hover:bg-teal-600 text-white"
               >
                 <PlusCircle className="w-4 h-4 mr-2" />
-                New Entry
+                {t('newEntry')}
               </Button>
             </div>
 

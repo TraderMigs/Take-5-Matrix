@@ -76,6 +76,18 @@ export interface Translation {
   newEntry: string;
   addQuotePlaceholder: string;
   logout: string;
+  
+  // Diary
+  entryTitle: string;
+  writeThoughts: string;
+  saveEntry: string;
+  startWriting: string;
+  entriesSaved: string;
+  entryTitlePlaceholder: string;
+  writeThoughtsPlaceholder: string;
+  entrySaved: string;
+  entryUpdated: string;
+  entryDeleted: string;
 }
 
 export const translations: Record<string, Translation> = {
@@ -139,7 +151,19 @@ export const translations: Record<string, Translation> = {
     yourPrivateDiary: "Your Private Diary",
     newEntry: "New Entry",
     addQuotePlaceholder: "Add a quote (40 chars max)",
-    logout: "Logout"
+    logout: "Logout",
+    
+    // Diary
+    entryTitle: "Entry title...",
+    writeThoughts: "Write your thoughts...",
+    saveEntry: "Save Entry",
+    startWriting: "Start writing to track your thoughts and feelings.",
+    entriesSaved: "Your entries are saved permanently and only visible to you.",
+    entryTitlePlaceholder: "Entry title...",
+    writeThoughtsPlaceholder: "Write your thoughts...",
+    entrySaved: "Your diary entry has been saved permanently.",
+    entryUpdated: "Your diary entry has been saved successfully.",
+    entryDeleted: "Your diary entry has been permanently removed."
   },
   th: {
     appName: "Take 5",
@@ -259,7 +283,19 @@ export const translations: Record<string, Translation> = {
     yourPrivateDiary: "Tu Diario Privado",
     newEntry: "Nueva Entrada",
     addQuotePlaceholder: "Agregar una cita (máx. 40 caracteres)",
-    logout: "Cerrar Sesión"
+    logout: "Cerrar Sesión",
+    
+    // Diary
+    entryTitle: "Título de entrada...",
+    writeThoughts: "Escribe tus pensamientos...",
+    saveEntry: "Guardar Entrada",
+    startWriting: "Comienza a escribir para rastrear tus pensamientos y sentimientos.",
+    entriesSaved: "Tus entradas se guardan permanentemente y solo son visibles para ti.",
+    entryTitlePlaceholder: "Título de entrada...",
+    writeThoughtsPlaceholder: "Escribe tus pensamientos...",
+    entrySaved: "Tu entrada de diario ha sido guardada permanentemente.",
+    entryUpdated: "Tu entrada de diario ha sido guardada exitosamente.",
+    entryDeleted: "Tu entrada de diario ha sido eliminada permanentemente."
   },
   fr: {
     appName: "Take 5",
