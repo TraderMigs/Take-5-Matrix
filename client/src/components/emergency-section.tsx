@@ -74,7 +74,7 @@ export default function EmergencySection() {
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-6 rounded-xl transition-colors flex items-center justify-center text-lg"
           >
             <Heart className="mr-3" size={20} />
-            Crisis Hotline: {locationData?.crisis}
+            Crisis Hotline: Call Now
           </Button>
         </div>
       )}

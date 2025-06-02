@@ -13,7 +13,7 @@ export default function Home() {
   const quickTools = [
     {
       id: "overwhelmed",
-      title: "I feel overwhelmed",
+      title: "I Feel Overwhelmed",
       subtitle: "Breathing exercises and grounding techniques",
       icon: "💨",
       color: "#47556D",
@@ -21,51 +21,51 @@ export default function Home() {
     },
     {
       id: "homeless",
-      title: "I'm homeless",
+      title: "I'm Homeless",
       subtitle: "Local resources and immediate assistance", 
       icon: "🏠",
       color: "#6B8E7B",
-      action: () => console.log("Homeless resources")
+      action: () => alert("Connecting you to local homeless assistance resources...")
     },
     {
       id: "suicidal",
-      title: "I feel suicidal",
+      title: "I Feel Suicidal",
       subtitle: "Immediate professional support available",
       icon: "💜",
       color: "#47556D", 
-      action: () => console.log("Crisis intervention")
+      action: () => alert("Please call emergency services immediately. You matter and help is available.")
     },
     {
       id: "talk",
-      title: "I need someone to talk to",
+      title: "I Need Someone To Talk To",
       subtitle: "Connect with trained listeners",
       icon: "💬",
       color: "#6B8E7B",
-      action: () => console.log("Talk to someone")
+      action: () => alert("Connecting you to crisis support lines...")
     },
     {
       id: "bullied",
-      title: "I'm being bullied",
+      title: "I'm Being Bullied",
       subtitle: "Protection resources and support",
       icon: "🛡️",
       color: "#47556D",
-      action: () => console.log("Bullying support")
+      action: () => alert("Connecting you to anti-bullying resources and support...")
     },
     {
       id: "hurt",
-      title: "I've hurt myself", 
+      title: "I've Hurt Myself", 
       subtitle: "Safe alternatives and medical guidance",
       icon: "🩹",
       color: "#6B8E7B",
-      action: () => console.log("Self-harm support")
+      action: () => alert("Please seek immediate medical attention. Crisis support is available.")
     },
     {
       id: "quiet",
-      title: "I just want quiet support",
+      title: "I Just Want Quiet Support",
       subtitle: "Peaceful exercises and affirmations",
       icon: "🕯️",
       color: "#47556D",
-      action: () => console.log("Quiet support")
+      action: () => alert("Loading calming exercises and affirmations...")
     }
   ];
 

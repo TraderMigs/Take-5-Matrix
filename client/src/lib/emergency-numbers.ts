@@ -17,7 +17,13 @@ const emergencyData: Record<string, { emergency: string; crisis: string; name: s
   SE: { emergency: "112", crisis: "020 22 00 60", name: "Sweden" },
   NO: { emergency: "112", crisis: "815 33 300", name: "Norway" },
   DK: { emergency: "112", crisis: "70 201 201", name: "Denmark" },
-  DEFAULT: { emergency: "112", crisis: "Contact local services", name: "International" }
+  TH: { emergency: "191", crisis: "1323", name: "Thailand" },
+  SG: { emergency: "995", crisis: "1800-221-4444", name: "Singapore" },
+  MY: { emergency: "999", crisis: "03-7956-8144", name: "Malaysia" },
+  PH: { emergency: "911", crisis: "02-8969191", name: "Philippines" },
+  ID: { emergency: "112", crisis: "119", name: "Indonesia" },
+  VN: { emergency: "113", crisis: "1800-1567", name: "Vietnam" },
+  DEFAULT: { emergency: "112", crisis: "Call Now", name: "International" }
 };
 
 export function getEmergencyNumber(): string {
@@ -34,13 +40,18 @@ export function getLocationBasedNumbers(countryCode?: string) {
 
 export async function detectUserLocation(): Promise<{ country: string; countryCode: string } | null> {
   try {
-    // Try browser geolocation first
+    // Ask for location permission first
     if (navigator.geolocation) {
       const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, {
-          timeout: 10000,
-          maximumAge: 600000 // 10 minutes cache
-        });
+        navigator.geolocation.getCurrentPosition(
+          resolve, 
+          reject, 
+          {
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 300000 // 5 minutes cache
+          }
+        );
       });
       
       // Use free reverse geocoding service
@@ -50,6 +61,7 @@ export async function detectUserLocation(): Promise<{ country: string; countryCo
       
       if (response.ok) {
         const data = await response.json();
+        console.log('Location detected:', data.countryName, data.countryCode);
         return {
           country: data.countryName || "Unknown",
           countryCode: data.countryCode || "DEFAULT"
@@ -58,9 +70,11 @@ export async function detectUserLocation(): Promise<{ country: string; countryCo
     }
     
     // Fallback to IP-based detection (free tier)
+    console.log('Trying IP-based location...');
     const ipResponse = await fetch('https://ipapi.co/json/');
     if (ipResponse.ok) {
       const ipData = await ipResponse.json();
+      console.log('IP location detected:', ipData.country_name, ipData.country_code);
       return {
         country: ipData.country_name || "Unknown",
         countryCode: ipData.country_code || "DEFAULT"
@@ -69,7 +83,7 @@ export async function detectUserLocation(): Promise<{ country: string; countryCo
     
     return null;
   } catch (error) {
-    console.log('Location detection failed, using default');
+    console.log('Location detection failed:', error);
     return null;
   }
 }
