@@ -75,7 +75,8 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
       ...prev,
       [entryId]: {
         title: entry.title,
-        content: entry.content
+        content: entry.content,
+        images: entry.images || []
       }
     }));
   };
