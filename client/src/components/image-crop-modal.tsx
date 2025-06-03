@@ -17,15 +17,15 @@ function getInitialCrop(
   mediaWidth: number,
   mediaHeight: number,
 ): Crop {
-  // Start with a larger crop area (80% of image) centered, users can resize as needed
-  const minDimension = Math.min(mediaWidth, mediaHeight);
-  const size = minDimension * 0.8;
+  // Start with a rectangular crop area (80% of image width, 60% of height) centered
+  const cropWidth = mediaWidth * 0.8;
+  const cropHeight = mediaHeight * 0.6;
   return {
     unit: 'px',
-    x: (mediaWidth - size) / 2,
-    y: (mediaHeight - size) / 2,
-    width: size,
-    height: size,
+    x: (mediaWidth - cropWidth) / 2,
+    y: (mediaHeight - cropHeight) / 2,
+    width: cropWidth,
+    height: cropHeight,
   };
 }
 
@@ -126,7 +126,7 @@ export default function ImageCropModal({ isOpen, onClose, imageSrc, onSave }: Im
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-auto bg-white dark:bg-gray-800 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+      <DialogContent className="max-w-4xl w-[95vw] max-h-[95vh] overflow-auto bg-white dark:bg-gray-800">
         <DialogHeader className="bg-white dark:bg-black p-4 -m-6 mb-4 rounded-t-lg">
           <DialogTitle className="text-black dark:text-white">Edit Profile Photo</DialogTitle>
         </DialogHeader>
@@ -138,16 +138,16 @@ export default function ImageCropModal({ isOpen, onClose, imageSrc, onSave }: Im
           </div>
 
           {/* Image Crop Area */}
-          <div className="flex justify-center bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
-            <ReactCrop
-              crop={crop}
-              onChange={(_, percentCrop) => setCrop(percentCrop)}
-              onComplete={(c) => setCompletedCrop(c)}
-              circularCrop
-              aspect={1}
-              keepSelection
-            >
-              <img
+          <div className="flex justify-center items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-4 min-h-[300px]">
+            <div className="w-full max-w-lg">
+              <ReactCrop
+                crop={crop}
+                onChange={(_, percentCrop) => setCrop(percentCrop)}
+                onComplete={(c) => setCompletedCrop(c)}
+                keepSelection
+                className="max-w-full"
+              >
+                <img
                 ref={imgRef}
                 alt="Crop preview"
                 src={imageSrc}
@@ -159,6 +159,7 @@ export default function ImageCropModal({ isOpen, onClose, imageSrc, onSave }: Im
                 onLoad={onImageLoad}
               />
             </ReactCrop>
+            </div>
           </div>
 
           {/* Controls */}
