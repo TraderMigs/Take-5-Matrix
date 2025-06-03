@@ -37,6 +37,50 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Text-to-speech function with warm, realistic voice
+  const speakText = (text: string) => {
+    // Cancel any ongoing speech
+    window.speechSynthesis.cancel();
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    
+    // Configure voice settings for warm, realistic speech
+    utterance.rate = 0.9; // Slightly slower for clarity
+    utterance.pitch = 1.0; // Natural pitch
+    utterance.volume = 0.8; // Comfortable volume
+    
+    // Function to set the best available voice
+    const setVoice = () => {
+      const voices = window.speechSynthesis.getVoices();
+      
+      // Prioritize high-quality voices
+      const preferredVoice = voices.find(voice => 
+        voice.name.includes('Premium') || 
+        voice.name.includes('Enhanced') ||
+        voice.name.includes('Neural') ||
+        voice.name.includes('Samantha') ||
+        voice.name.includes('Zira') ||
+        (voice.lang.startsWith('en') && voice.name.includes('Female')) ||
+        (voice.lang.startsWith('en') && voice.localService && !voice.name.includes('Male'))
+      ) || voices.find(voice => 
+        voice.lang.startsWith('en') && !voice.name.toLowerCase().includes('male')
+      ) || voices.find(voice => voice.lang.startsWith('en'));
+      
+      if (preferredVoice) {
+        utterance.voice = preferredVoice;
+      }
+      
+      window.speechSynthesis.speak(utterance);
+    };
+    
+    // Ensure voices are loaded before selecting
+    if (window.speechSynthesis.getVoices().length === 0) {
+      window.speechSynthesis.addEventListener('voiceschanged', setVoice, { once: true });
+    } else {
+      setVoice();
+    }
+  };
+
   // Load saved name and conversation history from localStorage on component mount
   useEffect(() => {
     const savedName = localStorage.getItem('take5-user-name');
@@ -169,7 +213,10 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
           setMessages(prev => [...prev, aiMessage]);
           setLastAiMessageId(aiMessageId);
           
-
+          // Speak the AI response if not muted
+          if (!isAiMuted && data.response) {
+            speakText(data.response);
+          }
           
           // Remove any injected feedback elements that might appear
           setTimeout(() => {
@@ -277,7 +324,14 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
         {/* Mute/Unmute AI Controls */}
         <div className="px-4 pb-2 border-b border-gray-200 dark:border-gray-700">
           <button
-            onClick={() => setIsAiMuted(!isAiMuted)}
+            onClick={() => {
+              const newMutedState = !isAiMuted;
+              setIsAiMuted(newMutedState);
+              // Stop any ongoing speech when muting
+              if (newMutedState) {
+                window.speechSynthesis.cancel();
+              }
+            }}
             className="text-xs text-green-700 hover:text-green-800 transition-colors font-medium"
           >
             {isAiMuted ? 'Unmute AI' : 'Mute AI'}
