@@ -132,8 +132,36 @@ export default function PersonalContacts({ currentUser }: PersonalContactsProps)
     <section className="space-y-4" data-section="contacts">
       <h2 className="text-xl font-semibold text-gray-800 dark:text-white text-center">{t('trustedContacts')}</h2>
 
-      <div className="space-y-3">
-        {contacts.map((contact) => (
+      {!currentUser ? (
+        <div className="text-center py-8">
+          <p className="text-black dark:text-white text-base font-normal mb-6">
+            Log In to Create Your Emergency Contacts List
+          </p>
+          <div className="space-y-3">
+            <Button
+              onClick={() => {
+                localStorage.setItem('take5_redirect_after_login', 'contacts');
+                window.location.href = '/api/auth/google';
+              }}
+              className="w-full bg-gray-800 hover:bg-gray-900 text-white px-6 py-3 rounded-lg"
+            >
+              Log In
+            </Button>
+            <Button
+              onClick={() => {
+                localStorage.setItem('take5_redirect_after_login', 'contacts');
+                window.location.href = '/api/auth/google';
+              }}
+              variant="outline"
+              className="w-full bg-white dark:bg-black hover:bg-gray-100 dark:hover:bg-gray-900 border-2 border-gray-800 dark:border-white text-gray-800 dark:text-white px-6 py-3 rounded-lg"
+            >
+              Create Account
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {contacts.map((contact) => (
           <div
             key={contact.id}
             className="bg-white border border-gray-200 rounded-xl p-4 flex items-center justify-between"
@@ -323,7 +351,8 @@ export default function PersonalContacts({ currentUser }: PersonalContactsProps)
             </div>
           </DialogContent>
         </Dialog>
-      </div>
+        </div>
+      )}
     </section>
   );
 }
