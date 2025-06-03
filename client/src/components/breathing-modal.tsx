@@ -40,28 +40,29 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
 
     const audioContext = audioContextRef.current;
     
-    // Create buffer for ocean wave sound (2 seconds of audio data)
-    const bufferSize = audioContext.sampleRate * 2;
+    // Create buffer for gentle meditation bell sound (3 seconds of audio data)
+    const bufferSize = audioContext.sampleRate * 3;
     const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
     const output = buffer.getChannelData(0);
 
-    // Generate ocean wave sound using multiple noise layers
+    // Generate soft meditation bell/chime sound
     for (let i = 0; i < bufferSize; i++) {
-      // Base white noise
-      let sample = (Math.random() * 2 - 1) * 0.3;
-      
-      // Add wave-like modulation with multiple frequencies
       const time = i / audioContext.sampleRate;
-      sample *= (0.5 + 0.3 * Math.sin(time * 0.5 * Math.PI)); // Slow wave cycle
-      sample *= (0.7 + 0.2 * Math.sin(time * 1.2 * Math.PI)); // Medium wave
-      sample *= (0.8 + 0.15 * Math.sin(time * 2.8 * Math.PI)); // Fast ripples
       
-      // Apply low-pass filtering effect
-      if (i > 0) {
-        sample = sample * 0.7 + output[i - 1] * 0.3;
-      }
+      // Create gentle bell-like harmonics at peaceful frequencies
+      const fundamental = Math.sin(2 * Math.PI * 220 * time) * 0.4; // A3 note (peaceful)
+      const harmonic2 = Math.sin(2 * Math.PI * 440 * time) * 0.2; // A4 (octave)
+      const harmonic3 = Math.sin(2 * Math.PI * 660 * time) * 0.1; // E5 (fifth)
+      const harmonic4 = Math.sin(2 * Math.PI * 880 * time) * 0.05; // A5
       
-      output[i] = sample * 0.4; // Overall volume control
+      // Add very subtle background texture
+      const texture = (Math.random() - 0.5) * 0.005;
+      
+      // Apply exponential decay envelope for bell-like sustain
+      const envelope = Math.exp(-time * 1.2); // Gentle decay over 3 seconds
+      
+      // Combine all frequencies with envelope
+      output[i] = (fundamental + harmonic2 + harmonic3 + harmonic4 + texture) * envelope * 0.12;
     }
 
     // Create and configure audio nodes
@@ -69,10 +70,10 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
     const gainNode = audioContext.createGain();
     const filter = audioContext.createBiquadFilter();
 
-    // Set up low-pass filter for ocean-like sound
+    // Set up gentle filter for meditation bell sound
     filter.type = "lowpass";
-    filter.frequency.setValueAtTime(1200, audioContext.currentTime);
-    filter.Q.setValueAtTime(0.5, audioContext.currentTime);
+    filter.frequency.setValueAtTime(2000, audioContext.currentTime);
+    filter.Q.setValueAtTime(0.3, audioContext.currentTime);
 
     // Connect audio chain
     source.connect(filter);
