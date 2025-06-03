@@ -49,13 +49,13 @@ function generateFallbackResponse(message: string, conversationHistory: any[] = 
   // Crisis/Emergency responses with immediate care
   if (detectCrisisKeywords(message)) {
     const crisisResponses = [
-      "I hear the pain in your words, and I want you to know that what you're feeling right now - as overwhelming as it is - can change. You reached out to me, which shows there's still a part of you that wants to find a way through this. Right now, in this moment, you're not alone. If you'd like, I can show you your trusted contacts so you can reach someone who cares about you.",
-      "What you're going through sounds incredibly difficult, and I'm concerned about you. These feelings are real and they matter, but they don't define your worth or your future. You took a brave step by sharing this with me. Would it help to see your emergency contacts so you can talk to someone who knows and cares about you?",
-      "I can feel how much you're hurting right now. Thank you for trusting me with something so personal and painful. You don't have to carry this weight alone - there are people who want to help you through this. Can I show you your trusted contacts so you can reach out to someone who cares?"
+      "I hear the pain in your words, and I want you to know that what you're feeling right now - as overwhelming as it is - can change. You reached out to me, which shows there's still a part of you that wants to find a way through this. Right now, in this moment, you're not alone. Tell me more about what's been weighing on you.",
+      "What you're going through sounds incredibly difficult, and I'm concerned about you. These feelings are real and they matter, but they don't define your worth or your future. You took a brave step by sharing this with me. What's been making this feel so overwhelming?",
+      "I can feel how much you're hurting right now. Thank you for trusting me with something so personal and painful. You don't have to carry this weight alone. Can you help me understand what's been bringing you to this point?"
     ];
     return {
       response: crisisResponses[Math.floor(Math.random() * crisisResponses.length)],
-      showContacts: true,
+      showContacts: false,
       isCrisis: true
     };
   }
@@ -216,8 +216,8 @@ async function getOpenAIResponse(message: string, conversationHistory: any[] = [
     // Count AI messages in current session to implement redirect logic
     const aiMessageCount = conversationHistory.filter(msg => msg.sender === 'ai').length;
     
-    // After 2-3 AI responses, redirect to built-in tools
-    if (aiMessageCount >= 2) {
+    // After 3-5 AI responses, redirect to built-in tools
+    if (aiMessageCount >= 3 && Math.random() > 0.3) { // 70% chance after 3+ exchanges
       const redirectMessages = [
         `You know what helps most right now${userName ? `, ${userName}` : ''}? Try tapping "I Feel Overwhelmed". People say it really helps, and I think it'll do the same for you. I'll be right here after.`,
         `Hey${userName ? ` ${userName}` : ''}, I think you'd really benefit from trying "I Feel Anxious" right now. It's designed exactly for moments like this. Give it a try and come back to chat whenever you need.`,
@@ -234,9 +234,11 @@ async function getOpenAIResponse(message: string, conversationHistory: any[] = [
 
 Always speak like a real human — warm, kind, relaxed, casual. Keep your responses under 100 words.
 
-After 2 to 3 back-and-forth messages, kindly encourage the user to try one of the built-in tools in the app like "I Feel Anxious", "I Feel Overwhelmed", or "Daily Reset". Say things like:
+Focus on having 3 to 5 meaningful back-and-forth conversations before suggesting any tools or redirections. Listen actively, ask follow-up questions, and help users process their feelings through conversation.
 
-"You know what helps most right now, [name]? Try tapping 'I Feel Overwhelmed'. People say it really helps, and I think it'll do the same for you. I'll be right here after."
+Never offer to show emergency contacts or trusted contacts. Never suggest contacting people unless the user specifically asks about reaching out to others.
+
+After 3-5 exchanges, you may gently suggest built-in tools like "I Feel Anxious", "I Feel Overwhelmed", or "Daily Reset" if appropriate.
 
 Never pretend to be a doctor. Never fake empathy — always keep it real, grounded, and emotionally safe. Your job is to connect, not cure.`
       }
