@@ -10,8 +10,14 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Session configuration for persistent login
+// Session configuration with PostgreSQL store for persistent login
+const PgSession = connectPg(session);
 app.use(session({
+  store: new PgSession({
+    conString: process.env.DATABASE_URL,
+    tableName: 'sessions',
+    createTableIfMissing: true,
+  }),
   secret: process.env.SESSION_SECRET || 'take5-session-secret-key',
   resave: false,
   saveUninitialized: false,
