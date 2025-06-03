@@ -4,6 +4,8 @@ import * as XLSX from 'xlsx';
 import { users } from "@shared/schema";
 import { db } from "./db";
 import { gte, and, desc } from "drizzle-orm";
+import fs from 'fs';
+import path from 'path';
 
 // Helper function to get week start date (Sunday)
 function getWeekStart(date: Date): Date {
@@ -23,7 +25,7 @@ interface UserSignupData {
   createdAt: Date;
 }
 
-export async function generateWeeklySignupReport(): Promise<Buffer> {
+export async function generateWeeklySignupReport(): Promise<{ buffer: Buffer; filename: string }> {
   try {
     // Get all users ordered by signup date
     const allUsers = await db
@@ -114,18 +116,35 @@ export async function generateWeeklySignupReport(): Promise<Buffer> {
     // Generate Excel buffer
     const excelBuffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
     
+    // Generate filename with timestamp
+    const now = new Date();
+    const filename = `Take5_Weekly_Signup_Report_${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}.xlsx`;
+    
     console.log(`📊 Weekly signup report generated: ${allUsers.length} total users, ${newSignups.length} new this week`);
     
-    return excelBuffer;
+    return { buffer: excelBuffer, filename };
   } catch (error) {
     console.error('Failed to generate weekly signup report:', error);
     throw error;
   }
 }
 
-export async function sendWeeklySignupReport(): Promise<boolean> {
+export async function sendWeeklySignupReport(): Promise<{ success: boolean; filePath?: string; downloadUrl?: string }> {
+  const timestamp = new Date().toISOString();
+  
   try {
-    const excelBuffer = await generateWeeklySignupReport();
+    const { buffer: excelBuffer, filename } = await generateWeeklySignupReport();
+    
+    // Create backup directory if it doesn't exist
+    const backupDir = path.join(process.cwd(), 'server', 'backup-reports');
+    if (!fs.existsSync(backupDir)) {
+      fs.mkdirSync(backupDir, { recursive: true });
+    }
+    
+    // Save file locally as backup
+    const filePath = path.join(backupDir, filename);
+    fs.writeFileSync(filePath, excelBuffer);
+    console.log(`📁 [${timestamp}] Backup file saved: ${filePath}`);
     
     // Get current week info for email subject
     const now = new Date();
@@ -134,22 +153,37 @@ export async function sendWeeklySignupReport(): Promise<boolean> {
     
     const subject = `Take 5 App - Weekly Signup Report - Week of ${weekStart.toLocaleDateString()}`;
     
-    const success = await sendSignupReportEmail(
-      'tradermigs@gmail.com',
-      subject,
-      excelBuffer
-    );
-    
-    if (success) {
-      console.log('✅ Weekly signup report sent successfully to tradermigs@gmail.com');
-    } else {
-      console.error('❌ Failed to send weekly signup report');
+    try {
+      const emailSuccess = await sendSignupReportEmail(
+        'tradermigs@gmail.com',
+        subject,
+        excelBuffer
+      );
+      
+      if (emailSuccess) {
+        console.log(`✅ [${timestamp}] Weekly signup report sent successfully to tradermigs@gmail.com`);
+        return { success: true, filePath };
+      } else {
+        throw new Error('Email sending failed - unknown error');
+      }
+    } catch (emailError: any) {
+      console.error(`❌ [${timestamp}] Email sending failed:`, emailError.message || emailError);
+      
+      // Create download URL for manual access
+      const downloadUrl = `/api/download-signup-report/${encodeURIComponent(filename)}`;
+      
+      console.log(`📄 [${timestamp}] Report available for download at: ${downloadUrl}`);
+      console.log(`📁 [${timestamp}] Local backup saved: ${filePath}`);
+      
+      return { 
+        success: false, 
+        filePath, 
+        downloadUrl 
+      };
     }
-    
-    return success;
-  } catch (error) {
-    console.error('Error sending weekly signup report:', error);
-    return false;
+  } catch (error: any) {
+    console.error(`❌ [${timestamp}] Failed to generate/send weekly signup report:`, error.message || error);
+    return { success: false };
   }
 }
 

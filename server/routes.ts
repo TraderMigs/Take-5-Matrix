@@ -395,24 +395,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/test/weekly-signup-report", async (req, res) => {
     try {
       const { sendWeeklySignupReport } = await import("./signup-reporting");
-      const success = await sendWeeklySignupReport();
+      const result = await sendWeeklySignupReport();
       
-      if (success) {
+      if (result.success) {
         res.json({ 
           success: true, 
-          message: "Weekly signup report sent successfully to tradermigs@gmail.com" 
+          message: "Weekly signup report sent successfully to tradermigs@gmail.com",
+          filePath: result.filePath,
+          timestamp: new Date().toISOString()
         });
       } else {
         res.status(500).json({ 
           success: false, 
-          message: "Failed to send weekly signup report" 
+          message: "Failed to send weekly signup report",
+          filePath: result.filePath,
+          downloadUrl: result.downloadUrl,
+          timestamp: new Date().toISOString()
         });
       }
     } catch (error) {
       console.error("Test weekly report error:", error);
       res.status(500).json({ 
         success: false, 
-        message: "Error generating or sending report" 
+        message: "Error generating or sending report",
+        timestamp: new Date().toISOString()
       });
     }
   });
