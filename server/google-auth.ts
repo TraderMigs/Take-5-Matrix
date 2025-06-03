@@ -174,14 +174,23 @@ export function setupGoogleAuth(app: Express) {
       // Create server-side session instead of passing user data via URL
       const session = await storage.createSession(user.id);
       
-      // Set session cookie
+      // Set session data and save it
       req.session = req.session || {};
       (req.session as any).sessionId = session.id;
       (req.session as any).userId = user.id;
       (req.session as any).userData = user;
       
-      // Simple redirect without user data in URL
-      res.redirect('/?auth=success');
+      console.log('Setting session data:', { sessionId: session.id, userId: user.id });
+      
+      // Force session save before redirect
+      req.session.save((err) => {
+        if (err) {
+          console.error('Session save error:', err);
+          return res.redirect('/?auth=error&details=session_error');
+        }
+        console.log('Session saved successfully, redirecting...');
+        res.redirect('/?auth=success');
+      });
     } catch (error) {
       console.error('Google OAuth error:', error);
       const errorMsg = error instanceof Error ? error.message : 'unknown_error';

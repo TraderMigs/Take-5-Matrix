@@ -296,6 +296,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.get("/api/auth/session", (req: any, res) => {
+    console.log('Session check - Session data:', req.session);
+    console.log('Session ID:', req.sessionID);
+    console.log('User ID:', req.session.userId);
+    console.log('User data exists:', !!req.session.userData);
+    
     if (req.session.userId && req.session.userData) {
       res.json({ 
         authenticated: true, 
@@ -745,8 +750,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/contacts', async (req, res) => {
     try {
+      console.log('Contact creation attempt - Session data:', req.session);
       const userId = req.session.userId;
+      console.log('User ID from session:', userId);
+      
       if (!userId) {
+        console.log('No userId in session, authentication required');
         return res.status(401).json({ error: 'Authentication required' });
       }
 
