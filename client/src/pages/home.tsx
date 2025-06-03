@@ -26,17 +26,40 @@ export default function Home() {
   const [selectedAction, setSelectedAction] = useState<any>(null);
   const [showAIChat, setShowAIChat] = useState(false);
   const [showUserAccount, setShowUserAccount] = useState(false);
+  const [showUserProfile, setShowUserProfile] = useState(false);
   const [hasAcceptedLegal, setHasAcceptedLegal] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const { theme, toggleTheme } = useTheme();
   const { t } = useLanguage();
   const { toast } = useToast();
 
-  // Check for legal acceptance and saved user session
+  // Functions to handle profile view persistence
+  const openProfileView = () => {
+    setShowUserProfile(true);
+    const url = new URL(window.location.href);
+    url.searchParams.set('view', 'profile');
+    window.history.pushState({}, '', url.toString());
+  };
+
+  const closeProfileView = () => {
+    setShowUserProfile(false);
+    const url = new URL(window.location.href);
+    url.searchParams.delete('view');
+    window.history.pushState({}, '', url.toString());
+  };
+
+  // Check for legal acceptance, saved user session, and profile view state
   useEffect(() => {
     const legalAccepted = localStorage.getItem('take5_legal_accepted');
     if (legalAccepted === 'true') {
       setHasAcceptedLegal(true);
+    }
+
+    // Check URL parameters for view state persistence
+    const urlParams = new URLSearchParams(window.location.search);
+    const viewParam = urlParams.get('view');
+    if (viewParam === 'profile') {
+      setShowUserProfile(true);
     }
 
     // Check for saved user session in localStorage first
@@ -305,8 +328,8 @@ export default function Home() {
             {theme === "light" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
           </button>
           <button
-            onClick={() => setShowUserAccount(true)}
-            className="p-2 rounded-full bg-white/20 dark:bg-black/20 hover:bg-white/30 dark:hover:bg-black/30 transition-colors"
+            onClick={() => currentUser ? openProfileView() : setShowUserAccount(true)}
+            className="p-2 rounded-full bg-white/80 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-700 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600 shadow-sm transition-colors"
             aria-label="User account"
           >
             <User className="w-5 h-5" />
@@ -580,6 +603,13 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      {/* User Profile Fullscreen View */}
+      <UserProfileFullscreen
+        isOpen={showUserProfile}
+        onClose={closeProfileView}
+        currentUser={currentUser}
+      />
 
       {/* Legal Acceptance Modal - Required on First Visit */}
       <LegalAcceptance
