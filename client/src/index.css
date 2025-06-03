@@ -231,6 +231,30 @@ button:focus, input:focus {
     border-color: hsl(var(--sage-green));
   }
 
+  /* Override ReactCrop circular styling to force rectangular cropping */
+  .ReactCrop__crop-selection {
+    border-radius: 0 !important;
+    border: 2px solid #3b82f6 !important;
+  }
+
+  .ReactCrop__drag-handle {
+    border-radius: 0 !important;
+    background-color: #3b82f6 !important;
+  }
+
+  .ReactCrop__drag-handle:after {
+    border-radius: 0 !important;
+  }
+
+  /* Remove any yellow from react-image-crop */
+  .ReactCrop *[style*="yellow"],
+  .ReactCrop *[style*="#fff"],
+  .ReactCrop *[style*="#fef"],
+  .ReactCrop *[style*="#fbb"] {
+    background-color: #3b82f6 !important;
+    border-color: #3b82f6 !important;
+  }
+
   /* Force remove all yellow colors globally */
   .text-yellow-400,
   .text-yellow-500,
