@@ -139,26 +139,28 @@ export default function ImageCropModal({ isOpen, onClose, imageSrc, onSave }: Im
 
           {/* Image Crop Area */}
           <div className="flex justify-center items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-4 min-h-[300px]">
-            <div className="w-full max-w-lg">
+            <div className="w-full flex justify-center">
               <ReactCrop
                 crop={crop}
                 onChange={(_, percentCrop) => setCrop(percentCrop)}
                 onComplete={(c) => setCompletedCrop(c)}
                 keepSelection
-                className="max-w-full"
+                className="max-w-full flex justify-center"
               >
                 <img
-                ref={imgRef}
-                alt="Crop preview"
-                src={imageSrc}
-                style={{ 
-                  transform: `scale(${scale}) rotate(${rotate}deg)`,
-                  maxWidth: '100%',
-                  maxHeight: '400px'
-                }}
-                onLoad={onImageLoad}
-              />
-            </ReactCrop>
+                  ref={imgRef}
+                  alt="Crop preview"
+                  src={imageSrc}
+                  style={{ 
+                    transform: `scale(${scale}) rotate(${rotate}deg)`,
+                    maxWidth: '100%',
+                    maxHeight: '400px',
+                    display: 'block',
+                    margin: '0 auto'
+                  }}
+                  onLoad={onImageLoad}
+                />
+              </ReactCrop>
             </div>
           </div>
 
@@ -229,21 +231,21 @@ export default function ImageCropModal({ isOpen, onClose, imageSrc, onSave }: Im
             <Button
               onClick={onClose}
               variant="outline"
-              className="text-black dark:text-white"
+              className="bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300"
             >
               <X className="w-4 h-4 mr-2" />
               Cancel
             </Button>
             <Button
               onClick={handleUseFullImage}
-              className="bg-blue-500 hover:bg-blue-600 text-white"
+              className="bg-slate-500 hover:bg-slate-600 text-white"
             >
               <Image className="w-4 h-4 mr-2" />
               Use Full Image
             </Button>
             <Button
               onClick={handleSave}
-              className="bg-teal-500 hover:bg-teal-600 text-white"
+              className="bg-slate-600 hover:bg-slate-700 text-white"
             >
               <Save className="w-4 h-4 mr-2" />
               Save Cropped

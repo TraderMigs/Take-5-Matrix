@@ -255,6 +255,55 @@ button:focus, input:focus {
     border-color: #3b82f6 !important;
   }
 
+  /* Force remove yellow from all buttons and UI elements globally */
+  button[style*="yellow"],
+  button[class*="yellow"],
+  .bg-yellow-300,
+  .bg-yellow-400,
+  .bg-yellow-500,
+  .text-yellow-300,
+  .text-yellow-400,
+  .text-yellow-500,
+  .border-yellow-300,
+  .border-yellow-400,
+  .border-yellow-500 {
+    background-color: #64748b !important; /* slate-500 */
+    color: white !important;
+    border-color: #475569 !important; /* slate-600 */
+  }
+
+  /* Override any remaining yellow in image crop modal specifically */
+  .ReactCrop__crop-selection {
+    background-color: rgba(59, 130, 246, 0.1) !important; /* blue with transparency */
+  }
+
+  /* Force override all yellow variations globally */
+  *[class*="yellow"],
+  *[style*="rgb(255, 255, 0)"],
+  *[style*="rgb(255, 240, 0)"],
+  *[style*="rgb(255, 193, 7)"],
+  *[style*="#ffff00"],
+  *[style*="#fff000"],
+  *[style*="#ffc107"] {
+    background-color: #64748b !important; /* slate-500 */
+    color: white !important;
+    border-color: #475569 !important; /* slate-600 */
+  }
+
+  /* Ensure proper centering for ReactCrop component */
+  .ReactCrop {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
+
+  .ReactCrop > img {
+    max-width: 100% !important;
+    max-height: 400px !important;
+    object-fit: contain !important;
+  }
+
   /* Force remove all yellow colors globally */
   .text-yellow-400,
   .text-yellow-500,
