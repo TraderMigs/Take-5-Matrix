@@ -167,12 +167,30 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
       const response = await fetch(`/api/auth/profile?userId=${currentUser.id}`);
       if (response.ok) {
         const profileData = await response.json();
-        setProfileQuote(profileData.bio || "");
-        setUsername(profileData.username || currentUser.username);
-        setProfileImage(profileData.profileImage || currentUser.profileImage || "");
+        const bioFromDB = profileData.bio || currentUser.bio || "";
+        const imageFromDB = profileData.profileImage || currentUser.profileImage || "";
+        const usernameFromDB = profileData.username || currentUser.username || "";
+        
+        setProfileQuote(bioFromDB);
+        setUsername(usernameFromDB);
+        setProfileImage(imageFromDB);
+        
+        // Sync localStorage with database data to ensure persistence
+        const updatedUser = { 
+          ...currentUser, 
+          bio: bioFromDB,
+          profileImage: imageFromDB,
+          username: usernameFromDB
+        };
+        localStorage.setItem('take5_current_user', JSON.stringify(updatedUser));
       }
     } catch (error) {
       console.error('Failed to load user profile:', error);
+      // If server fails, fall back to localStorage data
+      const savedUser = JSON.parse(localStorage.getItem('take5_current_user') || '{}');
+      setProfileQuote(savedUser.bio || currentUser.bio || "");
+      setProfileImage(savedUser.profileImage || currentUser.profileImage || "");
+      setUsername(savedUser.username || currentUser.username || "");
     }
   };
 
@@ -205,6 +223,10 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
       });
 
       if (response.ok) {
+        // Update localStorage for persistence across sessions
+        const updatedUser = { ...currentUser, bio: profileQuote };
+        localStorage.setItem('take5_current_user', JSON.stringify(updatedUser));
+        
         toast({
           title: "Quote Saved",
           description: "Your profile quote has been saved successfully.",
@@ -235,6 +257,11 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
 
       if (response.ok) {
         setIsEditingUsername(false);
+        
+        // Update localStorage for persistence across sessions
+        const updatedUser = { ...currentUser, username: username };
+        localStorage.setItem('take5_current_user', JSON.stringify(updatedUser));
+        
         toast({
           title: "Username Saved",
           description: "Your username has been updated successfully.",
@@ -481,13 +508,23 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
           <TabsContent value="diary" className="space-y-6 mt-6">
             <div className="flex justify-between items-center">
               <h3 className="text-xl font-semibold text-black dark:text-white">{t('yourPrivateDiary')}</h3>
-              <Button 
-                onClick={() => setShowNewEntry(true)}
-                className="bg-teal-500 hover:bg-teal-600 text-white"
-              >
-                <PlusCircle className="w-4 h-4 mr-2" />
-                {t('newEntry')}
-              </Button>
+              <div className="flex gap-2">
+                <Button 
+                  onClick={() => setShowExportModal(true)}
+                  className="bg-blue-500 hover:bg-blue-600 text-white"
+                  disabled={diaryEntries.length === 0}
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Export
+                </Button>
+                <Button 
+                  onClick={() => setShowNewEntry(true)}
+                  className="bg-teal-500 hover:bg-teal-600 text-white"
+                >
+                  <PlusCircle className="w-4 h-4 mr-2" />
+                  {t('newEntry')}
+                </Button>
+              </div>
             </div>
 
             {showNewEntry && (
@@ -655,6 +692,22 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Export Modal */}
+      <DiaryExportModal
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        entries={diaryEntries}
+        userName={currentUser?.displayName || currentUser?.username}
+      />
+
+      {/* Image Crop Modal */}
+      <ImageCropModal
+        isOpen={showImageCropModal}
+        onClose={() => setShowImageCropModal(false)}
+        imageSrc={tempImageSrc}
+        onSave={handleSaveCroppedPhoto}
+      />
     </div>
   );
 }
