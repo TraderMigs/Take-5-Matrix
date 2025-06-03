@@ -7,6 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Camera, BookOpen, PlusCircle, X, ChevronDown, ChevronUp, Save, Edit, Download, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/hooks/use-language";
+import DiaryExportModal from "@/components/diary-export-modal";
+import ImageCropModal from "@/components/image-crop-modal";
 
 interface UserProfileProps {
   isOpen: boolean;
@@ -27,6 +29,9 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
   const [expandedEntries, setExpandedEntries] = useState<Set<number>>(new Set());
   const [editingEntries, setEditingEntries] = useState<Set<number>>(new Set());
   const [editedContent, setEditedContent] = useState<{[key: number]: {title: string, content: string}}>({});
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [showImageCropModal, setShowImageCropModal] = useState(false);
+  const [tempImageSrc, setTempImageSrc] = useState("");
   const { toast } = useToast();
   const { t } = useLanguage();
 
@@ -253,40 +258,55 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
-    input.onchange = async (e) => {
+    input.onchange = (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (file) {
         const reader = new FileReader();
-        reader.onload = async (e) => {
-          const base64 = e.target?.result as string;
-          setProfileImage(base64);
-          
-          try {
-            await fetch('/api/auth/profile', {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ 
-                userId: currentUser.id, 
-                profileImage: base64 
-              }),
-            });
-            toast({
-              title: "Photo saved",
-              description: "Your profile photo has been updated.",
-              className: "bg-green-800 border-green-700 text-white",
-            });
-          } catch (error) {
-            toast({
-              title: "Upload failed",
-              description: "Could not save your photo.",
-              variant: "destructive",
-            });
-          }
+        reader.onload = (e) => {
+          const imageSrc = e.target?.result as string;
+          setTempImageSrc(imageSrc);
+          setShowImageCropModal(true);
         };
         reader.readAsDataURL(file);
       }
     };
     input.click();
+  };
+
+  const handleSaveCroppedPhoto = async (croppedImageSrc: string) => {
+    try {
+      setProfileImage(croppedImageSrc);
+      
+      // Save to server
+      const response = await fetch('/api/auth/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          userId: currentUser.id, 
+          profileImage: croppedImageSrc 
+        }),
+      });
+
+      if (response.ok) {
+        // Update localStorage for persistence
+        const updatedUser = { ...currentUser, profileImage: croppedImageSrc };
+        localStorage.setItem('take5_current_user', JSON.stringify(updatedUser));
+        
+        toast({
+          title: "Photo saved",
+          description: "Your profile photo has been updated successfully.",
+          className: "bg-green-800 border-green-700 text-white",
+        });
+      } else {
+        throw new Error('Failed to save photo');
+      }
+    } catch (error) {
+      toast({
+        title: "Upload failed",
+        description: "Could not save your photo. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const saveDiaryEntry = async () => {
