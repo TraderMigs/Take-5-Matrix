@@ -779,6 +779,14 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                           <Edit className="w-3 h-3" />
                           Edit Name
                         </button>
+                        <div className="border-t border-gray-200 dark:border-gray-600"></div>
+                        <button
+                          onClick={onLogout}
+                          className="w-full px-3 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-red-600 dark:text-red-400 flex items-center gap-2 text-sm"
+                        >
+                          <ArrowLeft className="w-3 h-3" />
+                          Log Out
+                        </button>
                       </div>
                     )}
                   </div>
@@ -982,15 +990,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                 </div>
               </div>
 
-              <Button 
-                onClick={onLogout}
-                size="sm"
-                variant="ghost"
-                className="mt-8 bg-transparent hover:bg-white/10 text-white/70 hover:text-white border-none p-2"
-                title="Logout"
-              >
-                <ArrowLeft className="w-4 h-4" />
-              </Button>
+
             </div>
           </TabsContent>
 
