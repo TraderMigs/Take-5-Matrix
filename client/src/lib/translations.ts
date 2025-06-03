@@ -355,6 +355,18 @@ export const translations: Record<string, Translation> = {
     youAreNotAlone: "คุณไม่ได้อยู่คนเดียวในเรื่องนี้",
     youAreLoved: "คุณได้รับความรักและมีคุณค่า",
     
+    // Profile UI
+    backgroundImage: "ภาพพื้นหลัง",
+    noBackgroundImageSet: "ยังไม่ได้ตั้งภาพพื้นหลัง",
+    uploadImage: "อัพโหลดภาพ",
+    setYourPersonalBackground: "ตั้งค่าพื้นหลังส่วนตัวของคุณ",
+    chooseYourImage: "เลือกภาพของคุณ",
+    uploadAnyPhoto: "อัพโหลดภาพใดๆ จากอุปกรณ์ของคุณ",
+    cropPosition: "ครอบตัดและจัดตำแหน่ง",
+    useEditorToCrop: "ใช้เครื่องมือแก้ไขเพื่อครอบตัดและจัดกึ่งกลางภาพอย่างสมบูรณ์",
+    screenImage: "ภาพหน้าจอ",
+    diary: "ไดอารี่",
+    
     // Legal
     legalPoliciesDisclamers: "นโยบายกฎหมายและข้อจำกัดความรับผิดชอบ",
     privacyPolicy: "นโยบายความเป็นส่วนตัว",

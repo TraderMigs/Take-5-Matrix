@@ -118,7 +118,7 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
       if (messages.length === 0 && userName && !showNameInput) {
         const welcomeBackMessage: Message = {
           id: Date.now().toString(),
-          text: `Hey, ${userName}! What's going on? Talk to me 🙏🏾`,
+          text: t('aiWelcomeMessage'),
           sender: "ai",
           timestamp: new Date(),
         };
@@ -267,17 +267,17 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
         <DialogContent className="sm:max-w-md bg-white dark:bg-gray-900">
           <DialogHeader>
             <DialogTitle className="text-center text-gray-800 dark:text-gray-200">
-              Welcome to Take 5 AI Support
+              {t('aiSupportChat')}
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4 p-4">
             <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
-              I'm here to provide compassionate support. What would you like me to call you?
+              {t('whatsYourName')}
             </p>
             <Input
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
-              placeholder="Enter your name or nickname"
+              placeholder={t('enterYourName')}
               onKeyPress={(e) => e.key === 'Enter' && handleNameSubmit()}
               className="text-center bg-black text-white placeholder:text-gray-400 border-gray-600"
               autoFocus
@@ -287,7 +287,7 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
               disabled={!userName.trim()}
               className="w-full bg-purple-600 hover:bg-purple-700 text-white"
             >
-              Start Conversation
+              {t('startConversation')}
             </Button>
           </div>
         </DialogContent>
@@ -302,7 +302,7 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
           <DialogTitle className="flex items-center justify-between text-gray-800 dark:text-gray-200">
             <div className="flex items-center gap-2">
               <Bot className="w-5 h-5 text-purple-600" />
-              Take 5 - AI Support
+              {t('aiSupportChat')}
             </div>
             {userName && (
               <button
@@ -315,7 +315,7 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
                 }}
                 className="text-xs text-gray-500 hover:text-purple-600 transition-colors"
               >
-                Change Name
+                {t('changeNamePrompt')}
               </button>
             )}
           </DialogTitle>
@@ -334,7 +334,7 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
             }}
             className="text-xs text-green-700 hover:text-green-800 transition-colors font-medium"
           >
-            {isAiMuted ? 'Unmute AI' : 'Mute AI'}
+            {isAiMuted ? t('unmuteAi') : 'Mute AI'}
           </button>
         </div>
 
@@ -436,7 +436,7 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
             <Input
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              placeholder="Type your message..."
+              placeholder={t('typeYourMessage')}
               disabled={isLoading}
               className="flex-1 bg-black text-white placeholder:text-gray-400 border-gray-600"
               autoFocus
@@ -451,7 +451,7 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
           </form>
           
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
-            If you're in crisis, please call 988 or emergency services immediately
+            {t('crisisWarning')}
           </p>
         </div>
       </DialogContent>
