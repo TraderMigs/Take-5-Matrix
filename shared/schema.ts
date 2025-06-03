@@ -13,6 +13,7 @@ export const users = pgTable("users", {
   lastName: text("last_name"),
   displayName: text("display_name"),
   profileImage: text("profile_image"),
+  backgroundImage: text("background_image"),
   bio: text("bio"),
   country: text("country"),
   emergencyContactId: integer("emergency_contact_id"),

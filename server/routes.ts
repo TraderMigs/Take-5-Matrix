@@ -666,7 +666,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.put('/api/auth/profile', async (req, res) => {
     try {
-      const { displayName, bio, userId, profileImage, username } = req.body;
+      const { displayName, bio, userId, profileImage, username, backgroundImage } = req.body;
       
       if (!userId) {
         return res.status(400).send('User ID required');
@@ -677,6 +677,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (bio !== undefined) updateData.bio = bio;
       if (profileImage !== undefined) updateData.profileImage = profileImage;
       if (username !== undefined) updateData.username = username;
+      if (backgroundImage !== undefined) updateData.backgroundImage = backgroundImage;
 
       const updatedUser = await storage.updateUserProfile(userId, updateData);
       res.json(updatedUser);
