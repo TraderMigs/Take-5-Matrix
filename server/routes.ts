@@ -657,10 +657,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.put('/api/auth/profile', async (req, res) => {
     try {
+      console.log('Profile update request received:', {
+        userId: req.body.userId,
+        hasProfileImage: !!req.body.profileImage,
+        profileImageLength: req.body.profileImage?.length,
+        hasBackgroundImage: !!req.body.backgroundImage
+      });
+
       const { displayName, bio, userId, profileImage, username, backgroundImage } = req.body;
       
       if (!userId) {
-        return res.status(400).send('User ID required');
+        console.error('No userId provided in request');
+        return res.status(400).json({ error: 'User ID required' });
+      }
+
+      // Validate userId is a number
+      const userIdNum = parseInt(userId);
+      if (isNaN(userIdNum)) {
+        console.error('Invalid userId format:', userId);
+        return res.status(400).json({ error: 'Invalid user ID format' });
+      }
+
+      // Check if user exists
+      const existingUser = await storage.getUser(userIdNum);
+      if (!existingUser) {
+        console.error('User not found:', userIdNum);
+        return res.status(404).json({ error: 'User not found' });
       }
 
       const updateData: any = {};
@@ -670,7 +692,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (username !== undefined) updateData.username = username;
       if (backgroundImage !== undefined) updateData.backgroundImage = backgroundImage;
 
-      const updatedUser = await storage.updateUserProfile(userId, updateData);
+      console.log('Updating user profile with data:', Object.keys(updateData));
+
+      const updatedUser = await storage.updateUserProfile(userIdNum, updateData);
+      
+      console.log('Profile updated successfully for user:', userIdNum);
       res.json(updatedUser);
     } catch (error) {
       console.error('Profile update error:', error);

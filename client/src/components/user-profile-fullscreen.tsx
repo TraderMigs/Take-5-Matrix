@@ -360,6 +360,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
 
   const handleSaveCroppedPhoto = async (croppedImageSrc: string) => {
     try {
+      console.log('Saving cropped photo for user:', currentUser.id);
       setProfileImage(croppedImageSrc);
       
       // Save to localStorage immediately for persistence
@@ -367,6 +368,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
       
       // Save to server (if authenticated)
       if (currentUser.id) {
+        console.log('Sending profile update request to server...');
         const response = await fetch('/api/auth/profile', {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -376,11 +378,14 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
           }),
         });
 
+        console.log('Server response status:', response.status);
+
         if (response.ok) {
           // Update localStorage for persistence
           const updatedUser = { ...currentUser, profileImage: croppedImageSrc };
           localStorage.setItem('take5_current_user', JSON.stringify(updatedUser));
           
+          console.log('Profile photo saved successfully');
           toast({
             title: "Photo saved",
             description: "Your profile photo has been updated successfully.",
@@ -388,11 +393,18 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
           });
         } else {
           const errorData = await response.text();
-          console.error('Profile save error:', errorData);
-          throw new Error(`Server error: ${response.status}`);
+          console.error('Profile save error response:', errorData);
+          
+          // Still keep the local change even if server save fails
+          toast({
+            title: "Photo saved locally",
+            description: "Your photo was saved locally but could not sync to server. It will be visible on this device.",
+            className: "bg-orange-600 border-orange-500 text-white",
+          });
         }
       } else {
         // For non-authenticated users, just save locally
+        console.log('Saving photo locally for non-authenticated user');
         toast({
           title: "Photo saved locally",
           description: "Your profile photo has been saved for this session.",
@@ -401,10 +413,15 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
       }
     } catch (error) {
       console.error('Photo save error:', error);
+      
+      // Still keep the local change even if there's an error
+      setProfileImage(croppedImageSrc);
+      localStorage.setItem(`take5_profile_${currentUser.id}`, croppedImageSrc);
+      
       toast({
-        title: "Upload failed",
-        description: "Could not save your photo. Please try again.",
-        variant: "destructive",
+        title: "Photo saved locally",
+        description: "Your photo was saved locally but could not sync to server.",
+        className: "bg-orange-600 border-orange-500 text-white",
       });
     }
   };

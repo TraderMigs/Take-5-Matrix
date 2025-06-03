@@ -46,7 +46,7 @@ export default function EmergencyContactDisplay({ isOpen, onClose, currentUser }
       <DialogContent className="sm:max-w-md bg-blue-900 dark:bg-green-800">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-red-600">
-            <Heart className="w-5 h-5 text-yellow-400" />
+            <Heart className="w-5 h-5 text-red-500" />
             Emergency Contacts
           </DialogTitle>
         </DialogHeader>
@@ -105,7 +105,7 @@ export default function EmergencyContactDisplay({ isOpen, onClose, currentUser }
             </>
           ) : (
             <div className="text-center py-6">
-              <Heart className="w-16 h-16 text-yellow-400 mx-auto mb-4" />
+              <Heart className="w-16 h-16 text-red-500 mx-auto mb-4" />
               <h3 className="text-lg font-semibold text-white mb-2">
                 Emergency Contact Info
               </h3>
