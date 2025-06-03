@@ -34,32 +34,43 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Load saved name from localStorage on component mount
+  // Load saved name and conversation history from localStorage on component mount
   useEffect(() => {
     const savedName = localStorage.getItem('take5-user-name');
     if (savedName) {
       setUserName(savedName);
       setShowNameInput(false);
     }
+
+    // Load last conversation history
+    const savedHistory = localStorage.getItem('take5-chat-history');
+    if (savedHistory) {
+      try {
+        const parsedHistory = JSON.parse(savedHistory);
+        // Convert timestamp strings back to Date objects
+        const historyWithDates = parsedHistory.map((msg: any) => ({
+          ...msg,
+          timestamp: new Date(msg.timestamp)
+        }));
+        setMessages(historyWithDates);
+      } catch (error) {
+        console.error('Error loading chat history:', error);
+      }
+    }
   }, []);
 
   // Reset states when dialog opens
   useEffect(() => {
     if (isOpen) {
-      if (messages.length === 0) {
-        // Show name input for first-time users
-        if (!userName) {
-          setShowNameInput(true);
-        } else {
-          // Welcome back existing users
-          const welcomeBackMessage: Message = {
-            id: Date.now().toString(),
-            text: `Welcome back, ${userName}! I'm here to support you. How are you feeling today?`,
-            sender: "ai",
-            timestamp: new Date(),
-          };
-          setMessages([welcomeBackMessage]);
-        }
+      // Only show welcome message if no conversation history exists and user has a name
+      if (messages.length === 0 && userName && !showNameInput) {
+        const welcomeBackMessage: Message = {
+          id: Date.now().toString(),
+          text: `Welcome back, ${userName}! I'm here to support you. How are you feeling today?`,
+          sender: "ai",
+          timestamp: new Date(),
+        };
+        setMessages([welcomeBackMessage]);
       }
 
       // Load contacts for emergency assistance
@@ -70,9 +81,15 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
     }
   }, [isOpen, userName, messages.length]);
 
-  // Auto-scroll to bottom when new messages arrive
+  // Save conversation history and auto-scroll to bottom when new messages arrive
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    
+    // Save only the last 6 messages (3 interactions) to localStorage
+    if (messages.length > 0) {
+      const lastSixMessages = messages.slice(-6);
+      localStorage.setItem('take5-chat-history', JSON.stringify(lastSixMessages));
+    }
   }, [messages]);
 
   const handleNameSubmit = () => {
@@ -220,6 +237,7 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
               <button
                 onClick={() => {
                   localStorage.removeItem('take5-user-name');
+                  localStorage.removeItem('take5-chat-history');
                   setUserName('');
                   setShowNameInput(true);
                   setMessages([]);
