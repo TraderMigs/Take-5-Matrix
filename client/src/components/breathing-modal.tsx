@@ -32,8 +32,8 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
     pause: 3,
   };
 
-  // Create continuous ocean waves sound using Web Audio API
-  const createOceanWaves = () => {
+  // Create gentle breathing sound using Web Audio API
+  const createBreathingSound = () => {
     if (!audioContextRef.current) {
       audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
     }
@@ -170,7 +170,7 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-sm w-full mx-4 rounded-2xl bg-white dark:bg-black border-black dark:border-white" aria-describedby="breathing-description">
+      <DialogContent className="max-w-sm w-full mx-auto rounded-2xl bg-white dark:bg-black border-black dark:border-white fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" aria-describedby="breathing-description">
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold text-black dark:text-white text-center">
             Guided Breathing
