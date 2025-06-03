@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Camera, BookOpen, PlusCircle, X, ChevronDown, ChevronUp, Save, Edit, Download, Trash2 } from "lucide-react";
+import { Camera, BookOpen, PlusCircle, X, ChevronDown, ChevronUp, Save, Edit, Download, Trash2, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/hooks/use-language";
 import DiaryExportModal from "@/components/diary-export-modal";
@@ -41,9 +41,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
   const [backgroundImage, setBackgroundImage] = useState("");
   const [showBackgroundCropModal, setShowBackgroundCropModal] = useState(false);
   const [tempBackgroundSrc, setTempBackgroundSrc] = useState("");
-  const [showBackgroundDropdown, setShowBackgroundDropdown] = useState(false);
   const [showProfileImageDropdown, setShowProfileImageDropdown] = useState(false);
-  const [showExportDropdown, setShowExportDropdown] = useState<{[key: number]: boolean}>({});
   const { toast } = useToast();
   const { t } = useLanguage();
 
@@ -481,48 +479,18 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
       <div className="min-h-screen p-4 bg-black/20 backdrop-blur-sm">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-4">
+            <Button
+              onClick={onClose}
+              size="sm"
+              variant="ghost"
+              className="bg-white/10 hover:bg-white/20 text-white/80 hover:text-white border-none p-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </Button>
             <h1 className="text-2xl font-bold text-white drop-shadow-lg">
               Hey, {currentUser?.displayName || currentUser?.username || 'Friend'}!
             </h1>
-            <div className="relative">
-              <Button
-                onClick={() => setShowBackgroundDropdown(!showBackgroundDropdown)}
-                size="sm"
-                variant="ghost"
-                className="bg-transparent hover:bg-white/10 text-white/70 hover:text-white border-none p-1"
-              >
-                <ChevronDown className="w-3 h-3" />
-              </Button>
-              {showBackgroundDropdown && (
-                <div className="absolute top-full left-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg z-10 min-w-[150px]">
-                  <button
-                    onClick={handleBackgroundUpload}
-                    className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-black dark:text-white flex items-center gap-2"
-                  >
-                    <Camera className="w-4 h-4" />
-                    Edit Image
-                  </button>
-                  {backgroundImage && (
-                    <button
-                      onClick={removeBackgroundImage}
-                      className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-red-600 flex items-center gap-2"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                      Remove
-                    </button>
-                  )}
-                </div>
-              )}
-            </div>
           </div>
-          <Button 
-            variant="ghost"
-            onClick={onClose}
-            className="bg-white/10 hover:bg-white/20 text-white/80 hover:text-white border-none backdrop-blur-sm"
-          >
-            <X className="w-4 h-4 mr-2" />
-            {t('close')}
-          </Button>
         </div>
 
         <Tabs defaultValue="profile" className="w-full">
