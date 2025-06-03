@@ -261,8 +261,8 @@ export default function Home() {
           </button>
         </div>
         
-        <h1 className="text-4xl font-black mb-2" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>{t('appName')}</h1>
-        <p className="text-lg font-bold opacity-90" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>{t('tagline')}</p>
+        <h1 className="text-4xl font-black mb-2 text-gray-700 dark:text-white" style={{ textShadow: '1px 1px 0px rgba(255,255,255,0.3)' }}>{t('appName')}</h1>
+        <p className="text-lg font-bold opacity-90 text-gray-600 dark:text-white" style={{ textShadow: '1px 1px 0px rgba(255,255,255,0.3)' }}>{t('tagline')}</p>
       </header>
 
       <main className="p-6 space-y-6 pb-20 bg-white dark:bg-black">
@@ -366,10 +366,10 @@ export default function Home() {
 
         {/* Safe Message */}
         <section className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 dark:bg-black text-black dark:text-white rounded-xl p-6 text-center space-y-3 border-2 border-black dark:border-white shimmer-mint">
-          <h2 className="text-xl font-black" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>{t('footerMessage1')}</h2>
-          <p className="text-lg font-bold opacity-95" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>{t('footerMessage2')}</p>
-          <p className="text-lg font-bold opacity-95" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>{t('footerMessage3')}</p>
-          <p className="text-sm font-semibold opacity-90" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>{t('footerMessage4')}</p>
+          <h2 className="text-xl font-black text-gray-700 dark:text-white" style={{ textShadow: '1px 1px 0px rgba(255,255,255,0.3)' }}>{t('footerMessage1')}</h2>
+          <p className="text-lg font-bold opacity-95 text-gray-600 dark:text-white" style={{ textShadow: '1px 1px 0px rgba(255,255,255,0.3)' }}>{t('footerMessage2')}</p>
+          <p className="text-lg font-bold opacity-95 text-gray-600 dark:text-white" style={{ textShadow: '1px 1px 0px rgba(255,255,255,0.3)' }}>{t('footerMessage3')}</p>
+          <p className="text-sm font-semibold opacity-90 text-gray-600 dark:text-white" style={{ textShadow: '1px 1px 0px rgba(255,255,255,0.3)' }}>{t('footerMessage4')}</p>
         </section>
 
         {/* Rotating Affirmations */}
