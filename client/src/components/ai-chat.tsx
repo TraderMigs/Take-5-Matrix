@@ -29,7 +29,7 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
   const [userName, setUserName] = useState("");
   const [showNameInput, setShowNameInput] = useState(true);
   const [highlightedTool, setHighlightedTool] = useState<string | null>(null);
-  const [isAiMuted, setIsAiMuted] = useState(false);
+  const [isAiMuted, setIsAiMuted] = useState(true);
   const [waitingForFeedback, setWaitingForFeedback] = useState(false);
   const [lastAiMessageId, setLastAiMessageId] = useState<string | null>(null);
 
