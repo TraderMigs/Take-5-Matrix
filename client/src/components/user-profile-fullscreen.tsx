@@ -395,28 +395,78 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
     input.click();
   };
 
-  const handleSaveCroppedBackground = (croppedImageSrc: string) => {
+  const handleSaveCroppedBackground = async (croppedImageSrc: string) => {
     setBackgroundImage(croppedImageSrc);
     localStorage.setItem(`take5_background_${currentUser.id}`, croppedImageSrc);
     
-    toast({
-      title: "Background saved",
-      description: "Your profile background has been updated successfully.",
-      className: "bg-green-800 border-green-700 text-white",
-    });
+    // Save to database
+    try {
+      const response = await fetch('/api/auth/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          userId: currentUser.id, 
+          backgroundImage: croppedImageSrc 
+        }),
+      });
+
+      if (response.ok) {
+        const updatedUser = { ...currentUser, backgroundImage: croppedImageSrc };
+        localStorage.setItem('take5_current_user', JSON.stringify(updatedUser));
+        
+        toast({
+          title: "Background saved",
+          description: "Your profile background has been updated successfully.",
+          className: "bg-green-800 border-green-700 text-white",
+        });
+      } else {
+        throw new Error('Failed to save background');
+      }
+    } catch (error) {
+      toast({
+        title: "Save Failed",
+        description: "Could not save your background image. Please try again.",
+        variant: "destructive",
+      });
+    }
     
     setShowBackgroundCropModal(false);
   };
 
-  const removeBackgroundImage = () => {
+  const removeBackgroundImage = async () => {
     setBackgroundImage("");
     localStorage.removeItem(`take5_background_${currentUser.id}`);
     
-    toast({
-      title: "Background removed",
-      description: "Your profile background has been removed.",
-      className: "bg-green-800 border-green-700 text-white",
-    });
+    // Save to database
+    try {
+      const response = await fetch('/api/auth/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          userId: currentUser.id, 
+          backgroundImage: null 
+        }),
+      });
+
+      if (response.ok) {
+        const updatedUser = { ...currentUser, backgroundImage: null };
+        localStorage.setItem('take5_current_user', JSON.stringify(updatedUser));
+        
+        toast({
+          title: "Background removed",
+          description: "Your profile background has been removed.",
+          className: "bg-green-800 border-green-700 text-white",
+        });
+      } else {
+        throw new Error('Failed to remove background');
+      }
+    } catch (error) {
+      toast({
+        title: "Remove Failed",
+        description: "Could not remove your background image. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const startEditingDisplayName = () => {
@@ -612,18 +662,24 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
         </div>
 
         <Tabs defaultValue="profile" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 bg-teal-200 dark:bg-teal-800">
+          <TabsList className="grid w-full grid-cols-3 bg-teal-200 dark:bg-teal-800">
             <TabsTrigger 
               value="profile" 
-              className="text-black dark:text-white data-[state=active]:bg-green-800 data-[state=active]:text-white"
+              className="text-black dark:text-white data-[state=active]:bg-green-800 data-[state=active]:text-white text-sm"
             >
-              {t('profile')}
+              Profile
             </TabsTrigger>
             <TabsTrigger 
               value="diary" 
-              className="text-black dark:text-white data-[state=active]:bg-green-800 data-[state=active]:text-white"
+              className="text-black dark:text-white data-[state=active]:bg-green-800 data-[state=active]:text-white text-sm"
             >
-              {t('privateDiary')}
+              Diary
+            </TabsTrigger>
+            <TabsTrigger 
+              value="background" 
+              className="text-black dark:text-white data-[state=active]:bg-green-800 data-[state=active]:text-white text-sm"
+            >
+              Screen Image
             </TabsTrigger>
           </TabsList>
           
@@ -977,6 +1033,124 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                   <BookOpen className="w-16 h-16 text-teal-400 mx-auto mb-4" />
                   <p className="text-black dark:text-white text-lg">{t('startWriting')}</p>
                   <p className="text-black dark:text-white text-sm mt-2">{t('entriesSaved')}</p>
+                </div>
+              )}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="background" className="space-y-6 mt-6">
+            <div className="text-center">
+              <h3 className="text-xl font-semibold text-white drop-shadow-lg mb-6">Background Image</h3>
+              
+              {backgroundImage ? (
+                <div className="space-y-6">
+                  {/* Background Preview */}
+                  <div className="relative mx-auto w-48 h-80 rounded-lg overflow-hidden border-2 border-white/30 shadow-lg">
+                    <img
+                      src={backgroundImage}
+                      alt="Background preview"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                      <div className="text-white text-center">
+                        <div className="text-xs bg-black/50 px-2 py-1 rounded">Preview</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Background Management Options */}
+                  <div className="flex flex-wrap justify-center gap-3">
+                    <Button
+                      onClick={handleBackgroundUpload}
+                      className="bg-blue-600 hover:bg-blue-700 text-white"
+                    >
+                      <Camera className="w-4 h-4 mr-2" />
+                      Change Image
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setTempBackgroundSrc(backgroundImage);
+                        setShowBackgroundCropModal(true);
+                      }}
+                      className="bg-green-600 hover:bg-green-700 text-white"
+                    >
+                      <Edit className="w-4 h-4 mr-2" />
+                      Edit & Crop
+                    </Button>
+                    <Button
+                      onClick={removeBackgroundImage}
+                      variant="destructive"
+                      className="bg-red-600 hover:bg-red-700 text-white"
+                    >
+                      <Trash2 className="w-4 h-4 mr-2" />
+                      Remove
+                    </Button>
+                  </div>
+
+                  {/* Usage Instructions */}
+                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-white/90 text-sm">
+                    <h4 className="font-semibold mb-2 flex items-center gap-2">
+                      <Camera className="w-4 h-4" />
+                      Background Image Tips
+                    </h4>
+                    <ul className="space-y-1 text-left">
+                      <li>• This image will appear as your full-screen background</li>
+                      <li>• Best results with portrait orientation images</li>
+                      <li>• Use the crop tool to position your image perfectly</li>
+                      <li>• Your background saves automatically</li>
+                    </ul>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {/* Upload Area */}
+                  <div className="mx-auto w-48 h-80 border-2 border-dashed border-white/40 rounded-lg flex flex-col items-center justify-center bg-white/5 backdrop-blur-sm">
+                    <Camera className="w-16 h-16 text-white/60 mb-4" />
+                    <p className="text-white/80 text-center mb-4">
+                      No background image set
+                    </p>
+                    <Button
+                      onClick={handleBackgroundUpload}
+                      className="bg-teal-500 hover:bg-teal-600 text-white"
+                    >
+                      <PlusCircle className="w-4 h-4 mr-2" />
+                      Upload Image
+                    </Button>
+                  </div>
+
+                  {/* Feature Description */}
+                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-white/90">
+                    <h4 className="font-semibold mb-3 text-center">Set Your Personal Background</h4>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center flex-shrink-0">
+                          <span className="text-white font-bold text-xs">1</span>
+                        </div>
+                        <div>
+                          <p className="font-medium">Choose Your Image</p>
+                          <p className="text-white/70">Upload any photo from your device</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center flex-shrink-0">
+                          <span className="text-white font-bold text-xs">2</span>
+                        </div>
+                        <div>
+                          <p className="font-medium">Crop & Position</p>
+                          <p className="text-white/70">Use our editor to crop and center your image perfectly</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center flex-shrink-0">
+                          <span className="text-white font-bold text-xs">3</span>
+                        </div>
+                        <div>
+                          <p className="font-medium">Save & Enjoy</p>
+                          <p className="text-white/70">Your background will appear throughout your profile</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
