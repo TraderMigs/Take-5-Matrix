@@ -9,6 +9,7 @@ import { User, Phone, Plus, Edit, Trash2 } from "lucide-react";
 import { useLanguage } from "@/hooks/use-language";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import UserAccountClean from "@/components/user-account-clean";
 
 interface Contact {
   id: string;
@@ -19,15 +20,17 @@ interface Contact {
 
 interface PersonalContactsProps {
   currentUser?: any;
+  onLogin?: (user: any) => void;
 }
 
-export default function PersonalContacts({ currentUser }: PersonalContactsProps) {
+export default function PersonalContacts({ currentUser, onLogin }: PersonalContactsProps) {
   const { t } = useLanguage();
   const queryClient = useQueryClient();
   
   const [isAddingContact, setIsAddingContact] = useState(false);
   const [editingContact, setEditingContact] = useState<Contact | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [showUserAccount, setShowUserAccount] = useState(false);
   const [newContact, setNewContact] = useState({
     name: "",
     phone: "",
@@ -139,19 +142,13 @@ export default function PersonalContacts({ currentUser }: PersonalContactsProps)
           </p>
           <div className="space-y-3">
             <Button
-              onClick={() => {
-                localStorage.setItem('take5_redirect_after_login', 'contacts');
-                window.location.href = '/api/auth/google';
-              }}
+              onClick={() => setShowUserAccount(true)}
               className="w-full bg-gray-800 hover:bg-gray-900 text-white px-6 py-3 rounded-lg"
             >
               Log In
             </Button>
             <Button
-              onClick={() => {
-                localStorage.setItem('take5_redirect_after_login', 'contacts');
-                window.location.href = '/api/auth/google';
-              }}
+              onClick={() => setShowUserAccount(true)}
               variant="outline"
               className="w-full bg-white dark:bg-black hover:bg-gray-100 dark:hover:bg-gray-900 border-2 border-gray-800 dark:border-white text-gray-800 dark:text-white px-6 py-3 rounded-lg"
             >
@@ -353,6 +350,18 @@ export default function PersonalContacts({ currentUser }: PersonalContactsProps)
         </Dialog>
         </div>
       )}
+
+      {/* User Account Modal */}
+      <UserAccountClean
+        isOpen={showUserAccount}
+        onClose={() => setShowUserAccount(false)}
+        currentUser={currentUser}
+        onLogin={(user) => {
+          if (onLogin) onLogin(user);
+          setShowUserAccount(false);
+        }}
+        onLogout={() => {}}
+      />
     </section>
   );
 }
