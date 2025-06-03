@@ -1,9 +1,9 @@
 import { useState, useRef, useCallback } from 'react';
-import ReactCrop, { Crop, PixelCrop, centerCrop, makeAspectCrop } from 'react-image-crop';
+import ReactCrop, { Crop, PixelCrop } from 'react-image-crop';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
-import { ZoomIn, ZoomOut, RotateCw, Save, X, Image } from 'lucide-react';
+import { ZoomIn, ZoomOut, RotateCw, Save, X, Image, RefreshCw } from 'lucide-react';
 import 'react-image-crop/dist/ReactCrop.css';
 
 interface ImageCropModalProps {
@@ -13,24 +13,20 @@ interface ImageCropModalProps {
   onSave: (croppedImageSrc: string) => void;
 }
 
-function centerAspectCrop(
+function getInitialCrop(
   mediaWidth: number,
   mediaHeight: number,
-  aspect: number,
-) {
-  return centerCrop(
-    makeAspectCrop(
-      {
-        unit: '%',
-        width: 90,
-      },
-      aspect,
-      mediaWidth,
-      mediaHeight,
-    ),
-    mediaWidth,
-    mediaHeight,
-  )
+): Crop {
+  // Start with a larger crop area (80% of image) centered, users can resize as needed
+  const minDimension = Math.min(mediaWidth, mediaHeight);
+  const size = minDimension * 0.8;
+  return {
+    unit: 'px',
+    x: (mediaWidth - size) / 2,
+    y: (mediaHeight - size) / 2,
+    width: size,
+    height: size,
+  };
 }
 
 export default function ImageCropModal({ isOpen, onClose, imageSrc, onSave }: ImageCropModalProps) {
@@ -43,7 +39,7 @@ export default function ImageCropModal({ isOpen, onClose, imageSrc, onSave }: Im
 
   const onImageLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
     const { width, height } = e.currentTarget;
-    setCrop(centerAspectCrop(width, height, 1));
+    setCrop(getInitialCrop(width, height));
   }, []);
 
   const getCroppedImg = useCallback(async () => {
@@ -108,6 +104,26 @@ export default function ImageCropModal({ isOpen, onClose, imageSrc, onSave }: Im
     onClose();
   };
 
+  const handleResetCrop = () => {
+    const image = imgRef.current;
+    if (image) {
+      setCrop(getInitialCrop(image.width, image.height));
+    }
+  };
+
+  const handleCropFullImage = () => {
+    const image = imgRef.current;
+    if (image) {
+      setCrop({
+        unit: 'px',
+        x: 0,
+        y: 0,
+        width: image.width,
+        height: image.height,
+      });
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-auto bg-white dark:bg-gray-800">
@@ -116,13 +132,17 @@ export default function ImageCropModal({ isOpen, onClose, imageSrc, onSave }: Im
         </DialogHeader>
         
         <div className="space-y-4">
+          {/* Instructions */}
+          <div className="text-center text-sm text-gray-600 dark:text-gray-400 bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
+            Drag the crop area to position it anywhere on the image. Resize by dragging the corners or edges to crop any size you want.
+          </div>
+
           {/* Image Crop Area */}
           <div className="flex justify-center bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
             <ReactCrop
               crop={crop}
               onChange={(_, percentCrop) => setCrop(percentCrop)}
               onComplete={(c) => setCompletedCrop(c)}
-              aspect={1}
               circularCrop
             >
               <img
