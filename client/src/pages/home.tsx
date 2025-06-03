@@ -323,7 +323,7 @@ export default function Home() {
 
         {/* Quick Tools */}
         <section className="space-y-4">
-          <h2 className="text-xl font-black text-black dark:text-white mb-4" style={{ textShadow: '1px 1px 0px rgba(128,128,128,0.5)' }}>{t('howCanWeSupport')}</h2>
+          <h2 className="text-xl font-black text-black dark:text-white mb-4 text-center" style={{ textShadow: '1px 1px 0px rgba(128,128,128,0.5)' }}>{t('howCanWeSupport')}</h2>
           <div className="space-y-3">
             {quickTools.map((tool) => (
               <button

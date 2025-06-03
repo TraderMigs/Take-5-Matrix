@@ -101,7 +101,7 @@ export const translations: Record<string, Translation> = {
     crisisHotlineCall: "Call Now",
     emergencyWarning: "If you're in immediate danger, call emergency services",
     additionalSupport: "Additional Support",
-    howCanWeSupport: "How can we support you right now?",
+    howCanWeSupport: "How are you feeling, friend?",
     feelOverwhelmed: "I Feel Overwhelmed",
     breathingDescription: "Breathing exercises and grounding techniques",
     feelAnxious: "I Feel Anxious",
