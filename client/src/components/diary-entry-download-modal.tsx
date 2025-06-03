@@ -248,29 +248,29 @@ export default function DiaryEntryDownloadModal({ isOpen, onClose, entry, userNa
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600">
+      <DialogContent className="max-w-sm mx-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold text-black dark:text-white flex items-center gap-2">
-            <Download className="w-5 h-5" />
+          <DialogTitle className="text-lg font-bold text-black dark:text-white flex items-center gap-2">
+            <Download className="w-4 h-4" />
             Download Entry
           </DialogTitle>
         </DialogHeader>
         
-        <div className="space-y-4 mt-4">
+        <div className="space-y-3 mt-3">
           {entry && (
-            <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
-              <h3 className="font-semibold text-black dark:text-white">{entry.title || 'Untitled Entry'}</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+            <div className="bg-gray-50 dark:bg-gray-700 p-2 rounded-lg">
+              <h3 className="font-medium text-black dark:text-white text-sm">{entry.title || 'Untitled Entry'}</h3>
+              <p className="text-xs text-gray-600 dark:text-gray-400">
                 {new Date(entry.createdAt).toLocaleDateString()}
               </p>
             </div>
           )}
           
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-xs text-gray-600 dark:text-gray-400">
             Choose your preferred download format:
           </p>
           
-          <div className="space-y-3">
+          <div className="space-y-2">
             {downloadOptions.map((option) => {
               const IconComponent = option.icon;
               return (
@@ -278,13 +278,13 @@ export default function DiaryEntryDownloadModal({ isOpen, onClose, entry, userNa
                   key={option.id}
                   onClick={() => handleDownload(option.id)}
                   disabled={isDownloading}
-                  className={`w-full ${option.color} text-white p-4 h-auto justify-start`}
+                  className={`w-full ${option.color} text-white p-3 h-auto justify-start`}
                 >
-                  <div className="flex items-center gap-3">
-                    <IconComponent className="w-5 h-5" />
+                  <div className="flex items-center gap-2">
+                    <IconComponent className="w-4 h-4" />
                     <div className="text-left">
-                      <div className="font-semibold">{option.title}</div>
-                      <div className="text-sm opacity-90">{option.description}</div>
+                      <div className="font-medium text-sm">{option.title}</div>
+                      <div className="text-xs opacity-90">{option.description}</div>
                     </div>
                   </div>
                 </Button>
@@ -295,7 +295,7 @@ export default function DiaryEntryDownloadModal({ isOpen, onClose, entry, userNa
           <Button
             onClick={onClose}
             variant="outline"
-            className="w-full"
+            className="w-full mt-2"
             disabled={isDownloading}
           >
             Cancel
