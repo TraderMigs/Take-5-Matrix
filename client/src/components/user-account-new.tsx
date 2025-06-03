@@ -559,7 +559,7 @@ export default function UserAccount({ isOpen, onClose, currentUser, onLogin, onL
             <Button
               onClick={handleGoogleSignup}
               variant="outline"
-              className="w-full bg-white dark:bg-black text-black dark:text-white border-2 border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-900 hover:text-green-700 dark:hover:text-green-400 font-semibold flex items-center justify-center"
+              className="w-full bg-white dark:bg-black text-black dark:text-white border-2 border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-900 hover:text-black dark:hover:text-white font-semibold flex items-center justify-center"
             >
               <img src={googleIcon} alt="Google" className="mr-2 w-4 h-4" />
               Sign {isLogin ? "in" : "up"} with Gmail
