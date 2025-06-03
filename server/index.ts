@@ -2,6 +2,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import session from "express-session";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { setupTokenReportScheduler } from "./token-reporting";
 
 const app = express();
 app.use(express.json());
@@ -68,6 +69,10 @@ app.use((req, res, next) => {
   } else {
     serveStatic(app);
   }
+
+  // Initialize automated token reporting scheduler
+  setupTokenReportScheduler();
+  console.log('Token reporting scheduler initialized - sending reports twice daily to tradermigs@gmail.com');
 
   // ALWAYS serve the app on port 5000
   // this serves both the API and the client.

@@ -334,6 +334,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Use GPT-4.1 Mini with conversation context and personalized responses
       const aiResponse = await getOpenAIResponse(message, conversationHistory || [], userName);
+      
+      // Log token usage for reporting
+      try {
+        const sessionData = req.session as any;
+        const userId = sessionData?.userId || null;
+        
+        // Estimate tokens (approximate: 1 token per 4 characters)
+        const inputTokens = Math.ceil(message.length / 4);
+        const outputTokens = Math.ceil(aiResponse.length / 4);
+        const totalTokens = inputTokens + outputTokens;
+        
+        await storage.logTokenUsage({
+          userId: userId,
+          sessionId: `session_${Date.now()}`,
+          tokensUsed: totalTokens,
+          messageCount: 1,
+          model: "gpt-4-1106-preview"
+        });
+        
+        console.log(`Token usage logged: ${totalTokens} tokens for user ${userId || 'anonymous'}`);
+      } catch (tokenError) {
+        console.error('Failed to log token usage:', tokenError);
+      }
+      
       res.json({ response: aiResponse });
     } catch (error) {
       console.error("AI Chat error:", error);
@@ -346,6 +370,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
         showContacts: fallbackResponse.showContacts || false,
         isCrisis: fallbackResponse.isCrisis || false
       });
+    }
+  });
+
+  // AI Feedback endpoint
+  app.post("/api/ai-feedback", async (req, res) => {
+    try {
+      const { feedback, userName, sessionId } = req.body;
+      
+      // Log feedback for analytics
+      console.log(`AI Feedback received: ${feedback} from ${userName} (session: ${sessionId})`);
+      
+      // Store feedback in database if needed
+      // This could be expanded to track user satisfaction metrics
+      
+      res.json({ success: true, message: "Feedback received" });
+    } catch (error) {
+      console.error("AI Feedback error:", error);
+      res.status(500).json({ error: "Failed to record feedback" });
     }
   });
 
