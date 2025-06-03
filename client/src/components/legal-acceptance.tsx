@@ -207,28 +207,19 @@ export default function LegalAcceptance({ isOpen, onAccept }: LegalAcceptancePro
         </ScrollArea>
 
         <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-black">
-          <div className="bg-white dark:bg-gray-800 border-3 border-teal-500 rounded-lg p-4 mb-4 shadow-lg">
-            <div className="flex items-start space-x-4">
-              <div className="flex-shrink-0">
-                <Checkbox 
-                  id="legal-acceptance"
-                  checked={hasAccepted}
-                  onCheckedChange={(checked) => setHasAccepted(checked === true)}
-                  className="border-2 border-teal-500 w-4 h-4 data-[state=checked]:bg-teal-500 data-[state=checked]:border-teal-500"
-                />
-              </div>
-              <div className="flex-1">
-                <label 
-                  htmlFor="legal-acceptance" 
-                  className="text-base text-white font-semibold cursor-pointer leading-relaxed block hover:text-teal-200 transition-colors"
-                >
-                  ✓ Click here to confirm: <span className="text-teal-300 font-bold">I am 18 years or older.</span> I have read and agree to the Privacy Policy, Terms & Conditions, and Disclaimer. I understand that Take 5 is not a substitute for professional help.
-                </label>
-                <p className="text-sm text-white mt-2 font-medium">
-                  👆 Please check the box above to continue
-                </p>
-              </div>
-            </div>
+          <div className="flex items-center space-x-3 mb-4">
+            <Checkbox 
+              id="legal-acceptance"
+              checked={hasAccepted}
+              onCheckedChange={(checked) => setHasAccepted(checked === true)}
+              className="w-4 h-4"
+            />
+            <label 
+              htmlFor="legal-acceptance" 
+              className="text-sm text-white cursor-pointer"
+            >
+              Check to Agree
+            </label>
           </div>
           <Button
             onClick={handleAccept}
