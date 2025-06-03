@@ -74,13 +74,13 @@ export default function AIChat({ isOpen, onClose }: AIChatProps) {
       
       const welcomeMessage: Message = {
         id: Date.now().toString(),
-        text: "Hello, I'm here to listen and support you. You're not alone. What's on your mind today?",
+        text: t('aiWelcomeMessage'),
         sender: "ai",
         timestamp: new Date()
       };
       setMessages([welcomeMessage]);
     }
-  }, [isOpen, messages.length]);
+  }, [isOpen, messages.length, t]);
 
   const loadContacts = async () => {
     try {
