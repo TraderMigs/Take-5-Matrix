@@ -34,6 +34,15 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Load saved name from localStorage on component mount
+  useEffect(() => {
+    const savedName = localStorage.getItem('take5-user-name');
+    if (savedName) {
+      setUserName(savedName);
+      setShowNameInput(false);
+    }
+  }, []);
+
   // Reset states when dialog opens
   useEffect(() => {
     if (isOpen) {
@@ -68,6 +77,8 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
 
   const handleNameSubmit = () => {
     if (userName.trim()) {
+      // Save name to localStorage for persistence
+      localStorage.setItem('take5-user-name', userName.trim());
       setShowNameInput(false);
       
       // Send welcome message after name is provided
@@ -200,9 +211,24 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-2xl h-[600px] bg-white dark:bg-gray-900 flex flex-col">
         <DialogHeader className="border-b border-gray-200 dark:border-gray-700 pb-4">
-          <DialogTitle className="flex items-center gap-2 text-gray-800 dark:text-gray-200">
-            <Bot className="w-5 h-5 text-purple-600" />
-            Take 5 - AI Support
+          <DialogTitle className="flex items-center justify-between text-gray-800 dark:text-gray-200">
+            <div className="flex items-center gap-2">
+              <Bot className="w-5 h-5 text-purple-600" />
+              Take 5 - AI Support
+            </div>
+            {userName && (
+              <button
+                onClick={() => {
+                  localStorage.removeItem('take5-user-name');
+                  setUserName('');
+                  setShowNameInput(true);
+                  setMessages([]);
+                }}
+                className="text-xs text-gray-500 hover:text-purple-600 transition-colors"
+              >
+                Change Name
+              </button>
+            )}
           </DialogTitle>
         </DialogHeader>
 
