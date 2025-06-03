@@ -91,6 +91,41 @@ export interface Translation {
   
   // AI Chat
   aiWelcomeMessage: string;
+  aiSupportChat: string;
+  aiImHere: string;
+  talkToMe: string;
+  chatWithAi: string;
+  compassionateAssistant: string;
+  immediateSupport: string;
+  copingStrategies: string;
+  someoneToListen: string;
+  startConversation: string;
+  typeYourMessage: string;
+  crisisWarning: string;
+  unmuteAi: string;
+  changeNamePrompt: string;
+  enterYourName: string;
+  whatsYourName: string;
+  
+  // Affirmations/Quotes
+  youDeservePeace: string;
+  youAreStronger: string;
+  youMatter: string;
+  thisToWillPass: string;
+  youAreNotAlone: string;
+  youAreLoved: string;
+  
+  // Profile UI
+  backgroundImage: string;
+  noBackgroundImageSet: string;
+  uploadImage: string;
+  setYourPersonalBackground: string;
+  chooseYourImage: string;
+  uploadAnyPhoto: string;
+  cropPosition: string;
+  useEditorToCrop: string;
+  screenImage: string;
+  diary: string;
   
   // Legal
   legalPoliciesDisclamers: string;
@@ -177,6 +212,41 @@ export const translations: Record<string, Translation> = {
     
     // AI Chat
     aiWelcomeMessage: "Hello, I'm here to listen and support you. You're not alone. What's on your mind today?",
+    aiSupportChat: "AI Support Chat",
+    aiImHere: "I'm here. Talk to me.",
+    talkToMe: "Talk to me",
+    chatWithAi: "Chat with our compassionate AI assistant",
+    compassionateAssistant: "compassionate AI assistant",
+    immediateSupport: "for immediate support",
+    copingStrategies: "coping strategies",
+    someoneToListen: "and someone to listen",
+    startConversation: "Start Conversation",
+    typeYourMessage: "Type your message...",
+    crisisWarning: "If you're in crisis, please call 988 or emergency services immediately",
+    unmuteAi: "Unmute AI",
+    changeNamePrompt: "Change Name",
+    enterYourName: "Enter your name",
+    whatsYourName: "What's your name?",
+    
+    // Affirmations/Quotes
+    youDeservePeace: "You deserve peace and happiness",
+    youAreStronger: "You are stronger than you know",
+    youMatter: "You matter. Your life has value.",
+    thisToWillPass: "This too shall pass",
+    youAreNotAlone: "You are not alone in this",
+    youAreLoved: "You are loved and valued",
+    
+    // Profile UI
+    backgroundImage: "Background Image",
+    noBackgroundImageSet: "No background image set",
+    uploadImage: "Upload Image",
+    setYourPersonalBackground: "Set Your Personal Background",
+    chooseYourImage: "Choose Your Image",
+    uploadAnyPhoto: "Upload any photo from your device",
+    cropPosition: "Crop & Position",
+    useEditorToCrop: "Use our editor to crop and center your image perfectly",
+    screenImage: "Screen Image",
+    diary: "Diary",
     
     // Legal
     legalPoliciesDisclamers: "Legal Policies & Disclaimers",
@@ -261,6 +331,29 @@ export const translations: Record<string, Translation> = {
     
     // AI Chat
     aiWelcomeMessage: "สวัสดี ฉันอยู่ที่นี่เพื่อฟังและสนับสนุนคุณ คุณไม่ได้อยู่คนเดียว วันนี้คุณคิดอะไรอยู่?",
+    aiSupportChat: "แชทสนับสนุน AI",
+    aiImHere: "ฉันอยู่ที่นี่ มาคุยกันเถอะ",
+    talkToMe: "คุยกับฉัน",
+    chatWithAi: "แชทกับผู้ช่วย AI ที่เห็นอกเห็นใจ",
+    compassionateAssistant: "ผู้ช่วย AI ที่เห็นอกเห็นใจ",
+    immediateSupport: "สำหรับการสนับสนุนทันที",
+    copingStrategies: "กลยุทธ์การรับมือ",
+    someoneToListen: "และใครสักคนที่จะฟัง",
+    startConversation: "เริ่มบทสนทนา",
+    typeYourMessage: "พิมพ์ข้อความของคุณ...",
+    crisisWarning: "หากคุณตกอยู่ในวิกฤต โปรดโทร 1323 หรือบริการฉุกเฉินทันที",
+    unmuteAi: "เปิดเสียง AI",
+    changeNamePrompt: "เปลี่ยนชื่อ",
+    enterYourName: "ใส่ชื่อของคุณ",
+    whatsYourName: "คุณชื่ออะไร?",
+    
+    // Affirmations/Quotes
+    youDeservePeace: "คุณสมควรได้รับความสงบและความสุข",
+    youAreStronger: "คุณแข็งแกร่งกว่าที่คุณคิด",
+    youMatter: "คุณมีความสำคัญ ชีวิตคุณมีคุณค่า",
+    thisToWillPass: "สิ่งนี้จะผ่านไป",
+    youAreNotAlone: "คุณไม่ได้อยู่คนเดียวในเรื่องนี้",
+    youAreLoved: "คุณได้รับความรักและมีคุณค่า",
     
     // Legal
     legalPoliciesDisclamers: "นโยบายกฎหมายและข้อจำกัดความรับผิดชอบ",
@@ -341,6 +434,29 @@ export const translations: Record<string, Translation> = {
     
     // AI Chat
     aiWelcomeMessage: "Hola, estoy aquí para escucharte y apoyarte. No estás solo. ¿Qué tienes en mente hoy?",
+    aiSupportChat: "Chat de Apoyo IA",
+    aiImHere: "Estoy aquí. Habla conmigo.",
+    talkToMe: "Habla conmigo",
+    chatWithAi: "Chatea con nuestro asistente IA compasivo",
+    compassionateAssistant: "asistente IA compasivo",
+    immediateSupport: "para apoyo inmediato",
+    copingStrategies: "estrategias de afrontamiento",
+    someoneToListen: "y alguien que escuche",
+    startConversation: "Iniciar Conversación",
+    typeYourMessage: "Escribe tu mensaje...",
+    crisisWarning: "Si estás en crisis, por favor llama al 988 o servicios de emergencia inmediatamente",
+    unmuteAi: "Activar audio IA",
+    changeNamePrompt: "Cambiar Nombre",
+    enterYourName: "Ingresa tu nombre",
+    whatsYourName: "¿Cuál es tu nombre?",
+    
+    // Affirmations/Quotes
+    youDeservePeace: "Mereces paz y felicidad",
+    youAreStronger: "Eres más fuerte de lo que crees",
+    youMatter: "Importas. Tu vida tiene valor.",
+    thisToWillPass: "Esto también pasará",
+    youAreNotAlone: "No estás solo en esto",
+    youAreLoved: "Eres amado y valorado",
     
     // Legal
     legalPoliciesDisclamers: "Políticas Legales y Exenciones de Responsabilidad",
