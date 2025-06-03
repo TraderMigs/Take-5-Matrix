@@ -15,7 +15,8 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
   
   // Audio refs for ocean waves
   const audioContextRef = useRef<AudioContext | null>(null);
-  const oceanAudioRef = useRef<HTMLAudioElement | null>(null);
+  const oceanSourceRef = useRef<AudioBufferSourceNode | null>(null);
+  const oceanGainRef = useRef<GainNode | null>(null);
 
   const phaseInstructions = {
     inhale: "Breathe in slowly",
@@ -93,13 +94,16 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
 
   // Stop all audio
   const stopAudio = () => {
-    if (oscillatorRef.current) {
+    if (oceanSourceRef.current) {
       try {
-        oscillatorRef.current.stop();
+        oceanSourceRef.current.stop();
       } catch (e) {
-        // Oscillator may already be stopped
+        // Source may already be stopped
       }
-      oscillatorRef.current = null;
+      oceanSourceRef.current = null;
+    }
+    if (oceanGainRef.current) {
+      oceanGainRef.current = null;
     }
     if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
       audioContextRef.current.close();
@@ -108,15 +112,14 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
   };
 
   const startBreathing = () => {
-    initAudio(); // Initialize audio context
     setIsActive(true);
     setPhase("inhale");
     setCount(5);
 
-    // Start with inhale sound
-    setTimeout(() => {
-      createBreathingSound("inhale");
-    }, 100);
+    // Start ocean waves sound
+    const { source, gainNode } = createOceanWaves();
+    oceanSourceRef.current = source;
+    oceanGainRef.current = gainNode;
 
     intervalRef.current = setInterval(() => {
       setCount((prevCount) => {
@@ -125,14 +128,6 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
             const phases: Array<"inhale" | "hold" | "exhale" | "pause"> = ["inhale", "hold", "exhale", "pause"];
             const currentIndex = phases.indexOf(prevPhase);
             const nextPhase = phases[(currentIndex + 1) % phases.length];
-            
-            // Play breathing sounds for inhale and exhale phases
-            if (nextPhase === "inhale") {
-              setTimeout(() => createBreathingSound("inhale"), 100);
-            } else if (nextPhase === "exhale") {
-              setTimeout(() => createBreathingSound("exhale"), 100);
-            }
-            
             return nextPhase;
           });
           return phaseDurations[phase] || 4;

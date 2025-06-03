@@ -820,6 +820,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Emergency contacts route
+  app.get('/api/emergency-contacts', async (req, res) => {
+    try {
+      const userId = req.session.userId;
+      if (!userId) {
+        return res.status(401).json({ error: 'Authentication required' });
+      }
+
+      const emergencyContacts = await storage.getEmergencyContacts(userId);
+      res.json(emergencyContacts);
+    } catch (error) {
+      console.error('Error fetching emergency contacts:', error);
+      res.status(500).json({ error: 'Failed to fetch emergency contacts' });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;

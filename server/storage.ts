@@ -129,6 +129,15 @@ export class DatabaseStorage implements IStorage {
     return newContact;
   }
 
+  async updateContact(contactId: number, updates: Partial<InsertContact>): Promise<Contact> {
+    const [updatedContact] = await db
+      .update(contacts)
+      .set(updates)
+      .where(eq(contacts.id, contactId))
+      .returning();
+    return updatedContact;
+  }
+
   async deleteContact(contactId: number): Promise<void> {
     await db.delete(contacts).where(eq(contacts.id, contactId));
   }
@@ -136,8 +145,7 @@ export class DatabaseStorage implements IStorage {
   async getEmergencyContacts(userId?: number): Promise<Contact[]> {
     if (!userId) return [];
     return await db.select().from(contacts)
-      .where(eq(contacts.userId, userId))
-      .where(eq(contacts.isEmergencyContact, true));
+      .where(and(eq(contacts.userId, userId), eq(contacts.isEmergencyContact, true)));
   }
 
   async createSession(userId: number): Promise<Session> {
