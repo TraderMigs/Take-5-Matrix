@@ -14,9 +14,11 @@ function initializeGoogleAuth() {
   // Determine the correct redirect URI based on environment
   let redirectUri;
   if (process.env.REPLIT_DOMAINS) {
-    // Production: use the first domain from REPLIT_DOMAINS
-    const domain = process.env.REPLIT_DOMAINS.split(',')[0];
-    redirectUri = `https://${domain}/api/auth/google/callback`;
+    // Production: use the current domain
+    const domains = process.env.REPLIT_DOMAINS.split(',');
+    // Use the first domain that ends with .replit.app
+    const replitDomain = domains.find(d => d.includes('.replit.app')) || domains[0];
+    redirectUri = `https://${replitDomain}/api/auth/google/callback`;
   } else {
     // Development
     redirectUri = 'http://localhost:5000/api/auth/google/callback';
@@ -54,6 +56,16 @@ export function setupGoogleAuth(app: Express) {
 
   // Start OAuth flow
   app.get('/api/auth/google', (req, res) => {
+    // Update the redirect URI based on the current request host
+    const currentHost = req.get('host');
+    const protocol = req.secure || req.get('x-forwarded-proto') === 'https' ? 'https' : 'http';
+    const dynamicRedirectUri = `${protocol}://${currentHost}/api/auth/google/callback`;
+    
+    console.log('Dynamic redirect URI:', dynamicRedirectUri);
+    
+    // Update the client with the current redirect URI
+    client.redirectUri = dynamicRedirectUri;
+    
     const scopes = [
       'https://www.googleapis.com/auth/userinfo.email',
       'https://www.googleapis.com/auth/userinfo.profile'
