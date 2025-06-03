@@ -23,6 +23,11 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
   const [username, setUsername] = useState(currentUser?.username || "");
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [isEditingQuote, setIsEditingQuote] = useState(false);
+  const [usernameStyle, setUsernameStyle] = useState({
+    color: currentUser?.usernameColor || "#000000",
+    isBold: currentUser?.usernameBold || false,
+    isItalic: currentUser?.usernameItalic || false
+  });
   const [diaryEntries, setDiaryEntries] = useState<any[]>([]);
   const [newEntryTitle, setNewEntryTitle] = useState("");
   const [newEntryContent, setNewEntryContent] = useState("");
@@ -271,7 +276,10 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           userId: currentUser.id, 
-          username: username 
+          username: username,
+          usernameColor: usernameStyle.color,
+          usernameBold: usernameStyle.isBold,
+          usernameItalic: usernameStyle.isItalic
         }),
       });
 
@@ -279,7 +287,13 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
         setIsEditingUsername(false);
         
         // Update localStorage for persistence across sessions
-        const updatedUser = { ...currentUser, username: username };
+        const updatedUser = { 
+          ...currentUser, 
+          username: username,
+          usernameColor: usernameStyle.color,
+          usernameBold: usernameStyle.isBold,
+          usernameItalic: usernameStyle.isItalic
+        };
         localStorage.setItem('take5_current_user', JSON.stringify(updatedUser));
         
         toast({
