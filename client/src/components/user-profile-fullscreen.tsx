@@ -817,19 +817,19 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
               value="profile" 
               className="text-black dark:text-white data-[state=active]:bg-green-800 data-[state=active]:text-white text-sm"
             >
-              Profile
+              {t('profile')}
             </TabsTrigger>
             <TabsTrigger 
               value="diary" 
               className="text-black dark:text-white data-[state=active]:bg-green-800 data-[state=active]:text-white text-sm"
             >
-              Diary
+              {t('diary')}
             </TabsTrigger>
             <TabsTrigger 
               value="background" 
               className="text-black dark:text-white data-[state=active]:bg-green-800 data-[state=active]:text-white text-sm"
             >
-              Screen Image
+              {t('screenImage')}
             </TabsTrigger>
           </TabsList>
           
