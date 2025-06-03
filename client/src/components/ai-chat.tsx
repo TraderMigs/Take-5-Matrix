@@ -18,7 +18,13 @@ interface AIChatProps {
   onClose: () => void;
 }
 
-export default function AIChat({ isOpen, onClose }: AIChatProps) {
+interface AIChatProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onToolSelect?: (toolId: string) => void;
+}
+
+export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -28,6 +34,7 @@ export default function AIChat({ isOpen, onClose }: AIChatProps) {
   const [contacts, setContacts] = useState<any[]>([]);
   const [userName, setUserName] = useState("");
   const [showNameInput, setShowNameInput] = useState(true);
+  const [highlightedTool, setHighlightedTool] = useState<string | null>(null);
   const { t, language } = useLanguage();
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -73,7 +80,52 @@ export default function AIChat({ isOpen, onClose }: AIChatProps) {
   useEffect(() => {
     if (isOpen) {
       loadContacts();
-      if (messages.length === 0 && !showNameInput) {
+      
+      // Load saved conversation and user name
+      const savedName = localStorage.getItem('take5_ai_chat_name');
+      const savedConversation = localStorage.getItem('take5_ai_chat_history');
+      
+      if (savedName) {
+        setUserName(savedName);
+        setShowNameInput(false);
+        
+        // Load previous conversation if exists (last 3 interactions)
+        if (savedConversation && messages.length === 0) {
+          try {
+            const parsedHistory = JSON.parse(savedConversation);
+            const historyWithDates = parsedHistory.map((msg: any) => ({
+              ...msg,
+              timestamp: new Date(msg.timestamp)
+            }));
+            
+            const welcomeBackMessage: Message = {
+              id: Date.now().toString(),
+              text: `Hi again, ${savedName}! I remember our last conversation. How are you feeling right now?`,
+              sender: "ai",
+              timestamp: new Date()
+            };
+            
+            setMessages([...historyWithDates, welcomeBackMessage]);
+          } catch (error) {
+            console.error('Error loading conversation history:', error);
+            const welcomeMessage: Message = {
+              id: Date.now().toString(),
+              text: `Welcome back, ${savedName}! How are you feeling today?`,
+              sender: "ai",
+              timestamp: new Date()
+            };
+            setMessages([welcomeMessage]);
+          }
+        } else if (messages.length === 0) {
+          const welcomeMessage: Message = {
+            id: Date.now().toString(),
+            text: `Welcome back, ${savedName}! How are you feeling today?`,
+            sender: "ai",
+            timestamp: new Date()
+          };
+          setMessages([welcomeMessage]);
+        }
+      } else if (messages.length === 0 && !showNameInput) {
         const welcomeMessage: Message = {
           id: Date.now().toString(),
           text: `Hi there! I'm Take 5, your supportive companion. I'm here to listen and help you feel seen and supported. What's on your mind today?`,
@@ -83,12 +135,15 @@ export default function AIChat({ isOpen, onClose }: AIChatProps) {
         setMessages([welcomeMessage]);
       }
     } else {
+      // Save conversation history before closing (last 3 user-AI interactions)
+      if (messages.length > 0) {
+        saveConversationHistory();
+      }
       // Reset when closing
       setMessages([]);
-      setShowNameInput(true);
-      setUserName("");
+      setShowNameInput(userName ? false : true);
     }
-  }, [isOpen, messages.length, showNameInput]);
+  }, [isOpen]);
 
   const loadContacts = async () => {
     try {
@@ -99,6 +154,32 @@ export default function AIChat({ isOpen, onClose }: AIChatProps) {
       }
     } catch (error) {
       console.log('No contacts available yet');
+    }
+  };
+
+  const saveConversationHistory = () => {
+    if (messages.length < 2) return; // Need at least user message + AI response
+    
+    // Extract last 3 pairs of user-AI interactions (6 messages total)
+    const userAIPairs = [];
+    for (let i = messages.length - 1; i >= 0; i--) {
+      if (messages[i].sender === 'ai' && i > 0 && messages[i-1].sender === 'user') {
+        userAIPairs.unshift(messages[i-1], messages[i]);
+        if (userAIPairs.length >= 6) break; // 3 pairs = 6 messages
+      }
+    }
+    
+    // Only save meaningful conversations (exclude welcome messages)
+    const meaningfulHistory = userAIPairs.filter(msg => 
+      !(msg.sender === 'ai' && (
+        msg.text.includes('Hi again') || 
+        msg.text.includes('Welcome back') ||
+        msg.text.includes('How are you feeling right now?')
+      ))
+    );
+    
+    if (meaningfulHistory.length > 0) {
+      localStorage.setItem('take5_ai_chat_history', JSON.stringify(meaningfulHistory));
     }
   };
 
@@ -149,7 +230,34 @@ export default function AIChat({ isOpen, onClose }: AIChatProps) {
           sender: "ai",
           timestamp: new Date()
         };
-        setMessages(prev => [...prev, aiMessage]);
+        setMessages(prev => {
+          const newMessages = [...prev, aiMessage];
+          // Save conversation history after each AI response
+          setTimeout(() => {
+            // Extract last 3 pairs of user-AI interactions for saving
+            const userAIPairs = [];
+            for (let i = newMessages.length - 1; i >= 0; i--) {
+              if (newMessages[i].sender === 'ai' && i > 0 && newMessages[i-1].sender === 'user') {
+                userAIPairs.unshift(newMessages[i-1], newMessages[i]);
+                if (userAIPairs.length >= 6) break; // 3 pairs = 6 messages
+              }
+            }
+            
+            // Only save meaningful conversations (exclude welcome messages)
+            const meaningfulHistory = userAIPairs.filter(msg => 
+              !(msg.sender === 'ai' && (
+                msg.text.includes('Hi again') || 
+                msg.text.includes('Welcome back') ||
+                msg.text.includes('How are you feeling right now?')
+              ))
+            );
+            
+            if (meaningfulHistory.length > 0) {
+              localStorage.setItem('take5_ai_chat_history', JSON.stringify(meaningfulHistory));
+            }
+          }, 100);
+          return newMessages;
+        });
         setIsTyping(false);
         
         // Check if this is a crisis response that should show contacts
