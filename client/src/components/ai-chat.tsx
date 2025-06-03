@@ -29,6 +29,7 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
   const [userName, setUserName] = useState("");
   const [showNameInput, setShowNameInput] = useState(true);
   const [highlightedTool, setHighlightedTool] = useState<string | null>(null);
+  const [isAiMuted, setIsAiMuted] = useState(false);
 
   const { t, language } = useLanguage();
   
@@ -249,6 +250,16 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
             )}
           </DialogTitle>
         </DialogHeader>
+
+        {/* Mute/Unmute AI Controls */}
+        <div className="px-4 pb-2 border-b border-gray-200 dark:border-gray-700">
+          <button
+            onClick={() => setIsAiMuted(!isAiMuted)}
+            className="text-xs text-green-700 hover:text-green-800 transition-colors font-medium"
+          >
+            {isAiMuted ? 'Unmute AI' : 'Mute AI'}
+          </button>
+        </div>
 
         <ScrollArea className="flex-1 p-4">
           <div className="space-y-4">
