@@ -5,6 +5,14 @@ import { users } from "@shared/schema";
 import { db } from "./db";
 import { gte, and, desc } from "drizzle-orm";
 
+// Helper function to get week start date (Sunday)
+function getWeekStart(date: Date): Date {
+  const weekStart = new Date(date);
+  weekStart.setDate(date.getDate() - date.getDay());
+  weekStart.setHours(0, 0, 0, 0);
+  return weekStart;
+}
+
 interface UserSignupData {
   id: number;
   email: string;
@@ -27,30 +35,39 @@ export async function generateWeeklySignupReport(): Promise<Buffer> {
         username: users.username,
         country: users.country,
         createdAt: users.createdAt,
+        signupTimestamp: users.signupTimestamp,
       })
       .from(users)
-      .orderBy(desc(users.createdAt));
+      .orderBy(desc(users.signupTimestamp));
 
-    // Prepare data for Excel
-    const excelData = allUsers.map((user, index) => ({
-      'Row #': index + 1,
-      'User ID': user.id,
-      'Email': user.email,
-      'First Name': user.firstName || 'Not provided',
-      'Last Name': user.lastName || 'Not provided',
-      'Username': user.username,
-      'Country': user.country || 'Not provided',
-      'Signup Date': user.createdAt.toLocaleDateString(),
-      'Signup Time': user.createdAt.toLocaleTimeString(),
-    }));
+    // Prepare data for Excel with detailed timestamp information
+    const excelData = allUsers.map((user, index) => {
+      const signupDate = user.signupTimestamp || user.createdAt;
+      return {
+        'Row #': index + 1,
+        'User ID': user.id,
+        'Email': user.email,
+        'First Name': user.firstName || 'Not provided',
+        'Last Name': user.lastName || 'Not provided',
+        'Username': user.username,
+        'Country': user.country || 'Not provided',
+        'Signup Date': signupDate.toLocaleDateString('en-US'),
+        'Signup Time': signupDate.toLocaleTimeString('en-US'),
+        'Full Timestamp': signupDate.toISOString(),
+        'Signup Week': `Week of ${getWeekStart(signupDate).toLocaleDateString('en-US')}`,
+        'Day of Week': signupDate.toLocaleDateString('en-US', { weekday: 'long' }),
+        'UTC Timestamp': signupDate.toUTCString(),
+      };
+    });
 
     // Get new signups from the past week
     const oneWeekAgo = new Date();
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
     
-    const newSignups = allUsers.filter(user => 
-      user.createdAt >= oneWeekAgo
-    );
+    const newSignups = allUsers.filter(user => {
+      const signupDate = user.signupTimestamp || user.createdAt;
+      return signupDate >= oneWeekAgo;
+    });
 
     // Create workbook with multiple sheets
     const workbook = XLSX.utils.book_new();
@@ -59,18 +76,26 @@ export async function generateWeeklySignupReport(): Promise<Buffer> {
     const allUsersSheet = XLSX.utils.json_to_sheet(excelData);
     XLSX.utils.book_append_sheet(workbook, allUsersSheet, 'All Users');
 
-    // New Signups This Week sheet
-    const newSignupsData = newSignups.map((user, index) => ({
-      'Row #': index + 1,
-      'User ID': user.id,
-      'Email': user.email,
-      'First Name': user.firstName || 'Not provided',
-      'Last Name': user.lastName || 'Not provided',
-      'Username': user.username,
-      'Country': user.country || 'Not provided',
-      'Signup Date': user.createdAt.toLocaleDateString(),
-      'Signup Time': user.createdAt.toLocaleTimeString(),
-    }));
+    // New Signups This Week sheet with detailed timestamp information
+    const newSignupsData = newSignups.map((user, index) => {
+      const signupDate = user.signupTimestamp || user.createdAt;
+      return {
+        'Row #': index + 1,
+        'User ID': user.id,
+        'Email': user.email,
+        'First Name': user.firstName || 'Not provided',
+        'Last Name': user.lastName || 'Not provided',
+        'Username': user.username,
+        'Country': user.country || 'Not provided',
+        'Signup Date': signupDate.toLocaleDateString('en-US'),
+        'Signup Time': signupDate.toLocaleTimeString('en-US'),
+        'Full Timestamp': signupDate.toISOString(),
+        'Signup Week': `Week of ${getWeekStart(signupDate).toLocaleDateString('en-US')}`,
+        'Day of Week': signupDate.toLocaleDateString('en-US', { weekday: 'long' }),
+        'UTC Timestamp': signupDate.toUTCString(),
+        'Days Ago': Math.floor((new Date().getTime() - signupDate.getTime()) / (1000 * 60 * 60 * 24)),
+      };
+    });
 
     const newSignupsSheet = XLSX.utils.json_to_sheet(newSignupsData);
     XLSX.utils.book_append_sheet(workbook, newSignupsSheet, 'New This Week');

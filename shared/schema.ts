@@ -20,6 +20,7 @@ export const users = pgTable("users", {
   emailVerificationToken: text("email_verification_token"),
   emailVerificationExpires: timestamp("email_verification_expires"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  signupTimestamp: timestamp("signup_timestamp").defaultNow().notNull(),
 });
 
 export const contacts = pgTable("contacts", {
