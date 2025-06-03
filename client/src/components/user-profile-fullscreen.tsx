@@ -1297,6 +1297,14 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
         imageSrc={tempBackgroundSrc}
         onSave={handleSaveCroppedBackground}
       />
+
+      {/* Diary Entry Image Crop Modal */}
+      <ImageCropModal
+        isOpen={showImageUploadModal}
+        onClose={() => setShowImageUploadModal(false)}
+        imageSrc={tempEntryImageSrc}
+        onSave={handleSaveCroppedEntryImage}
+      />
     </div>
   );
 }

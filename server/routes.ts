@@ -542,13 +542,13 @@ Now respond specifically to their latest message, acknowledging what they're act
 
   app.post('/api/diary', async (req, res) => {
     try {
-      const { userId, title, content, mood } = req.body;
+      const { userId, title, content, mood, images } = req.body;
       
       if (!userId || !content) {
         return res.status(400).json({ error: 'User ID and content required' });
       }
 
-      const newEntry = await storage.createDiaryEntry({ title, content, mood }, userId);
+      const newEntry = await storage.createDiaryEntry({ title, content, mood, images }, userId);
       res.json(newEntry);
     } catch (error) {
       console.error('Error creating diary entry:', error);

@@ -50,6 +50,7 @@ export const diaryEntries = pgTable("diary_entries", {
   title: text("title"),
   content: text("content").notNull(),
   mood: text("mood"), // optional mood tracking
+  images: text("images").array(), // array of base64 image strings
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -116,6 +117,7 @@ export const insertDiaryEntrySchema = createInsertSchema(diaryEntries).pick({
   title: true,
   content: true,
   mood: true,
+  images: true,
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
