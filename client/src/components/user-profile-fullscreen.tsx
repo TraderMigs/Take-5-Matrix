@@ -42,6 +42,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
   const [showBackgroundCropModal, setShowBackgroundCropModal] = useState(false);
   const [tempBackgroundSrc, setTempBackgroundSrc] = useState("");
   const [showBackgroundDropdown, setShowBackgroundDropdown] = useState(false);
+  const [showProfileImageDropdown, setShowProfileImageDropdown] = useState(false);
   const { toast } = useToast();
   const { t } = useLanguage();
 
@@ -416,6 +417,19 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
     setShowBackgroundDropdown(false);
   };
 
+  const removeProfileImage = () => {
+    setProfileImage("");
+    localStorage.removeItem(`take5_profile_${currentUser.id}`);
+    
+    toast({
+      title: "Profile picture removed",
+      description: "Your profile picture has been removed.",
+      className: "bg-green-800 border-green-700 text-white",
+    });
+    
+    setShowProfileImageDropdown(false);
+  };
+
   const saveDiaryEntry = async () => {
     if (!newEntryTitle.trim() || !newEntryContent.trim()) return;
     
@@ -535,14 +549,52 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                     {currentUser.displayName?.charAt(0) || currentUser.username?.charAt(0) || 'U'}
                   </AvatarFallback>
                 </Avatar>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="absolute -bottom-2 -right-2 rounded-full p-3 bg-teal-400 hover:bg-teal-500 border-teal-500"
-                  onClick={handlePhotoUpload}
-                >
-                  <Camera className="w-4 h-4 text-black" />
-                </Button>
+                <div className="absolute -bottom-1 -right-1">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="rounded-full p-1.5 bg-teal-400 hover:bg-teal-500 border-teal-500"
+                    onClick={() => setShowProfileImageDropdown(!showProfileImageDropdown)}
+                  >
+                    <ChevronDown className="w-3 h-3 text-black" />
+                  </Button>
+                  {showProfileImageDropdown && (
+                    <div className="absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg z-10 min-w-[140px]">
+                      <button
+                        onClick={() => {
+                          handlePhotoUpload();
+                          setShowProfileImageDropdown(false);
+                        }}
+                        className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-black dark:text-white flex items-center gap-2"
+                      >
+                        <Camera className="w-4 h-4" />
+                        Change Photo
+                      </button>
+                      {profileImage && (
+                        <>
+                          <button
+                            onClick={() => {
+                              setTempImageSrc(profileImage);
+                              setShowImageCropModal(true);
+                              setShowProfileImageDropdown(false);
+                            }}
+                            className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-black dark:text-white flex items-center gap-2"
+                          >
+                            <Edit className="w-4 h-4" />
+                            Edit Photo
+                          </button>
+                          <button
+                            onClick={removeProfileImage}
+                            className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-red-600 flex items-center gap-2"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                            Remove
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
               
               <div className="text-center w-full max-w-md">
