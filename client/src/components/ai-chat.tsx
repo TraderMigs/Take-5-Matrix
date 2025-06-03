@@ -66,7 +66,7 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
       if (messages.length === 0 && userName && !showNameInput) {
         const welcomeBackMessage: Message = {
           id: Date.now().toString(),
-          text: `Welcome back, ${userName}! I'm here to support you. How are you feeling today?`,
+          text: `Hey, ${userName}! What's going on? Talk to me 🙏🏾`,
           sender: "ai",
           timestamp: new Date(),
         };
@@ -101,7 +101,7 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
       // Send welcome message after name is provided
       const welcomeMessage: Message = {
         id: Date.now().toString(),
-        text: `Hello ${userName}! I'm your AI support companion. I'm here to listen and help you through whatever you're experiencing. How are you feeling today?`,
+        text: `Hey, ${userName}! What's going on? Talk to me 🙏🏾`,
         sender: "ai",
         timestamp: new Date(),
       };
