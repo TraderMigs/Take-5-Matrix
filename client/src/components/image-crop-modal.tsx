@@ -3,7 +3,7 @@ import ReactCrop, { Crop, PixelCrop, centerCrop, makeAspectCrop } from 'react-im
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
-import { ZoomIn, ZoomOut, RotateCw, Save, X } from 'lucide-react';
+import { ZoomIn, ZoomOut, RotateCw, Save, X, Image } from 'lucide-react';
 import 'react-image-crop/dist/ReactCrop.css';
 
 interface ImageCropModalProps {
@@ -103,6 +103,11 @@ export default function ImageCropModal({ isOpen, onClose, imageSrc, onSave }: Im
     }
   };
 
+  const handleUseFullImage = () => {
+    onSave(imageSrc);
+    onClose();
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-auto bg-white dark:bg-gray-800">
@@ -185,11 +190,18 @@ export default function ImageCropModal({ isOpen, onClose, imageSrc, onSave }: Im
               Cancel
             </Button>
             <Button
+              onClick={handleUseFullImage}
+              className="bg-blue-500 hover:bg-blue-600 text-white"
+            >
+              <Image className="w-4 h-4 mr-2" />
+              Use Full Image
+            </Button>
+            <Button
               onClick={handleSave}
               className="bg-teal-500 hover:bg-teal-600 text-white"
             >
               <Save className="w-4 h-4 mr-2" />
-              Save Photo
+              Save Cropped
             </Button>
           </div>
         </div>
