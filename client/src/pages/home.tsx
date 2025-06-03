@@ -239,7 +239,7 @@ export default function Home() {
       )}
 
       {/* Header */}
-      <header className="bg-black dark:bg-black text-white dark:text-white text-center py-8 px-6 relative">
+      <header className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 dark:bg-black text-black dark:text-white text-center py-8 px-6 relative shimmer-mint">
         <div className="absolute top-4 left-4">
           <LocationSelector />
         </div>
@@ -365,7 +365,7 @@ export default function Home() {
         <PersonalContacts />
 
         {/* Safe Message */}
-        <section className="bg-black dark:bg-black text-white dark:text-white rounded-xl p-6 text-center space-y-3 border-2 border-black dark:border-white">
+        <section className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 dark:bg-black text-black dark:text-white rounded-xl p-6 text-center space-y-3 border-2 border-black dark:border-white shimmer-mint">
           <h2 className="text-xl font-black" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>{t('footerMessage1')}</h2>
           <p className="text-lg font-bold opacity-95" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>{t('footerMessage2')}</p>
           <p className="text-lg font-bold opacity-95" style={{ textShadow: '1px 1px 0px rgba(0,0,0,0.8)' }}>{t('footerMessage3')}</p>
