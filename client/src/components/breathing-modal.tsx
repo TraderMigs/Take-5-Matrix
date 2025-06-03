@@ -13,10 +13,9 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
   const [count, setCount] = useState(5);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   
-  // Audio refs for breathing sounds
+  // Audio refs for ocean waves
   const audioContextRef = useRef<AudioContext | null>(null);
-  const oscillatorRef = useRef<OscillatorNode | null>(null);
-  const gainNodeRef = useRef<GainNode | null>(null);
+  const oceanAudioRef = useRef<HTMLAudioElement | null>(null);
 
   const phaseInstructions = {
     inhale: "Breathe in slowly",
@@ -32,70 +31,64 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
     pause: 3,
   };
 
-  // Initialize audio context for breathing sounds
-  const initAudio = () => {
+  // Create continuous ocean waves sound using Web Audio API
+  const createOceanWaves = () => {
     if (!audioContextRef.current) {
       audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
     }
-  };
-
-  // Create gentle breathing sound effect with improved audio quality
-  const createBreathingSound = (type: "inhale" | "exhale") => {
-    if (!audioContextRef.current) return;
-
-    // Stop any existing oscillator
-    if (oscillatorRef.current) {
-      try {
-        oscillatorRef.current.stop();
-      } catch (e) {
-        // Oscillator may already be stopped
-      }
-      oscillatorRef.current = null;
-    }
 
     const audioContext = audioContextRef.current;
-    const oscillator = audioContext.createOscillator();
+    
+    // Create buffer for ocean wave sound (2 seconds of audio data)
+    const bufferSize = audioContext.sampleRate * 2;
+    const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+    const output = buffer.getChannelData(0);
+
+    // Generate ocean wave sound using multiple noise layers
+    for (let i = 0; i < bufferSize; i++) {
+      // Base white noise
+      let sample = (Math.random() * 2 - 1) * 0.3;
+      
+      // Add wave-like modulation with multiple frequencies
+      const time = i / audioContext.sampleRate;
+      sample *= (0.5 + 0.3 * Math.sin(time * 0.5 * Math.PI)); // Slow wave cycle
+      sample *= (0.7 + 0.2 * Math.sin(time * 1.2 * Math.PI)); // Medium wave
+      sample *= (0.8 + 0.15 * Math.sin(time * 2.8 * Math.PI)); // Fast ripples
+      
+      // Apply low-pass filtering effect
+      if (i > 0) {
+        sample = sample * 0.7 + output[i - 1] * 0.3;
+      }
+      
+      output[i] = sample * 0.4; // Overall volume control
+    }
+
+    // Create and configure audio nodes
+    const source = audioContext.createBufferSource();
     const gainNode = audioContext.createGain();
     const filter = audioContext.createBiquadFilter();
 
-    // Create audio chain: oscillator -> filter -> gain -> destination
-    oscillator.connect(filter);
+    // Set up low-pass filter for ocean-like sound
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(1200, audioContext.currentTime);
+    filter.Q.setValueAtTime(0.5, audioContext.currentTime);
+
+    // Connect audio chain
+    source.connect(filter);
     filter.connect(gainNode);
     gainNode.connect(audioContext.destination);
 
-    // Set up low-pass filter for smoother, warmer sound
-    filter.type = "lowpass";
-    filter.frequency.setValueAtTime(800, audioContext.currentTime);
-    filter.Q.setValueAtTime(1, audioContext.currentTime);
-
-    // Improved frequencies for more pleasant breathing sounds
-    const baseFrequency = type === "inhale" ? 300 : 180;
-    oscillator.frequency.setValueAtTime(baseFrequency, audioContext.currentTime);
+    // Configure source
+    source.buffer = buffer;
+    source.loop = true; // Loop continuously
     
-    // Add gentle frequency modulation for more natural sound
-    if (type === "inhale") {
-      oscillator.frequency.linearRampToValueAtTime(baseFrequency + 50, audioContext.currentTime + 2.5);
-      oscillator.frequency.linearRampToValueAtTime(baseFrequency, audioContext.currentTime + 5);
-    } else {
-      oscillator.frequency.linearRampToValueAtTime(baseFrequency - 30, audioContext.currentTime + 3.5);
-      oscillator.frequency.linearRampToValueAtTime(baseFrequency, audioContext.currentTime + 7);
-    }
+    // Set volume
+    gainNode.gain.setValueAtTime(0.6, audioContext.currentTime);
 
-    // Improved volume envelope with higher audible levels
-    const duration = type === "inhale" ? 5 : 7;
-    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-    gainNode.gain.linearRampToValueAtTime(0.15, audioContext.currentTime + 0.3); // Increased volume
-    gainNode.gain.linearRampToValueAtTime(0.12, audioContext.currentTime + duration * 0.7);
-    gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + duration);
-
-    // Use triangle wave for softer, more pleasant sound
-    oscillator.type = "triangle";
+    // Start playing
+    source.start();
     
-    oscillator.start();
-    oscillator.stop(audioContext.currentTime + duration);
-
-    oscillatorRef.current = oscillator;
-    gainNodeRef.current = gainNode;
+    return { source, gainNode };
   };
 
   // Stop all audio
