@@ -404,7 +404,7 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
               onChange={(e) => setInputText(e.target.value)}
               placeholder="Type your message..."
               disabled={isLoading}
-              className="flex-1"
+              className="flex-1 bg-black text-white placeholder:text-gray-400 border-gray-600"
               autoFocus
             />
             <Button
