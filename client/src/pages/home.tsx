@@ -340,6 +340,31 @@ export default function Home() {
         <div className="absolute top-4 right-6 flex gap-2">
           <LanguageSelector />
           <button
+            onClick={() => {
+              if (!hasAcceptedLegal) {
+                toast({
+                  title: "Terms Required",
+                  description: "Please accept the legal terms to use the AI chat feature.",
+                  variant: "destructive",
+                });
+                return;
+              }
+              if (needsVerification) {
+                toast({
+                  title: "Email Verification Required",
+                  description: "Please verify your email to access AI chat support.",
+                  variant: "destructive",
+                });
+                return;
+              }
+              setShowAIChat(true);
+            }}
+            className="p-2 rounded-full bg-purple-600 hover:bg-purple-700 text-white transition-colors shadow-lg"
+            aria-label="AI Chat"
+          >
+            <MessageCircle className="w-5 h-5" />
+          </button>
+          <button
             onClick={toggleTheme}
             className="p-2 rounded-full bg-white/20 dark:bg-black/20 hover:bg-white/30 dark:hover:bg-black/30 transition-colors"
             aria-label="Toggle theme"
@@ -503,6 +528,35 @@ export default function Home() {
           </LegalModal>
         </footer>
       </main>
+
+      {/* Floating Chat Button */}
+      <div className="fixed bottom-6 right-6 z-40">
+        <button
+          onClick={() => {
+            if (!hasAcceptedLegal) {
+              toast({
+                title: "Terms Required",
+                description: "Please accept the legal terms to use the AI chat feature.",
+                variant: "destructive",
+              });
+              return;
+            }
+            if (needsVerification) {
+              toast({
+                title: "Email Verification Required", 
+                description: "Please verify your email to access AI chat support.",
+                variant: "destructive",
+              });
+              return;
+            }
+            setShowAIChat(true);
+          }}
+          className="w-14 h-14 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center"
+          aria-label="Quick AI Chat"
+        >
+          <MessageCircle className="w-6 h-6" />
+        </button>
+      </div>
 
       {/* Breathing Modal */}
       <BreathingModal 
