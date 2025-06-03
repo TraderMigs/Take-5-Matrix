@@ -143,7 +143,7 @@ Take 5 App System
 
     const msg = {
       to: email,
-      from: 'noreply@take5app.com',
+      from: 'tradermigs@gmail.com',
       subject: subject,
       text: emailContent,
       html: emailContent.replace(/\n/g, '<br>'),
