@@ -144,6 +144,8 @@ export default function ImageCropModal({ isOpen, onClose, imageSrc, onSave }: Im
               onChange={(_, percentCrop) => setCrop(percentCrop)}
               onComplete={(c) => setCompletedCrop(c)}
               circularCrop
+              aspect={1}
+              keepSelection
             >
               <img
                 ref={imgRef}
