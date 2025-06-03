@@ -674,7 +674,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                       onClick={() => !isEditing && toggleEntryExpansion(entryId)}
                     >
                       <div className="flex justify-between items-center">
-                        <div className="flex items-center space-x-3 flex-1">
+                        <div className="flex flex-col flex-1 pr-4">
                           {isEditing ? (
                             <Input
                               value={editData?.title || entry.title}
@@ -686,13 +686,13 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                               onClick={(e) => e.stopPropagation()}
                             />
                           ) : (
-                            <h4 className="font-medium text-black dark:text-white">{entry.title}</h4>
+                            <h4 className="font-medium text-black dark:text-white mb-1">{entry.title}</h4>
                           )}
                           <span className="text-sm text-gray-500 dark:text-gray-400">
                             {new Date(entry.createdAt).toLocaleDateString()}
                           </span>
                         </div>
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-3">
                           {!isEditing && (
                             <>
                               <Button
@@ -701,9 +701,9 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                                   e.stopPropagation();
                                   startEditingEntry(entry);
                                 }}
-                                className="bg-stone-200 hover:bg-stone-300 p-1 min-w-0 h-4 w-4"
+                                className="bg-gray-600 hover:bg-gray-700 p-2 min-w-0 h-8 w-8 rounded-full"
                               >
-                                <Edit className="w-2 h-2 text-black" />
+                                <Edit className="w-4 h-4 text-white" />
                               </Button>
                               <Button
                                 size="sm"
@@ -711,9 +711,9 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                                   e.stopPropagation();
                                   exportEntry(entry);
                                 }}
-                                className="bg-stone-200 hover:bg-stone-300 p-1 min-w-0 h-4 w-4"
+                                className="bg-blue-600 hover:bg-blue-700 p-2 min-w-0 h-8 w-8 rounded-full"
                               >
-                                <Download className="w-2 h-2 text-black" />
+                                <Download className="w-4 h-4 text-white" />
                               </Button>
                               <Button
                                 size="sm"
@@ -721,9 +721,9 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                                   e.stopPropagation();
                                   deleteEntry(entryId);
                                 }}
-                                className="bg-stone-200 hover:bg-stone-300 p-1 min-w-0 h-4 w-4"
+                                className="bg-red-600 hover:bg-red-700 p-2 min-w-0 h-8 w-8 rounded-full"
                               >
-                                <Trash2 className="w-2 h-2 text-black" />
+                                <Trash2 className="w-4 h-4 text-white" />
                               </Button>
                             </>
                           )}
