@@ -1,6 +1,6 @@
-import { users, contacts, breathingSessions, sessions, diaryEntries, type User, type InsertUser, type Contact, type InsertContact, type BreathingSession, type InsertBreathingSession, type Session, type DiaryEntry, type InsertDiaryEntry } from "@shared/schema";
+import { users, contacts, breathingSessions, sessions, diaryEntries, aiTokenUsage, type User, type InsertUser, type Contact, type InsertContact, type BreathingSession, type InsertBreathingSession, type Session, type DiaryEntry, type InsertDiaryEntry, type AiTokenUsage, type InsertAiTokenUsage } from "@shared/schema";
 import { db } from "./db";
-import { eq, and } from "drizzle-orm";
+import { eq, and, sql, gte, lte } from "drizzle-orm";
 
 export interface IStorage {
   // User operations
@@ -32,6 +32,11 @@ export interface IStorage {
   getDiaryEntries(userId: number): Promise<DiaryEntry[]>;
   updateDiaryEntry(entryId: number, updates: Partial<InsertDiaryEntry>): Promise<DiaryEntry>;
   deleteDiaryEntry(entryId: number): Promise<void>;
+
+  // AI Token Usage operations
+  logTokenUsage(usage: InsertAiTokenUsage): Promise<AiTokenUsage>;
+  getDailyTokenUsage(date: Date): Promise<Array<AiTokenUsage & { user: User }>>;
+  getTotalTokensForPeriod(startDate: Date, endDate: Date): Promise<number>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -204,6 +209,62 @@ export class DatabaseStorage implements IStorage {
 
   async deleteDiaryEntry(entryId: number): Promise<void> {
     await db.delete(diaryEntries).where(eq(diaryEntries.id, entryId));
+  }
+
+  async logTokenUsage(usage: InsertAiTokenUsage): Promise<AiTokenUsage> {
+    const [newUsage] = await db
+      .insert(aiTokenUsage)
+      .values(usage)
+      .returning();
+    return newUsage;
+  }
+
+  async getDailyTokenUsage(date: Date): Promise<Array<AiTokenUsage & { user: User }>> {
+    const startOfDay = new Date(date);
+    startOfDay.setHours(0, 0, 0, 0);
+    
+    const endOfDay = new Date(date);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const results = await db.select({
+      id: aiTokenUsage.id,
+      userId: aiTokenUsage.userId,
+      sessionId: aiTokenUsage.sessionId,
+      tokensUsed: aiTokenUsage.tokensUsed,
+      messageCount: aiTokenUsage.messageCount,
+      model: aiTokenUsage.model,
+      createdAt: aiTokenUsage.createdAt,
+      user: {
+        id: users.id,
+        email: users.email,
+        username: users.username,
+        displayName: users.displayName,
+      }
+    })
+    .from(aiTokenUsage)
+    .leftJoin(users, eq(aiTokenUsage.userId, users.id))
+    .where(and(
+      gte(aiTokenUsage.createdAt, startOfDay),
+      lte(aiTokenUsage.createdAt, endOfDay)
+    ));
+
+    return results.map(result => ({
+      ...result,
+      user: result.user || { id: 0, email: 'anonymous', username: 'anonymous', displayName: 'Anonymous User' }
+    })) as Array<AiTokenUsage & { user: User }>;
+  }
+
+  async getTotalTokensForPeriod(startDate: Date, endDate: Date): Promise<number> {
+    const result = await db.select({
+      total: aiTokenUsage.tokensUsed
+    })
+    .from(aiTokenUsage)
+    .where(and(
+      gte(aiTokenUsage.createdAt, startDate),
+      lte(aiTokenUsage.createdAt, endDate)
+    ));
+
+    return result.reduce((sum, row) => sum + (row.total || 0), 0);
   }
 }
 

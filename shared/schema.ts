@@ -138,6 +138,14 @@ export const insertDiaryEntrySchema = createInsertSchema(diaryEntries).pick({
   images: true,
 });
 
+export const insertAiTokenUsageSchema = createInsertSchema(aiTokenUsage).pick({
+  userId: true,
+  sessionId: true,
+  tokensUsed: true,
+  messageCount: true,
+  model: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type Contact = typeof contacts.$inferSelect;
@@ -147,3 +155,5 @@ export type InsertBreathingSession = z.infer<typeof insertBreathingSessionSchema
 export type DiaryEntry = typeof diaryEntries.$inferSelect;
 export type InsertDiaryEntry = z.infer<typeof insertDiaryEntrySchema>;
 export type Session = typeof sessions.$inferSelect;
+export type AiTokenUsage = typeof aiTokenUsage.$inferSelect;
+export type InsertAiTokenUsage = z.infer<typeof insertAiTokenUsageSchema>;
