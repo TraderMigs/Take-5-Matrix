@@ -371,7 +371,7 @@ export default function Home() {
           </button>
         </div>
         
-        <div className="mt-3">
+        <div className="mt-6 mb-4">
           <h1 className="text-4xl font-black mb-2 text-gray-700 dark:text-white" style={{ textShadow: '1px 1px 0px rgba(255,255,255,0.3)' }}>{t('appName')}</h1>
           <p className="text-lg font-bold opacity-90 text-gray-600 dark:text-white" style={{ textShadow: '1px 1px 0px rgba(255,255,255,0.3)' }}>{t('tagline')}</p>
         </div>
