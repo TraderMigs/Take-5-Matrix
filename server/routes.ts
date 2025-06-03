@@ -5,6 +5,8 @@ import OpenAI from 'openai';
 import { setupGoogleAuth } from './google-auth';
 import { generateVerificationToken, sendVerificationEmail, sendWelcomeEmail } from './email-service';
 import bcrypt from 'bcryptjs';
+import fs from 'fs';
+import path from 'path';
 
 // Extend Express session with user data
 declare module "express-session" {
@@ -420,6 +422,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
         message: "Error generating or sending report",
         timestamp: new Date().toISOString()
       });
+    }
+  });
+
+  // Download route for backup signup reports
+  app.get('/api/download-signup-report/:filename', (req, res) => {
+    try {
+      const filename = decodeURIComponent(req.params.filename);
+      const filePath = path.join(process.cwd(), 'server', 'backup-reports', filename);
+      
+      // Security check - ensure filename doesn't contain path traversal
+      if (filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
+        return res.status(400).json({ error: 'Invalid filename' });
+      }
+      
+      // Check if file exists
+      if (!fs.existsSync(filePath)) {
+        return res.status(404).json({ error: 'Report file not found' });
+      }
+      
+      // Set appropriate headers for Excel download
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+      
+      // Send the file
+      res.sendFile(filePath);
+      
+      console.log(`📥 Report downloaded: ${filename}`);
+    } catch (error) {
+      console.error('Download error:', error);
+      res.status(500).json({ error: 'Failed to download report' });
     }
   });
 
