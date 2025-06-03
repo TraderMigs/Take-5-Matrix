@@ -609,6 +609,16 @@ export default function Home() {
         isOpen={showUserProfile}
         onClose={closeProfileView}
         currentUser={currentUser}
+        onLogout={() => {
+          setCurrentUser(null);
+          localStorage.removeItem('take5_current_user');
+          closeProfileView();
+          toast({
+            title: "Logged out",
+            description: "You have been successfully logged out.",
+            className: "bg-green-800 border-green-700 text-white",
+          });
+        }}
       />
 
       {/* Legal Acceptance Modal - Required on First Visit */}

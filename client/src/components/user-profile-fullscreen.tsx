@@ -610,7 +610,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
 
           <TabsContent value="diary" className="space-y-6 mt-6">
             <div className="flex justify-between items-center">
-              <h3 className="text-xl font-semibold text-black dark:text-white">{t('yourPrivateDiary')}</h3>
+              <h3 className="text-xl font-semibold text-white drop-shadow-lg">{t('yourPrivateDiary')}</h3>
               <div className="flex gap-2">
                 <Button 
                   onClick={() => setShowExportModal(true)}
@@ -810,6 +810,14 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
         onClose={() => setShowImageCropModal(false)}
         imageSrc={tempImageSrc}
         onSave={handleSaveCroppedPhoto}
+      />
+
+      {/* Background Image Crop Modal */}
+      <ImageCropModal
+        isOpen={showBackgroundCropModal}
+        onClose={() => setShowBackgroundCropModal(false)}
+        imageSrc={tempBackgroundSrc}
+        onSave={handleSaveCroppedBackground}
       />
     </div>
   );
