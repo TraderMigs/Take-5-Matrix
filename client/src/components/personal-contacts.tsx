@@ -162,8 +162,8 @@ export default function PersonalContacts({ currentUser }: PersonalContactsProps)
                     <User className="text-white dark:text-black" size={20} />
                   </div>
                   <div>
-                    <p className="font-medium text-gray-800 dark:text-white">{contact.name}</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">{contact.relationship}</p>
+                    <p className="font-medium text-black dark:text-black">{contact.name}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-700">{contact.relationship}</p>
                   </div>
                 </div>
               </DialogTrigger>
