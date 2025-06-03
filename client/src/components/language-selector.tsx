@@ -82,7 +82,7 @@ export default function LanguageSelector() {
         <Button
           variant="ghost"
           size="sm"
-          className="h-8 w-8 p-0 text-white hover:bg-white/20"
+          className="h-8 w-8 p-0 bg-white/80 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-700 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600 shadow-sm"
         >
           <Globe className="h-4 w-4" />
           <span className="sr-only">Switch language</span>

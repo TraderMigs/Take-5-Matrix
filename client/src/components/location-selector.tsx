@@ -273,7 +273,7 @@ export default function LocationSelector() {
         <Button
           variant="ghost"
           size="sm"
-          className="bg-white/20 dark:bg-black/20 hover:bg-white/30 dark:hover:bg-black/30 text-white dark:text-white border-none"
+          className="bg-white/80 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-700 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600 shadow-sm"
         >
           <MapPin className="w-4 h-4 mr-1" />
           <span className="text-sm">{currentLocation.flag}</span>
