@@ -30,7 +30,7 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
   const [showNameInput, setShowNameInput] = useState(true);
   const [highlightedTool, setHighlightedTool] = useState<string | null>(null);
   const [isAiMuted, setIsAiMuted] = useState(true);
-  const [waitingForFeedback, setWaitingForFeedback] = useState(false);
+
   const [lastAiMessageId, setLastAiMessageId] = useState<string | null>(null);
 
   const { t, language } = useLanguage();
@@ -135,24 +135,7 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
     setInputText("");
     setIsLoading(true);
 
-    // Check if waiting for feedback and user provided a valid number
-    if (waitingForFeedback && /^[1-3]$/.test(messageText)) {
-      setWaitingForFeedback(false);
-      
-      // Send thank you message
-      setTimeout(() => {
-        const thankYouMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          text: "Thank you for your feedback! It helps me provide better support.",
-          sender: "ai",
-          timestamp: new Date(),
-        };
-        setMessages(prev => [...prev, thankYouMessage]);
-        setIsLoading(false);
-      }, 1000);
 
-      return;
-    }
 
     setIsTyping(true);
 
@@ -186,17 +169,7 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
           setMessages(prev => [...prev, aiMessage]);
           setLastAiMessageId(aiMessageId);
           
-          // Send feedback request as a text message after a delay
-          setTimeout(() => {
-            const feedbackMessage: Message = {
-              id: (Date.now() + 2).toString(),
-              text: "Was this helpful? Please respond with a number: 1 (not helpful), 2 (decent help), or 3 (great help)",
-              sender: "ai",
-              timestamp: new Date(),
-            };
-            setMessages(prev => [...prev, feedbackMessage]);
-            setWaitingForFeedback(true);
-          }, 2000);
+
           
           // Remove any injected feedback elements that might appear
           setTimeout(() => {
