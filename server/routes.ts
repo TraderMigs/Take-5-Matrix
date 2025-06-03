@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import Anthropic from '@anthropic-ai/sdk';
+import OpenAI from 'openai';
 import { setupGoogleAuth } from './google-auth';
 import { generateVerificationToken, sendVerificationEmail, sendWelcomeEmail } from './email-service';
 import bcrypt from 'bcryptjs';
@@ -203,6 +203,65 @@ function generateFallbackResponse(message: string, conversationHistory: any[] = 
   return { response: advancedSupportResponses[Math.floor(Math.random() * advancedSupportResponses.length)] };
 }
 
+// Initialize OpenAI client
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+// the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+async function getOpenAIResponse(message: string, conversationHistory: any[] = []): Promise<string> {
+  try {
+    // Create context from conversation history
+    const messages = [
+      {
+        role: "system" as const,
+        content: `You are a compassionate AI assistant for a mental wellness app called "Take 5". Your role is to provide empathetic, supportive responses to users who may be experiencing emotional distress, anxiety, depression, or crisis situations.
+
+Key guidelines:
+- Always prioritize user safety and well-being
+- Be empathetic, warm, and non-judgmental
+- Provide practical coping strategies when appropriate
+- Recognize crisis situations and encourage professional help
+- Keep responses conversational but supportive
+- Avoid giving medical advice or diagnoses
+- Encourage users to reach out to trusted contacts or emergency services when needed
+- Be authentic and genuine in your responses
+
+If you detect crisis keywords like "suicide," "self-harm," "want to die," etc., respond with immediate care and suggest emergency resources.`
+      }
+    ];
+
+    // Add conversation history
+    if (conversationHistory && conversationHistory.length > 0) {
+      conversationHistory.slice(-6).forEach(msg => {
+        messages.push({
+          role: msg.sender === 'user' ? 'user' as const : 'assistant' as const,
+          content: msg.text
+        });
+      });
+    }
+
+    // Add current message
+    messages.push({
+      role: "user" as const,
+      content: message
+    });
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: messages,
+      max_tokens: 300,
+      temperature: 0.7,
+    });
+
+    return response.choices[0]?.message?.content || "I'm here to listen and support you. Can you tell me more about what's on your mind?";
+  } catch (error) {
+    console.error('OpenAI API error:', error);
+    // Fallback to existing response system
+    return generateFallbackResponse(message, conversationHistory).response;
+  }
+}
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup Google OAuth routes
   setupGoogleAuth(app);
@@ -248,74 +307,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
-  // AI Chat endpoint
+  // AI Chat endpoint with OpenAI ChatGPT 4o Mini
   app.post("/api/ai-chat", async (req, res) => {
     try {
       const { message, conversationHistory } = req.body;
 
-      if (!process.env.ANTHROPIC_API_KEY) {
-        // Fallback system for testing without API key
-        const response = generateFallbackResponse(message, conversationHistory);
-        return res.json({ response });
-      }
-
-      const anthropic = new Anthropic({
-        apiKey: process.env.ANTHROPIC_API_KEY,
-      });
-
-      // Build conversation context
-      let conversationContext = "";
-      if (conversationHistory && conversationHistory.length > 0) {
-        conversationContext = conversationHistory
-          .map((msg: any) => `${msg.sender === 'user' ? 'Human' : 'Assistant'}: ${msg.text}`)
-          .join('\n');
-      }
-
-      const systemPrompt = `You are a compassionate AI mental health support assistant for the "Take 5" crisis support app. 
-
-CRITICAL: Always respond directly to the user's current message. Pay close attention to what they're actually saying right now, not just previous topics.
-
-Your role:
-1. Listen carefully to each specific concern or feeling they express
-2. Acknowledge and validate their current situation or emotion
-3. Provide relevant, practical support for what they're experiencing now
-4. Maintain conversation flow while being responsive to topic changes
-5. Offer appropriate coping strategies that match their current need
-6. Keep responses warm, personal, and contextually relevant (2-4 sentences)
-
-Context-Specific Guidelines:
-- If they mention physical needs (hunger, tiredness), acknowledge this practically while offering gentle wellness support
-- If they mention emotional needs (loneliness, anxiety), provide emotional validation and coping strategies
-- If they change topics, acknowledge the shift and respond to the new concern
-- Always relate your response to their specific words and situation
-- Avoid generic responses that don't match what they just said
-
-Previous conversation:
-${conversationContext}
-
-Now respond specifically to their latest message, acknowledging what they're actually experiencing right now.`;
-
-      // the newest Anthropic model is "claude-3-7-sonnet-20250219" which was released February 24, 2025
-      const response = await anthropic.messages.create({
-        model: "claude-3-7-sonnet-20250219",
-        max_tokens: 300,
-        system: systemPrompt,
-        messages: [
-          {
-            role: "user",
-            content: message
-          }
-        ],
-      });
-
-      const aiResponse = response.content[0].type === 'text' ? response.content[0].text : "I'm here to listen. Can you tell me more about what's happening?";
-
+      // Use OpenAI ChatGPT 4o Mini for enhanced AI responses
+      const aiResponse = await getOpenAIResponse(message, conversationHistory);
       res.json({ response: aiResponse });
     } catch (error) {
       console.error("AI Chat error:", error);
-      res.status(500).json({ 
-        error: "I'm having trouble responding right now. Please try again, or reach out to one of the crisis resources available in the app." 
-      });
+      
+      // Fallback to local response system if OpenAI fails
+      const fallbackResponse = generateFallbackResponse(message, conversationHistory);
+      res.json({ response: fallbackResponse.response });
     }
   });
 
