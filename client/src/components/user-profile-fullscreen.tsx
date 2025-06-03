@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Slider } from "@/components/ui/slider";
 import { Camera, BookOpen, PlusCircle, X, ChevronDown, ChevronUp, Save, Edit, Download, Trash2, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/hooks/use-language";
@@ -487,6 +488,13 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
     }
   };
 
+  const handleOpacityChange = (value: number[]) => {
+    const newOpacity = value[0];
+    setBackgroundOpacity(newOpacity);
+    // Save opacity to localStorage immediately
+    localStorage.setItem(`take5_background_opacity_${currentUser.id}`, newOpacity.toString());
+  };
+
   const startEditingDisplayName = () => {
     setTempDisplayName(currentUser?.displayName || "");
     setEditingDisplayName(true);
@@ -860,7 +868,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
               </div>
               
               <div className="text-center w-full max-w-md">
-                <div className="bg-black/20 backdrop-blur-sm rounded-lg px-4 py-2 mb-2">
+                <div className="bg-black/20 rounded-lg px-4 py-2 mb-2">
                   <h2 className="text-2xl font-bold text-white drop-shadow-lg">
                     {currentUser.displayName || username}
                   </h2>
@@ -895,7 +903,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                       </Button>
                     </div>
                   ) : (
-                    <div className="bg-black/20 backdrop-blur-sm rounded-lg px-3 py-1 flex items-center gap-2">
+                    <div className="bg-black/20 rounded-lg px-3 py-1 flex items-center gap-2">
                       <p className="text-lg text-white drop-shadow-lg">@{currentUser?.username || 'username'}</p>
                       <div className="relative">
                         <Button
@@ -1332,8 +1340,30 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                     </Button>
                   </div>
 
+                  {/* Opacity Control */}
+                  <div className="bg-white/10 rounded-lg p-4 space-y-3">
+                    <h4 className="font-semibold text-white text-center">Background Opacity</h4>
+                    <div className="flex items-center space-x-4">
+                      <span className="text-white text-sm min-w-[80px]">Transparent</span>
+                      <div className="flex-1">
+                        <Slider
+                          value={[backgroundOpacity]}
+                          onValueChange={handleOpacityChange}
+                          max={1}
+                          min={0}
+                          step={0.1}
+                          className="w-full"
+                        />
+                      </div>
+                      <span className="text-white text-sm min-w-[60px]">Opaque</span>
+                    </div>
+                    <div className="text-center text-white/80 text-sm">
+                      {Math.round(backgroundOpacity * 100)}%
+                    </div>
+                  </div>
+
                   {/* Usage Instructions */}
-                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-white/90 text-sm">
+                  <div className="bg-white/10 rounded-lg p-4 text-white/90 text-sm">
                     <h4 className="font-semibold mb-2 flex items-center gap-2">
                       <Camera className="w-4 h-4" />
                       Background Image Tips
