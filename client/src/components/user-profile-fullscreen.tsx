@@ -1198,13 +1198,13 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                               </div>
                               
                               {(editData?.images || entry.images || []).length > 0 && (
-                                <div className="grid grid-cols-2 gap-2">
+                                <div className="flex flex-col items-center space-y-2">
                                   {(editData?.images || entry.images || []).map((image: string, index: number) => (
                                     <div key={index} className="relative group">
                                       <img
                                         src={image}
                                         alt={`Entry image ${index + 1}`}
-                                        className="w-full h-24 object-cover rounded-lg border border-gray-200 dark:border-gray-600"
+                                        className="max-w-full h-32 object-contain rounded-lg border border-gray-200 dark:border-gray-600"
                                       />
                                       <Button
                                         onClick={() => removeEditEntryImage(entryId, index)}
