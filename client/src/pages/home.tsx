@@ -79,8 +79,27 @@ export default function Home() {
       .then(response => response.json())
       .then(data => {
         if (data.authenticated && data.userData) {
-          setCurrentUser(data.userData);
-          localStorage.setItem('take5_current_user', JSON.stringify(data.userData));
+          // Fetch the latest profile data from database to ensure all fields are current
+          fetch(`/api/auth/profile?userId=${data.userData.id}`)
+            .then(profileResponse => profileResponse.json())
+            .then(profileData => {
+              // Merge session data with latest profile data
+              const updatedUser = {
+                ...data.userData,
+                ...profileData,
+                // Preserve essential session fields
+                id: data.userData.id,
+                email: data.userData.email
+              };
+              setCurrentUser(updatedUser);
+              localStorage.setItem('take5_current_user', JSON.stringify(updatedUser));
+            })
+            .catch(profileError => {
+              console.error('Error fetching profile data:', profileError);
+              // Fall back to session data if profile fetch fails
+              setCurrentUser(data.userData);
+              localStorage.setItem('take5_current_user', JSON.stringify(data.userData));
+            });
         }
       })
       .catch(error => {

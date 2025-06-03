@@ -43,6 +43,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
   const [tempBackgroundSrc, setTempBackgroundSrc] = useState("");
   const [showBackgroundDropdown, setShowBackgroundDropdown] = useState(false);
   const [showProfileImageDropdown, setShowProfileImageDropdown] = useState(false);
+  const [showExportDropdown, setShowExportDropdown] = useState<{[key: number]: boolean}>({});
   const { toast } = useToast();
   const { t } = useLanguage();
 
@@ -712,23 +713,13 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
           <TabsContent value="diary" className="space-y-6 mt-6">
             <div className="flex justify-between items-center">
               <h3 className="text-xl font-semibold text-white drop-shadow-lg">{t('yourPrivateDiary')}</h3>
-              <div className="flex gap-2">
-                <Button 
-                  onClick={() => setShowExportModal(true)}
-                  className="bg-blue-500 hover:bg-blue-600 text-white"
-                  disabled={diaryEntries.length === 0}
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  Export
-                </Button>
-                <Button 
-                  onClick={() => setShowNewEntry(true)}
-                  className="bg-teal-500 hover:bg-teal-600 text-white"
-                >
-                  <PlusCircle className="w-4 h-4 mr-2" />
-                  {t('newEntry')}
-                </Button>
-              </div>
+              <Button 
+                onClick={() => setShowNewEntry(true)}
+                className="bg-teal-500 hover:bg-teal-600 text-white"
+              >
+                <PlusCircle className="w-4 h-4 mr-2" />
+                {t('newEntry')}
+              </Button>
             </div>
 
             {showNewEntry && (
