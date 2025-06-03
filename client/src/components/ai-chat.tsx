@@ -35,6 +35,9 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
   const [userName, setUserName] = useState("");
   const [showNameInput, setShowNameInput] = useState(true);
   const [highlightedTool, setHighlightedTool] = useState<string | null>(null);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [feedbackGiven, setFeedbackGiven] = useState(false);
+  const [selectedFeedback, setSelectedFeedback] = useState<string | null>(null);
   const { t, language } = useLanguage();
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -232,6 +235,13 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
         };
         setMessages(prev => {
           const newMessages = [...prev, aiMessage];
+          
+          // Show feedback after third AI message
+          const aiMessageCount = newMessages.filter(msg => msg.sender === 'ai').length;
+          if (aiMessageCount === 3 && !feedbackGiven) {
+            setShowFeedback(true);
+          }
+          
           // Save conversation history after each AI response
           setTimeout(() => {
             // Extract last 3 pairs of user-AI interactions for saving
@@ -340,6 +350,40 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
     }
   };
 
+  const handleFeedback = async (emoji: string) => {
+    setSelectedFeedback(emoji);
+    setShowFeedback(false);
+    setFeedbackGiven(true);
+
+    // Send feedback to server
+    try {
+      await fetch('/api/ai-feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          feedback: emoji,
+          userName: userName,
+          sessionId: Date.now().toString(),
+        }),
+      });
+    } catch (error) {
+      console.log('Feedback logging failed, but continuing');
+    }
+
+    // Show thank you message
+    setTimeout(() => {
+      const thankYouMessage: Message = {
+        id: Date.now().toString(),
+        text: "Thank you for your feedback! It helps me support you better. 💚",
+        sender: "ai",
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, thankYouMessage]);
+    }, 500);
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-md w-full mx-4 h-[500px] flex flex-col bg-white dark:bg-black border-black dark:border-white" aria-describedby="ai-chat-description">
@@ -433,6 +477,34 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
           </div>
           <div ref={messagesEndRef} />
         </ScrollArea>
+
+        {/* Emoji Feedback Bar */}
+        {showFeedback && (
+          <div className="p-4 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/30 dark:to-blue-900/30 border-t border-gray-200 dark:border-gray-700">
+            <div className="text-center mb-3">
+              <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Was this helpful?</p>
+            </div>
+            <div className="flex justify-center gap-3">
+              {[
+                { emoji: '😊', label: 'Very helpful' },
+                { emoji: '🙂', label: 'Somewhat helpful' },
+                { emoji: '😐', label: 'Neutral' },
+                { emoji: '🙁', label: 'Not very helpful' },
+                { emoji: '😞', label: 'Not helpful at all' }
+              ].map(({ emoji, label }) => (
+                <button
+                  key={emoji}
+                  onClick={() => handleFeedback(emoji)}
+                  className="flex flex-col items-center p-2 rounded-lg hover:bg-white/50 dark:hover:bg-gray-700/50 transition-colors group"
+                  title={label}
+                >
+                  <span className="text-2xl mb-1 group-hover:scale-110 transition-transform">{emoji}</span>
+                  <span className="text-xs text-gray-600 dark:text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">{label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="p-4 border-t border-gray-200 dark:border-gray-700">
           <div className="flex gap-2">

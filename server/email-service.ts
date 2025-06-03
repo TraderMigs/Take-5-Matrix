@@ -153,3 +153,30 @@ export async function sendWelcomeEmail(
     return false;
   }
 }
+
+export async function sendTokenUsageEmail(
+  email: string,
+  subject: string,
+  htmlContent: string
+): Promise<boolean> {
+  if (!process.env.SENDGRID_API_KEY) {
+    console.warn('SENDGRID_API_KEY not found, skipping token usage email');
+    return false;
+  }
+
+  const msg = {
+    to: email,
+    from: 'reports@take5.app',
+    subject,
+    html: htmlContent,
+  };
+
+  try {
+    await sgMail.send(msg);
+    console.log(`Token usage report sent to ${email}`);
+    return true;
+  } catch (error) {
+    console.error('Error sending token usage report:', error);
+    return false;
+  }
+}
