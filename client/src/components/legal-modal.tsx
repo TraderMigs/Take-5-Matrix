@@ -5,6 +5,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Shield, FileText, AlertTriangle, Scale } from "lucide-react";
+import { useLanguage } from "@/hooks/use-language";
 
 interface LegalModalProps {
   children: React.ReactNode;
@@ -12,6 +13,7 @@ interface LegalModalProps {
 
 export default function LegalModal({ children }: LegalModalProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -22,23 +24,32 @@ export default function LegalModal({ children }: LegalModalProps) {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl font-bold text-black dark:text-white">
             <Scale className="w-6 h-6" />
-            Legal Policies & Disclaimers
+            {t('legalPoliciesDisclamers')}
           </DialogTitle>
         </DialogHeader>
         
         <Tabs defaultValue="privacy" className="flex-1">
-          <TabsList className="grid w-full grid-cols-3 mb-4">
-            <TabsTrigger value="privacy" className="flex items-center gap-2">
+          <TabsList className="grid w-full grid-cols-3 mb-6 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
+            <TabsTrigger 
+              value="privacy" 
+              className="flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-transparent data-[state=active]:bg-black data-[state=active]:text-white text-black dark:text-white dark:data-[state=active]:bg-white dark:data-[state=active]:text-black transition-all"
+            >
               <Shield className="w-4 h-4" />
-              Privacy Policy
+              <span className="text-sm font-medium">{t('privacyPolicy')}</span>
             </TabsTrigger>
-            <TabsTrigger value="terms" className="flex items-center gap-2">
+            <TabsTrigger 
+              value="terms" 
+              className="flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-transparent data-[state=active]:bg-black data-[state=active]:text-white text-black dark:text-white dark:data-[state=active]:bg-white dark:data-[state=active]:text-black transition-all"
+            >
               <FileText className="w-4 h-4" />
-              Terms & Conditions
+              <span className="text-sm font-medium">{t('termsConditions')}</span>
             </TabsTrigger>
-            <TabsTrigger value="disclaimer" className="flex items-center gap-2">
+            <TabsTrigger 
+              value="disclaimer" 
+              className="flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-transparent data-[state=active]:bg-black data-[state=active]:text-white text-black dark:text-white dark:data-[state=active]:bg-white dark:data-[state=active]:text-black transition-all"
+            >
               <AlertTriangle className="w-4 h-4" />
-              Disclaimer
+              <span className="text-sm font-medium">{t('disclaimer')}</span>
             </TabsTrigger>
           </TabsList>
 

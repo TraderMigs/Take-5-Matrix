@@ -88,6 +88,16 @@ export interface Translation {
   entrySaved: string;
   entryUpdated: string;
   entryDeleted: string;
+  
+  // AI Chat
+  aiWelcomeMessage: string;
+  
+  // Legal
+  legalPoliciesDisclamers: string;
+  privacyPolicy: string;
+  termsConditions: string;
+  disclaimer: string;
+  effectiveDate: string;
 }
 
 export const translations: Record<string, Translation> = {
@@ -163,7 +173,17 @@ export const translations: Record<string, Translation> = {
     writeThoughtsPlaceholder: "Write your thoughts...",
     entrySaved: "Your diary entry has been saved permanently.",
     entryUpdated: "Your diary entry has been saved successfully.",
-    entryDeleted: "Your diary entry has been permanently removed."
+    entryDeleted: "Your diary entry has been permanently removed.",
+    
+    // AI Chat
+    aiWelcomeMessage: "Hello, I'm here to listen and support you. You're not alone. What's on your mind today?",
+    
+    // Legal
+    legalPoliciesDisclamers: "Legal Policies & Disclaimers",
+    privacyPolicy: "Privacy Policy",
+    termsConditions: "Terms & Conditions",
+    disclaimer: "Disclaimer",
+    effectiveDate: "Effective Date"
   },
   th: {
     appName: "Take 5",
@@ -225,7 +245,29 @@ export const translations: Record<string, Translation> = {
     yourPrivateDiary: "ไดอารี่ส่วนตัวของคุณ",
     newEntry: "เรื่องใหม่",
     addQuotePlaceholder: "เพิ่มคำพูด (สูงสุด 40 ตัวอักษร)",
-    logout: "ออกจากระบบ"
+    logout: "ออกจากระบบ",
+    
+    // Diary
+    entryTitle: "หัวข้อบันทึก...",
+    writeThoughts: "เขียนความคิดของคุณ...",
+    saveEntry: "บันทึกเรื่องราว",
+    startWriting: "เริ่มเขียนเพื่อติดตามความคิดและความรู้สึกของคุณ",
+    entriesSaved: "บันทึกของคุณถูกเก็บไว้อย่างถาวรและมองเห็นได้เฉพาะคุณเท่านั้น",
+    entryTitlePlaceholder: "หัวข้อบันทึก...",
+    writeThoughtsPlaceholder: "เขียนความคิดของคุณ...",
+    entrySaved: "บันทึกไดอารี่ของคุณถูกบันทึกอย่างถาวรแล้ว",
+    entryUpdated: "บันทึกไดอารี่ของคุณถูกบันทึกเรียบร้อยแล้ว",
+    entryDeleted: "บันทึกไดอารี่ของคุณถูกลบอย่างถาวรแล้ว",
+    
+    // AI Chat
+    aiWelcomeMessage: "สวัสดี ฉันอยู่ที่นี่เพื่อฟังและสนับสนุนคุณ คุณไม่ได้อยู่คนเดียว วันนี้คุณคิดอะไรอยู่?",
+    
+    // Legal
+    legalPoliciesDisclamers: "นโยบายกฎหมายและข้อจำกัดความรับผิดชอบ",
+    privacyPolicy: "นโยบายความเป็นส่วนตัว",
+    termsConditions: "ข้อกำหนดและเงื่อนไข",
+    disclaimer: "ข้อจำกัดความรับผิดชอบ",
+    effectiveDate: "วันที่มีผลบังคับใช้"
   },
   es: {
     appName: "Take 5",
@@ -295,7 +337,17 @@ export const translations: Record<string, Translation> = {
     writeThoughtsPlaceholder: "Escribe tus pensamientos...",
     entrySaved: "Tu entrada de diario ha sido guardada permanentemente.",
     entryUpdated: "Tu entrada de diario ha sido guardada exitosamente.",
-    entryDeleted: "Tu entrada de diario ha sido eliminada permanentemente."
+    entryDeleted: "Tu entrada de diario ha sido eliminada permanentemente.",
+    
+    // AI Chat
+    aiWelcomeMessage: "Hola, estoy aquí para escucharte y apoyarte. No estás solo. ¿Qué tienes en mente hoy?",
+    
+    // Legal
+    legalPoliciesDisclamers: "Políticas Legales y Exenciones de Responsabilidad",
+    privacyPolicy: "Política de Privacidad",
+    termsConditions: "Términos y Condiciones",
+    disclaimer: "Exención de Responsabilidad",
+    effectiveDate: "Fecha de Vigencia"
   },
   fr: {
     appName: "Take 5",
