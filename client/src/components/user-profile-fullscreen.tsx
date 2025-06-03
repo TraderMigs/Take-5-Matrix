@@ -473,9 +473,10 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
               <Button
                 onClick={() => setShowBackgroundDropdown(!showBackgroundDropdown)}
                 size="sm"
-                className="bg-white/20 hover:bg-white/30 text-white border border-white/30"
+                variant="ghost"
+                className="bg-transparent hover:bg-white/10 text-white/70 hover:text-white border-none p-1"
               >
-                <ChevronDown className="w-4 h-4" />
+                <ChevronDown className="w-3 h-3" />
               </Button>
               {showBackgroundDropdown && (
                 <div className="absolute top-full left-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg z-10 min-w-[150px]">
@@ -500,9 +501,9 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
             </div>
           </div>
           <Button 
-            variant="outline" 
+            variant="ghost"
             onClick={onClose}
-            className="bg-white dark:bg-black border-2 border-black dark:border-white text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="bg-white/10 hover:bg-white/20 text-white/80 hover:text-white border-none backdrop-blur-sm"
           >
             <X className="w-4 h-4 mr-2" />
             {t('close')}
