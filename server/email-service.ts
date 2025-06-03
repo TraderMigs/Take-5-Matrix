@@ -103,6 +103,72 @@ export async function sendVerificationEmail(
   }
 }
 
+export async function sendSignupReportEmail(
+  email: string,
+  subject: string,
+  excelBuffer: Buffer
+): Promise<boolean> {
+  try {
+    if (!process.env.SENDGRID_API_KEY) {
+      console.error('SENDGRID_API_KEY not found - email service not configured');
+      return false;
+    }
+
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+    const currentDate = new Date().toLocaleDateString();
+    const emailContent = `
+Take 5 App - Weekly Signup Report
+
+Report Generated: ${currentDate}
+
+This Excel spreadsheet contains:
+- All Users: Complete list of all registered users
+- New This Week: Users who signed up in the past 7 days  
+- Summary: Key metrics and statistics
+
+The spreadsheet includes:
+- User ID
+- Email address
+- First and last name
+- Username
+- Country of origin
+- Signup date and time
+
+This report is automatically generated every Monday at 9:00 AM.
+
+Best regards,
+Take 5 App System
+    `;
+
+    const msg = {
+      to: email,
+      from: 'noreply@take5app.com',
+      subject: subject,
+      text: emailContent,
+      html: emailContent.replace(/\n/g, '<br>'),
+      attachments: [
+        {
+          content: excelBuffer.toString('base64'),
+          filename: `Take5_Weekly_Signup_Report_${currentDate.replace(/\//g, '-')}.xlsx`,
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          disposition: 'attachment'
+        }
+      ]
+    };
+
+    await sgMail.send(msg);
+    console.log('Weekly signup report email sent successfully');
+    return true;
+  } catch (error) {
+    console.error('SendGrid signup report email error:', error);
+    if (error.response) {
+      console.error('SendGrid response body:', error.response.body);
+    }
+    return false;
+  }
+}
+
 export async function sendWelcomeEmail(
   to: string,
   username: string

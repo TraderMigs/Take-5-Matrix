@@ -394,7 +394,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Authentication routes
   app.post('/api/auth/signup', async (req, res) => {
     try {
-      const { email, username, password, dateOfBirth, displayName } = req.body;
+      const { email, username, password, dateOfBirth, displayName, firstName, lastName, country } = req.body;
       
       if (!email || !username || !password || !dateOfBirth) {
         return res.status(400).send('Email, username, password, and date of birth are required');
@@ -418,7 +418,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         username,
         password: hashedPassword,
         dateOfBirth,
+        firstName: firstName || null,
+        lastName: lastName || null,
         displayName: displayName || username,
+        country: country || null,
         emailVerified: true, // Temporarily auto-verify for immediate access
       });
 
