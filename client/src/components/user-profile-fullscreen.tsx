@@ -35,7 +35,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
   const [showNewEntry, setShowNewEntry] = useState(false);
   const [expandedEntries, setExpandedEntries] = useState<Set<number>>(new Set());
   const [editingEntries, setEditingEntries] = useState<Set<number>>(new Set());
-  const [editedContent, setEditedContent] = useState<{[key: number]: {title: string, content: string}}>({});
+  const [editedContent, setEditedContent] = useState<{[key: number]: {title: string, content: string, images?: string[]}}>({});
   const [showExportModal, setShowExportModal] = useState(false);
   const [showImageCropModal, setShowImageCropModal] = useState(false);
   const [tempImageSrc, setTempImageSrc] = useState("");
@@ -52,6 +52,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
   const [newEntryImages, setNewEntryImages] = useState<string[]>([]);
   const [showImageUploadModal, setShowImageUploadModal] = useState(false);
   const [tempEntryImageSrc, setTempEntryImageSrc] = useState("");
+  const [editingEntryId, setEditingEntryId] = useState<number | null>(null);
   const [showEntryDownloadModal, setShowEntryDownloadModal] = useState(false);
   const [selectedEntryForDownload, setSelectedEntryForDownload] = useState<any>(null);
   const { toast } = useToast();
@@ -574,6 +575,64 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
     setNewEntryImages(prev => prev.filter((_, i) => i !== index));
   };
 
+  const handleEditEntryImageUpload = (entryId: number) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const imageSrc = e.target?.result as string;
+          setTempEntryImageSrc(imageSrc);
+          setEditingEntryId(entryId);
+          setShowImageUploadModal(true);
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
+  };
+
+  const handleSaveCroppedEditEntryImage = (croppedImageSrc: string) => {
+    if (editingEntryId !== null) {
+      const currentImages = editedContent[editingEntryId]?.images || 
+                           diaryEntries.find(e => e.id === editingEntryId)?.images || [];
+      
+      setEditedContent(prev => ({
+        ...prev,
+        [editingEntryId]: {
+          ...prev[editingEntryId],
+          images: [...currentImages, croppedImageSrc]
+        }
+      }));
+      
+      setEditingEntryId(null);
+      setShowImageUploadModal(false);
+      setTempEntryImageSrc("");
+      
+      toast({
+        title: "Image added",
+        description: "Image has been added to your diary entry.",
+        className: "bg-green-800 border-green-700 text-white",
+      });
+    }
+  };
+
+  const removeEditEntryImage = (entryId: number, index: number) => {
+    const currentImages = editedContent[entryId]?.images || 
+                         diaryEntries.find(e => e.id === entryId)?.images || [];
+    
+    setEditedContent(prev => ({
+      ...prev,
+      [entryId]: {
+        ...prev[entryId],
+        images: currentImages.filter((_, i) => i !== index)
+      }
+    }));
+  };
+
   const removeProfileImage = () => {
     setProfileImage("");
     localStorage.removeItem(`take5_profile_${currentUser.id}`);
@@ -588,7 +647,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
   };
 
   const saveDiaryEntry = async () => {
-    if (!newEntryTitle.trim() || !newEntryContent.trim()) return;
+    if (!newEntryContent.trim()) return;
     
     try {
       const response = await fetch('/api/diary', {
@@ -596,7 +655,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userId: currentUser.id,
-          title: newEntryTitle,
+          title: newEntryTitle.trim() || `Entry for ${new Date().toLocaleDateString()}`,
           content: newEntryContent,
           images: newEntryImages,
         }),
@@ -614,11 +673,16 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
           description: "Your diary entry has been saved permanently.",
           className: "bg-green-800 border-green-700 text-white",
         });
+      } else {
+        const errorData = await response.text();
+        console.error('Diary save error:', errorData);
+        throw new Error(`Server error: ${response.status}`);
       }
     } catch (error) {
+      console.error('Diary save error:', error);
       toast({
-        title: "Save failed",
-        description: "Could not save your diary entry.",
+        title: "Error",
+        description: "Failed to save changes. Please try again.",
         variant: "destructive",
       });
     }
@@ -1097,15 +1161,59 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                     {isExpanded && (
                       <div className="px-4 pb-4 border-t border-gray-200 dark:border-gray-700">
                         {isEditing ? (
-                          <Textarea
-                            value={editData?.content || entry.content}
-                            onChange={(e) => setEditedContent(prev => ({
-                              ...prev,
-                              [entryId]: { ...prev[entryId], content: e.target.value }
-                            }))}
-                            rows={6}
-                            className="mt-3 bg-white dark:bg-black border border-teal-400 text-black dark:text-white"
-                          />
+                          <div className="mt-3 space-y-4">
+                            <Textarea
+                              value={editData?.content || entry.content}
+                              onChange={(e) => setEditedContent(prev => ({
+                                ...prev,
+                                [entryId]: { ...prev[entryId], content: e.target.value }
+                              }))}
+                              rows={6}
+                              className="bg-white dark:bg-black border border-teal-400 text-black dark:text-white"
+                            />
+                            
+                            {/* Image Upload Section for Editing */}
+                            <div className="space-y-3">
+                              <div className="flex items-center justify-between">
+                                <label className="text-sm font-medium text-black dark:text-white">
+                                  Images ({(editData?.images || entry.images || []).length}/5)
+                                </label>
+                                {(editData?.images || entry.images || []).length < 5 && (
+                                  <Button
+                                    onClick={() => handleEditEntryImageUpload(entryId)}
+                                    size="sm"
+                                    variant="outline"
+                                    className="bg-white dark:bg-black border-teal-400 text-teal-600 hover:bg-teal-50 dark:hover:bg-teal-900"
+                                  >
+                                    <Camera className="w-4 h-4 mr-2" />
+                                    Add Image
+                                  </Button>
+                                )}
+                              </div>
+                              
+                              {(editData?.images || entry.images || []).length > 0 && (
+                                <div className="grid grid-cols-2 gap-2">
+                                  {(editData?.images || entry.images || []).map((image: string, index: number) => (
+                                    <div key={index} className="relative group">
+                                      <img
+                                        src={image}
+                                        alt={`Entry image ${index + 1}`}
+                                        className="w-full h-24 object-cover rounded-lg border border-gray-200 dark:border-gray-600"
+                                      />
+                                      <Button
+                                        onClick={() => removeEditEntryImage(entryId, index)}
+                                        size="sm"
+                                        variant="destructive"
+                                        className="absolute top-1 right-1 w-6 h-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                                      >
+                                        <X className="w-3 h-3" />
+                                      </Button>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </div>
                         ) : (
                           <div className="mt-3 space-y-4">
                             <p className="text-black dark:text-white leading-relaxed">{entry.content}</p>
