@@ -26,7 +26,7 @@ export default function AIChat({ isOpen, onClose }: AIChatProps) {
   const [isTyping, setIsTyping] = useState(false);
   const [showContactList, setShowContactList] = useState(false);
   const [contacts, setContacts] = useState<any[]>([]);
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
@@ -122,7 +122,8 @@ export default function AIChat({ isOpen, onClose }: AIChatProps) {
         },
         body: JSON.stringify({
           message: text.trim(),
-          conversationHistory: messages.slice(-5) // Send last 5 messages for context
+          conversationHistory: messages.slice(-5), // Send last 5 messages for context
+          language: language // Send user's language for multilingual responses
         }),
       });
 
