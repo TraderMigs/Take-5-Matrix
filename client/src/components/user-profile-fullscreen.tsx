@@ -362,30 +362,45 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
     try {
       setProfileImage(croppedImageSrc);
       
-      // Save to server
-      const response = await fetch('/api/auth/profile', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          userId: currentUser.id, 
-          profileImage: croppedImageSrc 
-        }),
-      });
+      // Save to localStorage immediately for persistence
+      localStorage.setItem(`take5_profile_${currentUser.id}`, croppedImageSrc);
+      
+      // Save to server (if authenticated)
+      if (currentUser.id) {
+        const response = await fetch('/api/auth/profile', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            userId: currentUser.id, 
+            profileImage: croppedImageSrc 
+          }),
+        });
 
-      if (response.ok) {
-        // Update localStorage for persistence
-        const updatedUser = { ...currentUser, profileImage: croppedImageSrc };
-        localStorage.setItem('take5_current_user', JSON.stringify(updatedUser));
-        
+        if (response.ok) {
+          // Update localStorage for persistence
+          const updatedUser = { ...currentUser, profileImage: croppedImageSrc };
+          localStorage.setItem('take5_current_user', JSON.stringify(updatedUser));
+          
+          toast({
+            title: "Photo saved",
+            description: "Your profile photo has been updated successfully.",
+            className: "bg-green-800 border-green-700 text-white",
+          });
+        } else {
+          const errorData = await response.text();
+          console.error('Profile save error:', errorData);
+          throw new Error(`Server error: ${response.status}`);
+        }
+      } else {
+        // For non-authenticated users, just save locally
         toast({
-          title: "Photo saved",
-          description: "Your profile photo has been updated successfully.",
+          title: "Photo saved locally",
+          description: "Your profile photo has been saved for this session.",
           className: "bg-green-800 border-green-700 text-white",
         });
-      } else {
-        throw new Error('Failed to save photo');
       }
     } catch (error) {
+      console.error('Photo save error:', error);
       toast({
         title: "Upload failed",
         description: "Could not save your photo. Please try again.",

@@ -126,7 +126,7 @@ export default function ImageCropModal({ isOpen, onClose, imageSrc, onSave }: Im
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-auto bg-white dark:bg-gray-800">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-auto bg-white dark:bg-gray-800 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <DialogHeader className="bg-white dark:bg-black p-4 -m-6 mb-4 rounded-t-lg">
           <DialogTitle className="text-black dark:text-white">Edit Profile Photo</DialogTitle>
         </DialogHeader>
