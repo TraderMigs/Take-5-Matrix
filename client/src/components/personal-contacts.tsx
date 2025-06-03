@@ -75,7 +75,7 @@ export default function PersonalContacts({ currentUser }: PersonalContactsProps)
     if (!currentUser) {
       // Require authentication to save contacts
       localStorage.setItem('take5_redirect_after_login', 'contacts');
-      window.location.href = '/auth/google';
+      window.location.href = '/api/auth/google';
       return;
     }
     
@@ -94,7 +94,7 @@ export default function PersonalContacts({ currentUser }: PersonalContactsProps)
   const removeContact = async (id: string) => {
     if (!currentUser) {
       localStorage.setItem('take5_redirect_after_login', 'contacts');
-      window.location.href = '/auth/google';
+      window.location.href = '/api/auth/google';
       return;
     }
     
@@ -113,7 +113,7 @@ export default function PersonalContacts({ currentUser }: PersonalContactsProps)
   const handleUpdateContact = async () => {
     if (!currentUser) {
       localStorage.setItem('take5_redirect_after_login', 'contacts');
-      window.location.href = '/auth/google';
+      window.location.href = '/api/auth/google';
       return;
     }
     

@@ -116,8 +116,8 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
     setPhase("inhale");
     setCount(5);
 
-    // Start ocean waves sound
-    const { source, gainNode } = createOceanWaves();
+    // Start breathing sound
+    const { source, gainNode } = createBreathingSound();
     oceanSourceRef.current = source;
     oceanGainRef.current = gainNode;
 
