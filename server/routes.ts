@@ -307,6 +307,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.post("/api/auth/session", (req: any, res) => {
+    try {
+      const { userId, userData } = req.body;
+      
+      if (!userId || !userData) {
+        return res.status(400).json({ error: "Missing userId or userData" });
+      }
+      
+      req.session.userId = userId;
+      req.session.userData = userData;
+      
+      res.json({ 
+        success: true, 
+        authenticated: true,
+        userId: userId,
+        userData: userData 
+      });
+    } catch (error) {
+      console.error("Session creation error:", error);
+      res.status(500).json({ error: "Failed to create session" });
+    }
+  });
+
   app.delete("/api/auth/session", (req: any, res) => {
     req.session.destroy((err: any) => {
       if (err) {

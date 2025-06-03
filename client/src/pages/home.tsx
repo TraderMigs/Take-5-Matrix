@@ -111,35 +111,38 @@ export default function Home() {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const authStatus = urlParams.get('auth');
-    const userParam = urlParams.get('user');
 
-    if (authStatus === 'success' && userParam) {
-      try {
-        const user = JSON.parse(decodeURIComponent(userParam));
-        setCurrentUser(user);
-        // Save user session to localStorage for persistence
-        localStorage.setItem('take5_current_user', JSON.stringify(user));
-        
-        // Also save to server-side session for extended persistence
-        fetch('/api/auth/session', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userId: user.id, userData: user })
-        }).catch(error => {
-          console.error('Error saving server session:', error);
+    if (authStatus === 'success') {
+      // Fetch user data from server session instead of URL
+      fetch('/api/auth/session')
+        .then(response => response.json())
+        .then(data => {
+          if (data.authenticated && data.userData) {
+            setCurrentUser(data.userData);
+            localStorage.setItem('take5_current_user', JSON.stringify(data.userData));
+            
+            toast({
+              title: "Welcome!",
+              description: `Successfully signed in with Google as ${data.userData.displayName || data.userData.email}`,
+              className: "bg-green-800 border-green-700 text-white",
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching session data:', error);
+          toast({
+            title: "Sign in issue",
+            description: "Please try signing in again.",
+            variant: "destructive",
+          });
         });
-        
-        toast({
-          title: "Welcome!",
-          description: `Successfully signed in with Google as ${user.displayName || user.email}`,
-          className: "bg-green-800 border-green-700 text-white",
-        });
-        // Clean up URL
-        window.history.replaceState({}, document.title, window.location.pathname);
-      } catch (error) {
-        console.error('Error parsing user data:', error);
-      }
+      
+      // Clean up URL
+      window.history.replaceState({}, document.title, window.location.pathname);
     } else if (authStatus === 'error') {
+      const errorDetails = urlParams.get('details');
+      console.error('OAuth error details:', errorDetails);
+      
       toast({
         title: "Sign in failed",
         description: "There was an issue signing in with Google. Please try again.",

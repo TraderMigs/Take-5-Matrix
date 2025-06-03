@@ -56,20 +56,6 @@ export function setupGoogleAuth(app: Express) {
 
   // Start OAuth flow
   app.get('/api/auth/google', (req, res) => {
-    // Update the redirect URI based on the current request host
-    const currentHost = req.get('host');
-    const protocol = req.secure || req.get('x-forwarded-proto') === 'https' ? 'https' : 'http';
-    const dynamicRedirectUri = `${protocol}://${currentHost}/api/auth/google/callback`;
-    
-    console.log('Dynamic redirect URI:', dynamicRedirectUri);
-    
-    // Create a new client with the current redirect URI for this request
-    const requestClient = new OAuth2Client(
-      process.env.GOOGLE_CLIENT_ID,
-      process.env.GOOGLE_CLIENT_SECRET,
-      dynamicRedirectUri
-    );
-    
     const scopes = [
       'https://www.googleapis.com/auth/userinfo.email',
       'https://www.googleapis.com/auth/userinfo.profile'
@@ -80,7 +66,7 @@ export function setupGoogleAuth(app: Express) {
       scope: scopes,
       prompt: 'select_account',
       include_granted_scopes: true,
-      state: 'state_parameter_passthrough_value'
+      state: Math.random().toString(36).substring(2, 15)
     });
 
     console.log('Generated OAuth URL:', authUrl);
@@ -183,9 +169,19 @@ export function setupGoogleAuth(app: Express) {
         }
       }
 
-      console.log('OAuth success, redirecting to frontend...');
-      // Redirect to frontend with success
-      res.redirect(`/?auth=success&user=${encodeURIComponent(JSON.stringify(user))}`);
+      console.log('OAuth success, creating session and redirecting...');
+      
+      // Create server-side session instead of passing user data via URL
+      const session = await storage.createSession(user.id);
+      
+      // Set session cookie
+      req.session = req.session || {};
+      (req.session as any).sessionId = session.id;
+      (req.session as any).userId = user.id;
+      (req.session as any).userData = user;
+      
+      // Simple redirect without user data in URL
+      res.redirect('/?auth=success');
     } catch (error) {
       console.error('Google OAuth error:', error);
       const errorMsg = error instanceof Error ? error.message : 'unknown_error';
