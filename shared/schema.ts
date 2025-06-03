@@ -44,6 +44,16 @@ export const breathingSessions = pgTable("breathing_sessions", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const aiTokenUsage = pgTable("ai_token_usage", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id),
+  sessionId: text("session_id"),
+  tokensUsed: integer("tokens_used").notNull(),
+  messageCount: integer("message_count").notNull().default(1),
+  model: text("model").notNull().default("gpt-4-1106-preview"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 export const diaryEntries = pgTable("diary_entries", {
   id: serial("id").primaryKey(),
   userId: integer("user_id").references(() => users.id).notNull(),
@@ -60,6 +70,7 @@ export const usersRelations = relations(users, ({ many }) => ({
   breathingSessions: many(breathingSessions),
   sessions: many(sessions),
   diaryEntries: many(diaryEntries),
+  aiTokenUsage: many(aiTokenUsage),
 }));
 
 export const contactsRelations = relations(contacts, ({ one }) => ({
@@ -86,6 +97,13 @@ export const breathingSessionsRelations = relations(breathingSessions, ({ one })
 export const diaryEntriesRelations = relations(diaryEntries, ({ one }) => ({
   user: one(users, {
     fields: [diaryEntries.userId],
+    references: [users.id],
+  }),
+}));
+
+export const aiTokenUsageRelations = relations(aiTokenUsage, ({ one }) => ({
+  user: one(users, {
+    fields: [aiTokenUsage.userId],
     references: [users.id],
   }),
 }));
