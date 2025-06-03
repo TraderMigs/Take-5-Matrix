@@ -462,7 +462,7 @@ export default function Home() {
         </section>
 
         {/* Personal Contacts */}
-        <PersonalContacts />
+        <PersonalContacts currentUser={currentUser} />
 
         {/* Safe Message */}
         <section className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 dark:bg-black text-black dark:text-white rounded-xl p-6 text-center space-y-3 border-2 border-black dark:border-white shimmer-mint">

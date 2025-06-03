@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,6 +7,8 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { User, Phone, Plus, Edit, Trash2 } from "lucide-react";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useLanguage } from "@/hooks/use-language";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 
 interface Contact {
   id: string;
@@ -15,9 +17,16 @@ interface Contact {
   relationship: string;
 }
 
-export default function PersonalContacts() {
+interface PersonalContactsProps {
+  currentUser?: any;
+}
+
+export default function PersonalContacts({ currentUser }: PersonalContactsProps) {
   const { t } = useLanguage();
-  const [contacts, setContacts] = useLocalStorage<Contact[]>("trusted-contacts", []);
+  const queryClient = useQueryClient();
+  
+  // Use localStorage for anonymous users, database for authenticated users
+  const [localContacts, setLocalContacts] = useLocalStorage<Contact[]>("trusted-contacts", []);
   const [isAddingContact, setIsAddingContact] = useState(false);
   const [editingContact, setEditingContact] = useState<Contact | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -27,13 +36,59 @@ export default function PersonalContacts() {
     relationship: "",
   });
 
-  const handleAddContact = () => {
+  // Fetch contacts from database for authenticated users
+  const { data: dbContacts = [], isLoading } = useQuery({
+    queryKey: ["/api/contacts"],
+    enabled: !!currentUser,
+    retry: false,
+  });
+
+  // Use database contacts for authenticated users, localStorage for anonymous
+  const contacts = currentUser ? dbContacts : localContacts;
+
+  // Mutation to create contact
+  const createContactMutation = useMutation({
+    mutationFn: async (contactData: Omit<Contact, 'id'>) => {
+      return await apiRequest("/api/contacts", "POST", contactData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/contacts"] });
+    },
+  });
+
+  // Mutation to update contact
+  const updateContactMutation = useMutation({
+    mutationFn: async ({ id, ...data }: Contact) => {
+      return await apiRequest(`/api/contacts/${id}`, "PUT", data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/contacts"] });
+    },
+  });
+
+  // Mutation to delete contact
+  const deleteContactMutation = useMutation({
+    mutationFn: async (id: string) => {
+      return await apiRequest(`/api/contacts/${id}`, "DELETE");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/contacts"] });
+    },
+  });
+
+  const handleAddContact = async () => {
     if (newContact.name && newContact.phone) {
-      const contact: Contact = {
-        id: Date.now().toString(),
-        ...newContact,
-      };
-      setContacts([...contacts, contact]);
+      if (currentUser) {
+        // Save to database for authenticated users
+        await createContactMutation.mutateAsync(newContact);
+      } else {
+        // Save to localStorage for anonymous users
+        const contact: Contact = {
+          id: Date.now().toString(),
+          ...newContact,
+        };
+        setLocalContacts([...localContacts, contact]);
+      }
       setNewContact({ name: "", phone: "", relationship: "" });
       setIsAddingContact(false);
     }
@@ -43,8 +98,14 @@ export default function PersonalContacts() {
     window.location.href = `tel:${phone}`;
   };
 
-  const removeContact = (id: string) => {
-    setContacts(contacts.filter(contact => contact.id !== id));
+  const removeContact = async (id: string) => {
+    if (currentUser) {
+      // Delete from database for authenticated users
+      await deleteContactMutation.mutateAsync(id);
+    } else {
+      // Delete from localStorage for anonymous users
+      setLocalContacts(localContacts.filter(contact => contact.id !== id));
+    }
   };
 
   const handleEditContact = (contact: Contact) => {
@@ -56,15 +117,25 @@ export default function PersonalContacts() {
     });
   };
 
-  const handleUpdateContact = () => {
+  const handleUpdateContact = async () => {
     if (editingContact && newContact.name && newContact.phone) {
-      setContacts(contacts.map(contact => 
-        contact.id === editingContact.id 
-          ? { ...contact, ...newContact }
-          : contact
-      ));
+      if (currentUser) {
+        // Update in database for authenticated users
+        await updateContactMutation.mutateAsync({
+          id: editingContact.id,
+          ...newContact,
+        });
+      } else {
+        // Update in localStorage for anonymous users
+        setLocalContacts(localContacts.map(contact => 
+          contact.id === editingContact.id 
+            ? { ...contact, ...newContact }
+            : contact
+        ));
+      }
       setEditingContact(null);
       setNewContact({ name: "", phone: "", relationship: "" });
+      setEditDialogOpen(false);
     }
   };
 

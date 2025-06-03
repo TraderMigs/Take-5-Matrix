@@ -580,6 +580,99 @@ Now respond specifically to their latest message, acknowledging what they're act
     }
   });
 
+  // Contact routes for persistent storage
+  app.get('/api/contacts', async (req, res) => {
+    try {
+      const userId = req.session.userId;
+      if (!userId) {
+        return res.status(401).json({ error: 'Authentication required' });
+      }
+
+      const contacts = await storage.getContacts(userId);
+      res.json(contacts);
+    } catch (error) {
+      console.error('Error fetching contacts:', error);
+      res.status(500).json({ error: 'Failed to fetch contacts' });
+    }
+  });
+
+  app.post('/api/contacts', async (req, res) => {
+    try {
+      const userId = req.session.userId;
+      if (!userId) {
+        return res.status(401).json({ error: 'Authentication required' });
+      }
+
+      const { name, phone, relationship } = req.body;
+      
+      if (!name || !phone) {
+        return res.status(400).json({ error: 'Name and phone are required' });
+      }
+
+      const newContact = await storage.createContact({ name, phone, relationship }, userId);
+      res.json(newContact);
+    } catch (error) {
+      console.error('Error creating contact:', error);
+      res.status(500).json({ error: 'Failed to create contact' });
+    }
+  });
+
+  app.put('/api/contacts/:id', async (req, res) => {
+    try {
+      const userId = req.session.userId;
+      if (!userId) {
+        return res.status(401).json({ error: 'Authentication required' });
+      }
+
+      const contactId = parseInt(req.params.id);
+      const { name, phone, relationship } = req.body;
+
+      if (!name || !phone) {
+        return res.status(400).json({ error: 'Name and phone are required' });
+      }
+
+      // First verify the contact belongs to the user
+      const existingContacts = await storage.getContacts(userId);
+      const contactExists = existingContacts.find(c => c.id === contactId);
+      
+      if (!contactExists) {
+        return res.status(404).json({ error: 'Contact not found' });
+      }
+
+      // Update the contact
+      const updatedContact = await storage.updateContact(contactId, { name, phone, relationship });
+      res.json(updatedContact);
+    } catch (error) {
+      console.error('Error updating contact:', error);
+      res.status(500).json({ error: 'Failed to update contact' });
+    }
+  });
+
+  app.delete('/api/contacts/:id', async (req, res) => {
+    try {
+      const userId = req.session.userId;
+      if (!userId) {
+        return res.status(401).json({ error: 'Authentication required' });
+      }
+
+      const contactId = parseInt(req.params.id);
+
+      // First verify the contact belongs to the user
+      const existingContacts = await storage.getContacts(userId);
+      const contactExists = existingContacts.find(c => c.id === contactId);
+      
+      if (!contactExists) {
+        return res.status(404).json({ error: 'Contact not found' });
+      }
+
+      await storage.deleteContact(contactId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error deleting contact:', error);
+      res.status(500).json({ error: 'Failed to delete contact' });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;
