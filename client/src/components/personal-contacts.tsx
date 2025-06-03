@@ -129,7 +129,7 @@ export default function PersonalContacts({ currentUser }: PersonalContactsProps)
   };
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-4" data-section="contacts">
       <h2 className="text-xl font-semibold text-gray-800 dark:text-white text-center">{t('trustedContacts')}</h2>
 
       <div className="space-y-3">

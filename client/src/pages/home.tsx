@@ -126,6 +126,19 @@ export default function Home() {
               description: `Successfully signed in with Google as ${data.userData.displayName || data.userData.email}`,
               className: "bg-green-800 border-green-700 text-white",
             });
+            
+            // Check for redirect after login
+            const redirectTo = localStorage.getItem('take5_redirect_after_login');
+            if (redirectTo === 'contacts') {
+              localStorage.removeItem('take5_redirect_after_login');
+              // Scroll to contacts section after a brief delay
+              setTimeout(() => {
+                const contactsSection = document.querySelector('[data-section="contacts"]');
+                if (contactsSection) {
+                  contactsSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }, 1000);
+            }
           }
         })
         .catch(error => {

@@ -684,7 +684,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                       <ChevronDown className="w-3 h-3" />
                     </Button>
                     {showDisplayNameDropdown && (
-                      <div className="absolute top-full left-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg z-10 min-w-[120px]">
+                      <div className="absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg z-10 min-w-[120px]">
                         <button
                           onClick={startEditingDisplayName}
                           className="w-full px-3 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-black dark:text-white flex items-center gap-2 text-sm"
@@ -826,7 +826,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                           <ChevronDown className="w-3 h-3" />
                         </Button>
                         {showUsernameDropdown && (
-                          <div className="absolute top-full left-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg z-10 min-w-[130px]">
+                          <div className="absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg z-10 min-w-[130px]">
                             <button
                               onClick={startEditingUsername}
                               className="w-full px-3 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-black dark:text-white flex items-center gap-2 text-sm"
