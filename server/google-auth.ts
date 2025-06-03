@@ -63,8 +63,12 @@ export function setupGoogleAuth(app: Express) {
     
     console.log('Dynamic redirect URI:', dynamicRedirectUri);
     
-    // Update the client with the current redirect URI
-    client.redirectUri = dynamicRedirectUri;
+    // Create a new client with the current redirect URI for this request
+    const requestClient = new OAuth2Client(
+      process.env.GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET,
+      dynamicRedirectUri
+    );
     
     const scopes = [
       'https://www.googleapis.com/auth/userinfo.email',
@@ -161,6 +165,15 @@ export function setupGoogleAuth(app: Express) {
           emailVerified: true, // Google OAuth users are pre-verified
         });
         console.log('Created user:', user);
+        
+        // Send welcome email for new Google OAuth users
+        try {
+          const { sendWelcomeEmail } = await import('./email-service');
+          await sendWelcomeEmail(user.email, user.displayName || user.username);
+          console.log('Welcome email sent to new Google OAuth user');
+        } catch (error) {
+          console.error('Failed to send welcome email:', error);
+        }
       } else {
         console.log('User already exists, using existing user');
         // Mark existing Google OAuth users as email verified if not already
