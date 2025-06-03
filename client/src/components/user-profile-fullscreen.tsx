@@ -406,7 +406,6 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
     });
     
     setShowBackgroundCropModal(false);
-    setShowBackgroundDropdown(false);
   };
 
   const removeBackgroundImage = () => {
