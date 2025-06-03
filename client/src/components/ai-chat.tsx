@@ -26,6 +26,8 @@ export default function AIChat({ isOpen, onClose }: AIChatProps) {
   const [isTyping, setIsTyping] = useState(false);
   const [showContactList, setShowContactList] = useState(false);
   const [contacts, setContacts] = useState<any[]>([]);
+  const [userName, setUserName] = useState("");
+  const [showNameInput, setShowNameInput] = useState(true);
   const { t, language } = useLanguage();
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -67,20 +69,26 @@ export default function AIChat({ isOpen, onClose }: AIChatProps) {
     };
   }, []);
 
-  // Add welcome message when chat opens and load contacts
+  // Reset states when dialog opens
   useEffect(() => {
-    if (isOpen && messages.length === 0) {
+    if (isOpen) {
       loadContacts();
-      
-      const welcomeMessage: Message = {
-        id: Date.now().toString(),
-        text: t('aiWelcomeMessage'),
-        sender: "ai",
-        timestamp: new Date()
-      };
-      setMessages([welcomeMessage]);
+      if (messages.length === 0 && !showNameInput) {
+        const welcomeMessage: Message = {
+          id: Date.now().toString(),
+          text: `Hi there! I'm Take 5, your supportive companion. I'm here to listen and help you feel seen and supported. What's on your mind today?`,
+          sender: "ai",
+          timestamp: new Date()
+        };
+        setMessages([welcomeMessage]);
+      }
+    } else {
+      // Reset when closing
+      setMessages([]);
+      setShowNameInput(true);
+      setUserName("");
     }
-  }, [isOpen, messages.length, t]);
+  }, [isOpen, messages.length, showNameInput]);
 
   const loadContacts = async () => {
     try {
@@ -123,7 +131,8 @@ export default function AIChat({ isOpen, onClose }: AIChatProps) {
         body: JSON.stringify({
           message: text.trim(),
           conversationHistory: messages.slice(-5), // Send last 5 messages for context
-          language: language // Send user's language for multilingual responses
+          language: language, // Send user's language for multilingual responses
+          userName: userName // Send user's name for personalized responses
         }),
       });
 
@@ -204,7 +213,23 @@ export default function AIChat({ isOpen, onClose }: AIChatProps) {
     setInputText("");
     setIsListening(false);
     setIsTyping(false);
+    setShowNameInput(true);
+    setUserName("");
     onClose();
+  };
+
+  const handleNameSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (userName.trim()) {
+      setShowNameInput(false);
+      const welcomeMessage: Message = {
+        id: Date.now().toString(),
+        text: `Hi ${userName}! I'm Take 5, your supportive companion. I'm here to listen and help you feel seen and supported. What's on your mind today?`,
+        sender: "ai",
+        timestamp: new Date()
+      };
+      setMessages([welcomeMessage]);
+    }
   };
 
   return (

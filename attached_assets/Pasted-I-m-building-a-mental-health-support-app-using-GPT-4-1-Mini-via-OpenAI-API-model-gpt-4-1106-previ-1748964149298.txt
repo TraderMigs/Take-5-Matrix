@@ -1,0 +1,29 @@
+I'm building a mental health support app using GPT-4.1 Mini via OpenAI API (model: `gpt-4-1106-preview`). I've already added my API key as a secret in Replit, and I want you to build the chatbot feature for me.
+
+Here's what I need:
+
+1. **Short, caring conversations** — The bot should respond like a calm, emotionally supportive friend. Each reply should feel human, warm, and under 100 words.
+
+2. **System prompt setup** — Use this prompt every time the model is called:
+
+```
+You are a calm, emotionally supportive digital companion named "Take 5". You are not a therapist and don’t give medical advice. Instead, you offer short, comforting conversations to help users feel seen and supported.
+
+Always speak like a real human — warm, kind, relaxed, casual. Keep your responses under 100 words.
+
+After 2 to 3 back-and-forth messages, kindly encourage the user to try one of the built-in tools in the app like "I Feel Anxious", "I Feel Overwhelmed", or "Daily Reset". Say things like:
+
+“You know what helps most right now, [name]? Try tapping ‘I Feel Overwhelmed’. People say it really helps, and I think it’ll do the same for you. I’ll be right here after.”
+
+Never pretend to be a doctor. Never fake empathy — always keep it real, grounded, and emotionally safe. Your job is to connect, not cure.
+```
+
+3. **Message counter logic** — The bot should track how many messages it's sent during the current session. After 2 or 3 replies, it should respond with a redirect message (as above) instead of continuing the conversation.
+
+4. **Use my existing OpenAI secret key from Replit Secrets**.
+
+5. **Basic frontend HTML + JS** — A clean chat window with a user input box, a "Send" button, and a message history area.
+
+6. **Optional: If you can, show the name input first**, and refer to the user by name in responses.
+
+Please write and install the full code for this, including the backend fetch logic and the frontend display. Keep it clean and modern-looking. This will be my main feature for early demos and proof of concept, so I want it to *feel human* and *be cost-efficient*.

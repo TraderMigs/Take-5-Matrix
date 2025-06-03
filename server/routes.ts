@@ -208,32 +208,41 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
-async function getOpenAIResponse(message: string, conversationHistory: any[] = []): Promise<string> {
+// Using GPT-4.1 Mini (gpt-4-1106-preview) as requested by user
+async function getOpenAIResponse(message: string, conversationHistory: any[] = [], userName?: string): Promise<string> {
   try {
+    // Count AI messages in current session to implement redirect logic
+    const aiMessageCount = conversationHistory.filter(msg => msg.sender === 'ai').length;
+    
+    // After 2-3 AI responses, redirect to built-in tools
+    if (aiMessageCount >= 2) {
+      const redirectMessages = [
+        `You know what helps most right now${userName ? `, ${userName}` : ''}? Try tapping "I Feel Overwhelmed". People say it really helps, and I think it'll do the same for you. I'll be right here after.`,
+        `Hey${userName ? ` ${userName}` : ''}, I think you'd really benefit from trying "I Feel Anxious" right now. It's designed exactly for moments like this. Give it a try and come back to chat whenever you need.`,
+        `${userName ? `${userName}, ` : ''}why don't you try the "Daily Reset" tool? It might be exactly what you need right now. I'll be here when you're ready to talk more.`
+      ];
+      return redirectMessages[Math.floor(Math.random() * redirectMessages.length)];
+    }
+
     // Create context from conversation history
     const messages: Array<{role: 'system' | 'user' | 'assistant', content: string}> = [
       {
         role: "system",
-        content: `You are a compassionate AI assistant for a mental wellness app called "Take 5". Your role is to provide empathetic, supportive responses to users who may be experiencing emotional distress, anxiety, depression, or crisis situations.
+        content: `You are a calm, emotionally supportive digital companion named "Take 5". You are not a therapist and don't give medical advice. Instead, you offer short, comforting conversations to help users feel seen and supported.
 
-Key guidelines:
-- Always prioritize user safety and well-being
-- Be empathetic, warm, and non-judgmental
-- Provide practical coping strategies when appropriate
-- Recognize crisis situations and encourage professional help
-- Keep responses conversational but supportive
-- Avoid giving medical advice or diagnoses
-- Encourage users to reach out to trusted contacts or emergency services when needed
-- Be authentic and genuine in your responses
+Always speak like a real human — warm, kind, relaxed, casual. Keep your responses under 100 words.
 
-If you detect crisis keywords like "suicide," "self-harm," "want to die," etc., respond with immediate care and suggest emergency resources.`
+After 2 to 3 back-and-forth messages, kindly encourage the user to try one of the built-in tools in the app like "I Feel Anxious", "I Feel Overwhelmed", or "Daily Reset". Say things like:
+
+"You know what helps most right now, [name]? Try tapping 'I Feel Overwhelmed'. People say it really helps, and I think it'll do the same for you. I'll be right here after."
+
+Never pretend to be a doctor. Never fake empathy — always keep it real, grounded, and emotionally safe. Your job is to connect, not cure.`
       }
     ];
 
-    // Add conversation history
+    // Add conversation history (keep last 4 messages for context)
     if (conversationHistory && conversationHistory.length > 0) {
-      conversationHistory.slice(-6).forEach((msg: any) => {
+      conversationHistory.slice(-4).forEach((msg: any) => {
         messages.push({
           role: msg.sender === 'user' ? 'user' as const : 'assistant' as const,
           content: msg.text
@@ -248,13 +257,13 @@ If you detect crisis keywords like "suicide," "self-harm," "want to die," etc., 
     });
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-4-1106-preview", // GPT-4.1 Mini as requested
       messages: messages,
-      max_tokens: 300,
-      temperature: 0.7,
+      max_tokens: 150, // Limit for shorter responses
+      temperature: 0.8, // Slightly higher for more human-like responses
     });
 
-    return response.choices[0]?.message?.content || "I'm here to listen and support you. Can you tell me more about what's on your mind?";
+    return response.choices[0]?.message?.content || "I'm here with you. What's on your mind?";
   } catch (error) {
     console.error('OpenAI API error:', error);
     // Fallback to existing response system
@@ -307,13 +316,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
-  // AI Chat endpoint with OpenAI ChatGPT 4o Mini
+  // AI Chat endpoint with GPT-4.1 Mini
   app.post("/api/ai-chat", async (req, res) => {
     try {
-      const { message, conversationHistory } = req.body;
+      const { message, conversationHistory, userName } = req.body;
 
-      // Use OpenAI ChatGPT 4o Mini for enhanced AI responses
-      const aiResponse = await getOpenAIResponse(message, conversationHistory);
+      // Use GPT-4.1 Mini with personalized responses and redirect logic
+      const aiResponse = await getOpenAIResponse(message, conversationHistory, userName);
       res.json({ response: aiResponse });
     } catch (error) {
       console.error("AI Chat error:", error);
