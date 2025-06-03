@@ -40,6 +40,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
   const [showImageCropModal, setShowImageCropModal] = useState(false);
   const [tempImageSrc, setTempImageSrc] = useState("");
   const [backgroundImage, setBackgroundImage] = useState("");
+  const [backgroundOpacity, setBackgroundOpacity] = useState(1);
   const [showBackgroundCropModal, setShowBackgroundCropModal] = useState(false);
   const [tempBackgroundSrc, setTempBackgroundSrc] = useState("");
   const [showProfileImageDropdown, setShowProfileImageDropdown] = useState(false);
@@ -199,10 +200,14 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
         setUsername(usernameFromDB);
         setProfileImage(imageFromDB);
         
-        // Load background image from localStorage (persistent across sessions)
+        // Load background image and opacity from localStorage (persistent across sessions)
         const savedBackground = localStorage.getItem(`take5_background_${currentUser.id}`);
+        const savedOpacity = localStorage.getItem(`take5_background_opacity_${currentUser.id}`);
         if (savedBackground) {
           setBackgroundImage(savedBackground);
+        }
+        if (savedOpacity) {
+          setBackgroundOpacity(parseFloat(savedOpacity));
         }
         
         // Sync localStorage with database data to ensure persistence
@@ -222,10 +227,14 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
       setProfileImage(savedUser.profileImage || currentUser.profileImage || "");
       setUsername(savedUser.username || currentUser.username || "");
       
-      // Load background image from localStorage even if server fails
+      // Load background image and opacity from localStorage even if server fails
       const savedBackground = localStorage.getItem(`take5_background_${currentUser.id}`);
+      const savedOpacity = localStorage.getItem(`take5_background_opacity_${currentUser.id}`);
       if (savedBackground) {
         setBackgroundImage(savedBackground);
+      }
+      if (savedOpacity) {
+        setBackgroundOpacity(parseFloat(savedOpacity));
       }
     }
   };
@@ -406,6 +415,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
   const handleSaveCroppedBackground = async (croppedImageSrc: string) => {
     setBackgroundImage(croppedImageSrc);
     localStorage.setItem(`take5_background_${currentUser.id}`, croppedImageSrc);
+    localStorage.setItem(`take5_background_opacity_${currentUser.id}`, backgroundOpacity.toString());
     
     // Save to database
     try {
@@ -698,10 +708,11 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
         backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'linear-gradient(135deg, #ddd6fe 0%, #a855f7 100%)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
+        backgroundRepeat: 'no-repeat',
+        opacity: backgroundOpacity
       }}
     >
-      <div className="min-h-screen p-4 bg-black/20 backdrop-blur-sm">
+      <div className="min-h-screen p-4">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-4">
             <Button
