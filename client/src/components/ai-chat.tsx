@@ -40,9 +40,14 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
   // Load saved name and conversation history from localStorage on component mount
   useEffect(() => {
     const savedName = localStorage.getItem('take5-user-name');
-    if (savedName) {
+    console.log('Loading saved name from localStorage:', savedName);
+    if (savedName && savedName.trim()) {
       setUserName(savedName);
       setShowNameInput(false);
+      console.log('Name loaded successfully, hiding input');
+    } else {
+      console.log('No saved name found, showing input');
+      setShowNameInput(true);
     }
 
     // Load last conversation history
@@ -98,13 +103,15 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
   const handleNameSubmit = () => {
     if (userName.trim()) {
       // Save name to localStorage for persistence
-      localStorage.setItem('take5-user-name', userName.trim());
+      const trimmedName = userName.trim();
+      localStorage.setItem('take5-user-name', trimmedName);
+      console.log('Saving name to localStorage:', trimmedName);
       setShowNameInput(false);
       
       // Send welcome message after name is provided
       const welcomeMessage: Message = {
         id: Date.now().toString(),
-        text: `Hey, ${userName}! What's going on? Talk to me 🙏🏾`,
+        text: `Hey, ${trimmedName}! What's going on? Talk to me 🙏🏾`,
         sender: "ai",
         timestamp: new Date(),
       };
