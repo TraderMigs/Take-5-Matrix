@@ -10,7 +10,7 @@ interface BreathingModalProps {
 export default function BreathingModal({ isOpen, onClose }: BreathingModalProps) {
   const [isActive, setIsActive] = useState(false);
   const [phase, setPhase] = useState<"inhale" | "hold" | "exhale" | "pause">("inhale");
-  const [count, setCount] = useState(4);
+  const [count, setCount] = useState(5);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   
   // Audio refs for breathing sounds
@@ -26,10 +26,10 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
   };
 
   const phaseDurations = {
-    inhale: 4,
-    hold: 4,
-    exhale: 6,
-    pause: 2,
+    inhale: 5,
+    hold: 5,
+    exhale: 7,
+    pause: 3,
   };
 
   // Initialize audio context for breathing sounds
@@ -39,38 +39,60 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
     }
   };
 
-  // Create gentle breathing sound effect
+  // Create gentle breathing sound effect with improved audio quality
   const createBreathingSound = (type: "inhale" | "exhale") => {
     if (!audioContextRef.current) return;
 
     // Stop any existing oscillator
     if (oscillatorRef.current) {
-      oscillatorRef.current.stop();
+      try {
+        oscillatorRef.current.stop();
+      } catch (e) {
+        // Oscillator may already be stopped
+      }
       oscillatorRef.current = null;
     }
 
     const audioContext = audioContextRef.current;
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
+    const filter = audioContext.createBiquadFilter();
 
-    oscillator.connect(gainNode);
+    // Create audio chain: oscillator -> filter -> gain -> destination
+    oscillator.connect(filter);
+    filter.connect(gainNode);
     gainNode.connect(audioContext.destination);
 
-    // Set frequency for gentle breathing sound
-    const baseFrequency = type === "inhale" ? 200 : 150;
+    // Set up low-pass filter for smoother, warmer sound
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(800, audioContext.currentTime);
+    filter.Q.setValueAtTime(1, audioContext.currentTime);
+
+    // Improved frequencies for more pleasant breathing sounds
+    const baseFrequency = type === "inhale" ? 300 : 180;
     oscillator.frequency.setValueAtTime(baseFrequency, audioContext.currentTime);
+    
+    // Add gentle frequency modulation for more natural sound
+    if (type === "inhale") {
+      oscillator.frequency.linearRampToValueAtTime(baseFrequency + 50, audioContext.currentTime + 2.5);
+      oscillator.frequency.linearRampToValueAtTime(baseFrequency, audioContext.currentTime + 5);
+    } else {
+      oscillator.frequency.linearRampToValueAtTime(baseFrequency - 30, audioContext.currentTime + 3.5);
+      oscillator.frequency.linearRampToValueAtTime(baseFrequency, audioContext.currentTime + 7);
+    }
 
-    // Create smooth volume envelope
+    // Improved volume envelope with higher audible levels
+    const duration = type === "inhale" ? 5 : 7;
     gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-    gainNode.gain.linearRampToValueAtTime(0.05, audioContext.currentTime + 0.5); // Very gentle volume
-    gainNode.gain.linearRampToValueAtTime(0.02, audioContext.currentTime + 2);
-    gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 4);
+    gainNode.gain.linearRampToValueAtTime(0.15, audioContext.currentTime + 0.3); // Increased volume
+    gainNode.gain.linearRampToValueAtTime(0.12, audioContext.currentTime + duration * 0.7);
+    gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + duration);
 
-    // Use sine wave for soft, natural sound
-    oscillator.type = "sine";
+    // Use triangle wave for softer, more pleasant sound
+    oscillator.type = "triangle";
     
     oscillator.start();
-    oscillator.stop(audioContext.currentTime + 4);
+    oscillator.stop(audioContext.currentTime + duration);
 
     oscillatorRef.current = oscillator;
     gainNodeRef.current = gainNode;
@@ -96,7 +118,7 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
     initAudio(); // Initialize audio context
     setIsActive(true);
     setPhase("inhale");
-    setCount(4);
+    setCount(5);
 
     // Start with inhale sound
     setTimeout(() => {
@@ -135,7 +157,7 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
     }
     stopAudio(); // Stop all audio when stopping the exercise
     setPhase("inhale");
-    setCount(4);
+    setCount(5);
   };
 
   useEffect(() => {
