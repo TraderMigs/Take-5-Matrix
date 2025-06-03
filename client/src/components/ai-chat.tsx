@@ -238,40 +238,72 @@ export default function AIChat({ isOpen, onClose }: AIChatProps) {
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold text-black dark:text-white text-center flex items-center justify-center gap-2">
             <Bot className="w-6 h-6 text-purple-600" />
-            AI Support Chat
+            Take 5 - AI Support
           </DialogTitle>
         </DialogHeader>
         <div id="ai-chat-description" className="sr-only">
-          Chat with an AI assistant for emotional support and guidance
+          Chat with Take 5, your supportive AI companion for emotional support and guidance
         </div>
 
-        <ScrollArea className="flex-1 p-4 space-y-4">
-          <div className="space-y-4">
-            {messages.map((message) => (
-              <div
-                key={message.id}
-                className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
+        {showNameInput ? (
+          <div className="flex-1 flex flex-col items-center justify-center p-6 space-y-4">
+            <Bot className="w-16 h-16 text-purple-600 mb-4" />
+            <h3 className="text-lg font-medium text-black dark:text-white text-center">
+              Hi there! I'm Take 5
+            </h3>
+            <p className="text-gray-600 dark:text-gray-300 text-center text-sm">
+              I'm your supportive companion. Before we chat, what would you like me to call you?
+            </p>
+            <form onSubmit={handleNameSubmit} className="w-full space-y-4">
+              <Input
+                type="text"
+                placeholder="Enter your name..."
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+                className="w-full bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600"
+                autoFocus
+              />
+              <Button 
+                type="submit" 
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                disabled={!userName.trim()}
               >
-                <div className={`flex items-start gap-2 max-w-[80%] ${message.sender === "user" ? "flex-row-reverse" : ""}`}>
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                    message.sender === "user" 
-                      ? "bg-purple-600 text-white" 
-                      : "bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
-                  }`}>
-                    {message.sender === "user" ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
+                Start Chatting
+              </Button>
+            </form>
+            <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+              Your conversations are private and supportive
+            </p>
+          </div>
+        ) : (
+          <>
+            <ScrollArea className="flex-1 p-4 space-y-4">
+              <div className="space-y-4">
+                {messages.map((message) => (
+                  <div
+                    key={message.id}
+                    className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
+                  >
+                    <div className={`flex items-start gap-2 max-w-[80%] ${message.sender === "user" ? "flex-row-reverse" : ""}`}>
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                        message.sender === "user" 
+                          ? "bg-purple-600 text-white" 
+                          : "bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
+                      }`}>
+                        {message.sender === "user" ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
+                      </div>
+                      <div className={`p-3 rounded-2xl ${
+                        message.sender === "user"
+                          ? "bg-purple-600 text-white"
+                          : "bg-gray-100 dark:bg-gray-800 text-black dark:text-white"
+                      }`}>
+                        <p className="text-sm leading-relaxed">{message.text}</p>
+                        <p className="text-xs opacity-70 mt-1">
+                          {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <div className={`p-3 rounded-2xl ${
-                    message.sender === "user"
-                      ? "bg-purple-600 text-white"
-                      : "bg-gray-100 dark:bg-gray-800 text-black dark:text-white"
-                  }`}>
-                    <p className="text-sm leading-relaxed">{message.text}</p>
-                    <p className="text-xs opacity-70 mt-1">
-                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </p>
-                  </div>
-                </div>
-              </div>
             ))}
             
             {isTyping && (
@@ -377,6 +409,8 @@ export default function AIChat({ isOpen, onClose }: AIChatProps) {
               </div>
             </div>
           </div>
+        )}
+          </>
         )}
       </DialogContent>
     </Dialog>
