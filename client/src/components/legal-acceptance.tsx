@@ -206,20 +206,29 @@ export default function LegalAcceptance({ isOpen, onAccept }: LegalAcceptancePro
           </div>
         </ScrollArea>
 
-        <div className="p-6 border-t border-gray-200 dark:border-gray-700">
-          <div className="flex items-center space-x-3 mb-4">
-            <Checkbox 
-              id="legal-acceptance"
-              checked={hasAccepted}
-              onCheckedChange={(checked) => setHasAccepted(checked === true)}
-              className="border-2 border-black dark:border-white"
-            />
-            <label 
-              htmlFor="legal-acceptance" 
-              className="text-sm text-black dark:text-white font-medium cursor-pointer leading-relaxed"
-            >
-              I am 18 years or older. I have read and agree to the Privacy Policy, Terms & Conditions, and Disclaimer. I understand that Take 5 is not a substitute for professional help.
-            </label>
+        <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-yellow-50 dark:bg-yellow-900/20">
+          <div className="bg-white dark:bg-gray-800 border-3 border-teal-500 rounded-lg p-4 mb-4 shadow-lg">
+            <div className="flex items-start space-x-4">
+              <div className="flex-shrink-0">
+                <Checkbox 
+                  id="legal-acceptance"
+                  checked={hasAccepted}
+                  onCheckedChange={(checked) => setHasAccepted(checked === true)}
+                  className="border-3 border-teal-500 w-6 h-6 data-[state=checked]:bg-teal-500 data-[state=checked]:border-teal-500"
+                />
+              </div>
+              <div className="flex-1">
+                <label 
+                  htmlFor="legal-acceptance" 
+                  className="text-base text-black dark:text-white font-semibold cursor-pointer leading-relaxed block"
+                >
+                  ✓ Click here to confirm: I am 18 years or older. I have read and agree to the Privacy Policy, Terms & Conditions, and Disclaimer. I understand that Take 5 is not a substitute for professional help.
+                </label>
+                <p className="text-sm text-teal-600 dark:text-teal-400 mt-2 font-medium">
+                  👆 Please check the box above to continue
+                </p>
+              </div>
+            </div>
           </div>
           <Button
             onClick={handleAccept}
