@@ -137,7 +137,7 @@ export function setupGoogleAuth(app: Express) {
           console.log('Username conflict resolved, new username:', googleUser.username);
         }
         
-        // Create new user
+        // Create new user with email already verified (Google verified it)
         console.log('Creating new user with data:', googleUser);
         user = await storage.createUser({
           email: googleUser.email,
@@ -146,10 +146,16 @@ export function setupGoogleAuth(app: Express) {
           dateOfBirth: googleUser.dateOfBirth,
           displayName: googleUser.displayName,
           profileImage: googleUser.profileImage,
+          emailVerified: true, // Google OAuth users are pre-verified
         });
         console.log('Created user:', user);
       } else {
         console.log('User already exists, using existing user');
+        // Mark existing Google OAuth users as email verified if not already
+        if (!user.emailVerified) {
+          await storage.updateUserProfile(user.id, { emailVerified: true });
+          user.emailVerified = true;
+        }
       }
 
       console.log('OAuth success, redirecting to frontend...');

@@ -97,6 +97,7 @@ export const insertUserSchema = createInsertSchema(users).pick({
   displayName: true,
   profileImage: true,
   bio: true,
+  emailVerified: true,
 });
 
 export const insertContactSchema = createInsertSchema(contacts).pick({
