@@ -153,6 +153,13 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
             timestamp: new Date(),
           };
           setMessages(prev => [...prev, aiMessage]);
+          
+          // Prevent any feedback popups or external UI components
+          // Remove any injected feedback elements that might appear
+          setTimeout(() => {
+            const feedbackElements = document.querySelectorAll('[data-feedback], .feedback-popup, .emoji-feedback');
+            feedbackElements.forEach(el => el.remove());
+          }, 100);
         }, 1000);
 
         // Handle tool suggestions

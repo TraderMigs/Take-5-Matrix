@@ -398,23 +398,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // AI Feedback endpoint
-  app.post("/api/ai-feedback", async (req, res) => {
-    try {
-      const { feedback, userName, sessionId } = req.body;
-      
-      // Log feedback for analytics
-      console.log(`AI Feedback received: ${feedback} from ${userName} (session: ${sessionId})`);
-      
-      // Store feedback in database if needed
-      // This could be expanded to track user satisfaction metrics
-      
-      res.json({ success: true, message: "Feedback received" });
-    } catch (error) {
-      console.error("AI Feedback error:", error);
-      res.status(500).json({ error: "Failed to record feedback" });
-    }
-  });
+
 
   // Test endpoint for weekly signup report (remove in production)
   app.get("/api/test/weekly-signup-report", async (req, res) => {
