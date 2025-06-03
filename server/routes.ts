@@ -319,18 +319,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // AI Chat endpoint with GPT-4.1 Mini
   app.post("/api/ai-chat", async (req, res) => {
     try {
-      const { message, conversationHistory, userName } = req.body;
+      const { message, conversationHistory, userName, language } = req.body;
 
-      // Use GPT-4.1 Mini with personalized responses and redirect logic
-      const aiResponse = await getOpenAIResponse(message, conversationHistory, userName);
+      // Detect crisis keywords for emergency response
+      const isCrisis = detectCrisisKeywords(message);
+      if (isCrisis) {
+        const crisisResponse = generateFallbackResponse(message, conversationHistory || []);
+        return res.json({ 
+          response: crisisResponse.response, 
+          showContacts: crisisResponse.showContacts || false,
+          isCrisis: crisisResponse.isCrisis || false
+        });
+      }
+
+      // Use GPT-4.1 Mini with conversation context and personalized responses
+      const aiResponse = await getOpenAIResponse(message, conversationHistory || [], userName);
       res.json({ response: aiResponse });
     } catch (error) {
       console.error("AI Chat error:", error);
       
       // Fallback to local response system if OpenAI fails
       const { message: reqMessage, conversationHistory: reqHistory } = req.body;
-      const fallbackResponse = generateFallbackResponse(reqMessage, reqHistory);
-      res.json({ response: fallbackResponse.response });
+      const fallbackResponse = generateFallbackResponse(reqMessage, reqHistory || []);
+      res.json({ 
+        response: fallbackResponse.response,
+        showContacts: fallbackResponse.showContacts || false,
+        isCrisis: fallbackResponse.isCrisis || false
+      });
     }
   });
 
