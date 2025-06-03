@@ -212,9 +212,9 @@ const openai = new OpenAI({
 async function getOpenAIResponse(message: string, conversationHistory: any[] = []): Promise<string> {
   try {
     // Create context from conversation history
-    const messages = [
+    const messages: Array<{role: 'system' | 'user' | 'assistant', content: string}> = [
       {
-        role: "system" as const,
+        role: "system",
         content: `You are a compassionate AI assistant for a mental wellness app called "Take 5". Your role is to provide empathetic, supportive responses to users who may be experiencing emotional distress, anxiety, depression, or crisis situations.
 
 Key guidelines:
@@ -233,7 +233,7 @@ If you detect crisis keywords like "suicide," "self-harm," "want to die," etc., 
 
     // Add conversation history
     if (conversationHistory && conversationHistory.length > 0) {
-      conversationHistory.slice(-6).forEach(msg => {
+      conversationHistory.slice(-6).forEach((msg: any) => {
         messages.push({
           role: msg.sender === 'user' ? 'user' as const : 'assistant' as const,
           content: msg.text
@@ -319,7 +319,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error("AI Chat error:", error);
       
       // Fallback to local response system if OpenAI fails
-      const fallbackResponse = generateFallbackResponse(message, conversationHistory);
+      const { message: reqMessage, conversationHistory: reqHistory } = req.body;
+      const fallbackResponse = generateFallbackResponse(reqMessage, reqHistory);
       res.json({ response: fallbackResponse.response });
     }
   });
