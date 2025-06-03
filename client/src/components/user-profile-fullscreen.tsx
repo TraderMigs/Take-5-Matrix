@@ -1048,7 +1048,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                     </div>
                   ) : (
                     <div className="flex items-center space-x-2 group">
-                      <p className="text-gray-700 dark:text-gray-300 font-normal text-base flex-1 min-h-[24px] bg-white/20 dark:bg-black/20 px-3 py-2 rounded-lg">
+                      <p className="text-white dark:text-black font-normal text-base flex-1 min-h-[24px] bg-black dark:bg-white px-3 py-2 rounded-lg border-2 border-teal-400">
                         {profileQuote || t('addQuotePlaceholder')}
                       </p>
                       <Button
