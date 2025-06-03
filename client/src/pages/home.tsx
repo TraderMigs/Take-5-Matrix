@@ -319,7 +319,7 @@ export default function Home() {
 
       <main className="p-6 space-y-6 pb-20 bg-white dark:bg-black">
         {/* Search Bar */}
-        <div className="relative">
+        <div className="relative search-container">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black dark:text-white w-4 h-4" />
           <input
             type="text"
