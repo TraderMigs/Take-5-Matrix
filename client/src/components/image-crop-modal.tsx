@@ -197,6 +197,28 @@ export default function ImageCropModal({ isOpen, onClose, imageSrc, onSave }: Im
                 {rotate}°
               </span>
             </div>
+
+            {/* Crop Controls */}
+            <div className="flex justify-center space-x-3">
+              <Button
+                onClick={handleResetCrop}
+                variant="outline"
+                size="sm"
+                className="text-black dark:text-white"
+              >
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Reset
+              </Button>
+              <Button
+                onClick={handleCropFullImage}
+                variant="outline"
+                size="sm"
+                className="text-black dark:text-white"
+              >
+                <Image className="w-4 h-4 mr-2" />
+                Crop Full Image
+              </Button>
+            </div>
           </div>
 
           {/* Action Buttons */}

@@ -849,9 +849,11 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
               </div>
               
               <div className="text-center w-full max-w-md">
-                <h2 className="text-2xl font-bold text-black dark:text-white mb-2">
-                  {currentUser.displayName || username}
-                </h2>
+                <div className="bg-black/20 backdrop-blur-sm rounded-lg px-4 py-2 mb-2">
+                  <h2 className="text-2xl font-bold text-white drop-shadow-lg">
+                    {currentUser.displayName || username}
+                  </h2>
+                </div>
                 
                 {/* Username Section */}
                 <div className="mb-4 flex items-center justify-center gap-2">
@@ -882,14 +884,14 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                       </Button>
                     </div>
                   ) : (
-                    <div className="flex items-center gap-2">
-                      <p className="text-lg text-black dark:text-white">@{currentUser?.username || 'username'}</p>
+                    <div className="bg-black/20 backdrop-blur-sm rounded-lg px-3 py-1 flex items-center gap-2">
+                      <p className="text-lg text-white drop-shadow-lg">@{currentUser?.username || 'username'}</p>
                       <div className="relative">
                         <Button
                           onClick={() => setShowUsernameDropdown(!showUsernameDropdown)}
                           size="sm"
                           variant="ghost"
-                          className="bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 border-none p-1"
+                          className="bg-transparent hover:bg-white/10 text-white/70 hover:text-white border-none p-1"
                         >
                           <ChevronDown className="w-3 h-3" />
                         </Button>
@@ -963,9 +965,12 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
 
               <Button 
                 onClick={onLogout}
-                className="mt-8 bg-red-600 hover:bg-red-700 text-white"
+                size="sm"
+                variant="ghost"
+                className="mt-8 bg-transparent hover:bg-white/10 text-white/70 hover:text-white border-none p-2"
+                title="Logout"
               >
-                {t('logout')}
+                <ArrowLeft className="w-4 h-4" />
               </Button>
             </div>
           </TabsContent>
@@ -1019,13 +1024,13 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                   </div>
                   
                   {newEntryImages.length > 0 && (
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="flex flex-col items-center space-y-2">
                       {newEntryImages.map((image, index) => (
                         <div key={index} className="relative group">
                           <img
                             src={image}
                             alt={`Entry image ${index + 1}`}
-                            className="w-full h-24 object-cover rounded-lg border border-gray-200 dark:border-gray-600"
+                            className="max-w-full h-32 object-contain rounded-lg border border-gray-200 dark:border-gray-600"
                           />
                           <Button
                             onClick={() => removeEntryImage(index)}
@@ -1223,13 +1228,13 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                             {entry.images && entry.images.length > 0 && (
                               <div className="space-y-2">
                                 <h5 className="text-sm font-medium text-black dark:text-white">Images:</h5>
-                                <div className="grid grid-cols-2 gap-2">
+                                <div className="flex flex-col items-center space-y-2">
                                   {entry.images.map((image: string, index: number) => (
                                     <div key={index} className="relative group">
                                       <img
                                         src={image}
                                         alt={`Entry image ${index + 1}`}
-                                        className="w-full h-32 object-cover rounded-lg border border-gray-200 dark:border-gray-600 cursor-pointer hover:opacity-90 transition-opacity"
+                                        className="max-w-full h-40 object-contain rounded-lg border border-gray-200 dark:border-gray-600 cursor-pointer hover:opacity-90 transition-opacity"
                                         onClick={() => {
                                           // Open image in full view
                                           const overlay = document.createElement('div');
