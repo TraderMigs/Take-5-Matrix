@@ -48,6 +48,9 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
   const [tempUsername, setTempUsername] = useState("");
   const [showDisplayNameDropdown, setShowDisplayNameDropdown] = useState(false);
   const [showUsernameDropdown, setShowUsernameDropdown] = useState(false);
+  const [newEntryImages, setNewEntryImages] = useState<string[]>([]);
+  const [showImageUploadModal, setShowImageUploadModal] = useState(false);
+  const [tempEntryImageSrc, setTempEntryImageSrc] = useState("");
   const { toast } = useToast();
   const { t } = useLanguage();
 
@@ -533,6 +536,41 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
     setTempUsername("");
   };
 
+  const handleDiaryImageUpload = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const imageSrc = e.target?.result as string;
+          setTempEntryImageSrc(imageSrc);
+          setShowImageUploadModal(true);
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
+  };
+
+  const handleSaveCroppedEntryImage = (croppedImageSrc: string) => {
+    setNewEntryImages(prev => [...prev, croppedImageSrc]);
+    setShowImageUploadModal(false);
+    setTempEntryImageSrc("");
+    
+    toast({
+      title: "Image added",
+      description: "Image has been added to your diary entry.",
+      className: "bg-green-800 border-green-700 text-white",
+    });
+  };
+
+  const removeEntryImage = (index: number) => {
+    setNewEntryImages(prev => prev.filter((_, i) => i !== index));
+  };
+
   const removeProfileImage = () => {
     setProfileImage("");
     localStorage.removeItem(`take5_profile_${currentUser.id}`);
@@ -557,6 +595,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
           userId: currentUser.id,
           title: newEntryTitle,
           content: newEntryContent,
+          images: newEntryImages,
         }),
       });
       
@@ -565,6 +604,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
         setDiaryEntries([newEntry, ...diaryEntries]);
         setNewEntryTitle("");
         setNewEntryContent("");
+        setNewEntryImages([]);
         setShowNewEntry(false);
         toast({
           title: "Entry saved",
@@ -890,6 +930,49 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                   rows={4}
                   className="bg-white dark:bg-black border-2 border-teal-400 text-black dark:text-white"
                 />
+                
+                {/* Image Upload Section */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-medium text-black dark:text-white">
+                      Images ({newEntryImages.length}/5)
+                    </label>
+                    {newEntryImages.length < 5 && (
+                      <Button
+                        onClick={handleDiaryImageUpload}
+                        size="sm"
+                        variant="outline"
+                        className="bg-white dark:bg-black border-teal-400 text-teal-600 hover:bg-teal-50 dark:hover:bg-teal-900"
+                      >
+                        <Camera className="w-4 h-4 mr-2" />
+                        Add Image
+                      </Button>
+                    )}
+                  </div>
+                  
+                  {newEntryImages.length > 0 && (
+                    <div className="grid grid-cols-2 gap-2">
+                      {newEntryImages.map((image, index) => (
+                        <div key={index} className="relative group">
+                          <img
+                            src={image}
+                            alt={`Entry image ${index + 1}`}
+                            className="w-full h-24 object-cover rounded-lg border border-gray-200 dark:border-gray-600"
+                          />
+                          <Button
+                            onClick={() => removeEntryImage(index)}
+                            size="sm"
+                            variant="destructive"
+                            className="absolute top-1 right-1 w-6 h-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <X className="w-3 h-3" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                
                 <div className="flex gap-2">
                   <Button onClick={saveDiaryEntry} className="bg-teal-500 hover:bg-teal-600 text-white">
                     {t('saveEntry')}
@@ -1020,7 +1103,40 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                             className="mt-3 bg-white dark:bg-black border border-teal-400 text-black dark:text-white"
                           />
                         ) : (
-                          <p className="text-black dark:text-white mt-3 leading-relaxed">{entry.content}</p>
+                          <div className="mt-3 space-y-4">
+                            <p className="text-black dark:text-white leading-relaxed">{entry.content}</p>
+                            
+                            {/* Display entry images */}
+                            {entry.images && entry.images.length > 0 && (
+                              <div className="space-y-2">
+                                <h5 className="text-sm font-medium text-black dark:text-white">Images:</h5>
+                                <div className="grid grid-cols-2 gap-2">
+                                  {entry.images.map((image: string, index: number) => (
+                                    <div key={index} className="relative group">
+                                      <img
+                                        src={image}
+                                        alt={`Entry image ${index + 1}`}
+                                        className="w-full h-32 object-cover rounded-lg border border-gray-200 dark:border-gray-600 cursor-pointer hover:opacity-90 transition-opacity"
+                                        onClick={() => {
+                                          // Open image in full view
+                                          const overlay = document.createElement('div');
+                                          overlay.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
+                                          overlay.onclick = () => document.body.removeChild(overlay);
+                                          
+                                          const img = document.createElement('img');
+                                          img.src = image;
+                                          img.className = 'max-w-full max-h-full object-contain';
+                                          
+                                          overlay.appendChild(img);
+                                          document.body.appendChild(overlay);
+                                        }}
+                                      />
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
                         )}
                       </div>
                     )}
