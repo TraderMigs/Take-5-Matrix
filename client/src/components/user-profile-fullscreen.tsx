@@ -8,6 +8,7 @@ import { Camera, BookOpen, PlusCircle, X, ChevronDown, ChevronUp, Save, Edit, Do
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/hooks/use-language";
 import DiaryExportModal from "@/components/diary-export-modal";
+import DiaryEntryDownloadModal from "@/components/diary-entry-download-modal";
 import ImageCropModal from "@/components/image-crop-modal";
 
 interface UserProfileProps {
@@ -51,6 +52,8 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
   const [newEntryImages, setNewEntryImages] = useState<string[]>([]);
   const [showImageUploadModal, setShowImageUploadModal] = useState(false);
   const [tempEntryImageSrc, setTempEntryImageSrc] = useState("");
+  const [showEntryDownloadModal, setShowEntryDownloadModal] = useState(false);
+  const [selectedEntryForDownload, setSelectedEntryForDownload] = useState<any>(null);
   const { toast } = useToast();
   const { t } = useLanguage();
 
@@ -1036,7 +1039,8 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                                 size="sm"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  exportEntry(entry);
+                                  setSelectedEntryForDownload(entry);
+                                  setShowEntryDownloadModal(true);
                                 }}
                                 className="bg-blue-600 hover:bg-blue-700 p-2 min-w-0 h-8 w-8 rounded-full"
                               >
@@ -1304,6 +1308,17 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
         onClose={() => setShowImageUploadModal(false)}
         imageSrc={tempEntryImageSrc}
         onSave={handleSaveCroppedEntryImage}
+      />
+
+      {/* Diary Entry Download Modal */}
+      <DiaryEntryDownloadModal
+        isOpen={showEntryDownloadModal}
+        onClose={() => {
+          setShowEntryDownloadModal(false);
+          setSelectedEntryForDownload(null);
+        }}
+        entry={selectedEntryForDownload}
+        userName={currentUser?.displayName || currentUser?.username}
       />
     </div>
   );
