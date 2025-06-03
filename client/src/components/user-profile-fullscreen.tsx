@@ -32,6 +32,10 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
   const [showExportModal, setShowExportModal] = useState(false);
   const [showImageCropModal, setShowImageCropModal] = useState(false);
   const [tempImageSrc, setTempImageSrc] = useState("");
+  const [backgroundImage, setBackgroundImage] = useState("");
+  const [showBackgroundCropModal, setShowBackgroundCropModal] = useState(false);
+  const [tempBackgroundSrc, setTempBackgroundSrc] = useState("");
+  const [showBackgroundDropdown, setShowBackgroundDropdown] = useState(false);
   const { toast } = useToast();
   const { t } = useLanguage();
 
@@ -175,6 +179,12 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
         setUsername(usernameFromDB);
         setProfileImage(imageFromDB);
         
+        // Load background image from localStorage (persistent across sessions)
+        const savedBackground = localStorage.getItem(`take5_background_${currentUser.id}`);
+        if (savedBackground) {
+          setBackgroundImage(savedBackground);
+        }
+        
         // Sync localStorage with database data to ensure persistence
         const updatedUser = { 
           ...currentUser, 
@@ -191,6 +201,12 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
       setProfileQuote(savedUser.bio || currentUser.bio || "");
       setProfileImage(savedUser.profileImage || currentUser.profileImage || "");
       setUsername(savedUser.username || currentUser.username || "");
+      
+      // Load background image from localStorage even if server fails
+      const savedBackground = localStorage.getItem(`take5_background_${currentUser.id}`);
+      if (savedBackground) {
+        setBackgroundImage(savedBackground);
+      }
     }
   };
 
@@ -336,6 +352,52 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
     }
   };
 
+  const handleBackgroundUpload = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const imageSrc = e.target?.result as string;
+          setTempBackgroundSrc(imageSrc);
+          setShowBackgroundCropModal(true);
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
+  };
+
+  const handleSaveCroppedBackground = (croppedImageSrc: string) => {
+    setBackgroundImage(croppedImageSrc);
+    localStorage.setItem(`take5_background_${currentUser.id}`, croppedImageSrc);
+    
+    toast({
+      title: "Background saved",
+      description: "Your profile background has been updated successfully.",
+      className: "bg-green-800 border-green-700 text-white",
+    });
+    
+    setShowBackgroundCropModal(false);
+    setShowBackgroundDropdown(false);
+  };
+
+  const removeBackgroundImage = () => {
+    setBackgroundImage("");
+    localStorage.removeItem(`take5_background_${currentUser.id}`);
+    
+    toast({
+      title: "Background removed",
+      description: "Your profile background has been removed.",
+      className: "bg-green-800 border-green-700 text-white",
+    });
+    
+    setShowBackgroundDropdown(false);
+  };
+
   const saveDiaryEntry = async () => {
     if (!newEntryTitle.trim() || !newEntryContent.trim()) return;
     
@@ -374,10 +436,51 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-purple-200 dark:bg-purple-900 overflow-y-auto">
-      <div className="min-h-screen p-4">
+    <div 
+      className="fixed inset-0 z-50 overflow-y-auto"
+      style={{
+        backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'linear-gradient(135deg, #ddd6fe 0%, #a855f7 100%)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      <div className="min-h-screen p-4 bg-black/20 backdrop-blur-sm">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-black dark:text-white">{t('yourProfile')}</h1>
+          <div className="flex items-center gap-4">
+            <h1 className="text-2xl font-bold text-white drop-shadow-lg">
+              Hey, {currentUser?.displayName || currentUser?.username || 'Friend'}!
+            </h1>
+            <div className="relative">
+              <Button
+                onClick={() => setShowBackgroundDropdown(!showBackgroundDropdown)}
+                size="sm"
+                className="bg-white/20 hover:bg-white/30 text-white border border-white/30"
+              >
+                <ChevronDown className="w-4 h-4" />
+              </Button>
+              {showBackgroundDropdown && (
+                <div className="absolute top-full left-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg z-10 min-w-[150px]">
+                  <button
+                    onClick={handleBackgroundUpload}
+                    className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-black dark:text-white flex items-center gap-2"
+                  >
+                    <Camera className="w-4 h-4" />
+                    Edit Image
+                  </button>
+                  {backgroundImage && (
+                    <button
+                      onClick={removeBackgroundImage}
+                      className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-red-600 flex items-center gap-2"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Remove
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
           <Button 
             variant="outline" 
             onClick={onClose}
