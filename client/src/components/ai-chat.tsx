@@ -180,7 +180,7 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
               onChange={(e) => setUserName(e.target.value)}
               placeholder="Enter your name or nickname"
               onKeyPress={(e) => e.key === 'Enter' && handleNameSubmit()}
-              className="text-center"
+              className="text-center text-purple-600 dark:text-white"
               autoFocus
             />
             <Button
