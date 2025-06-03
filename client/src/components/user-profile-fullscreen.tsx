@@ -22,6 +22,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
   const [profileImage, setProfileImage] = useState(currentUser?.profileImage || "");
   const [username, setUsername] = useState(currentUser?.username || "");
   const [isEditingUsername, setIsEditingUsername] = useState(false);
+  const [isEditingQuote, setIsEditingQuote] = useState(false);
   const [diaryEntries, setDiaryEntries] = useState<any[]>([]);
   const [newEntryTitle, setNewEntryTitle] = useState("");
   const [newEntryContent, setNewEntryContent] = useState("");
@@ -242,6 +243,9 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
         // Update localStorage for persistence across sessions
         const updatedUser = { ...currentUser, bio: profileQuote };
         localStorage.setItem('take5_current_user', JSON.stringify(updatedUser));
+        
+        // Exit editing mode
+        setIsEditingQuote(false);
         
         toast({
           title: "Quote Saved",
@@ -578,24 +582,54 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                 </div>
                 
                 <div className="space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <Input
-                      type="text"
-                      placeholder={t('addQuotePlaceholder')}
-                      value={profileQuote}
-                      onChange={(e) => handleQuoteChange(e.target.value)}
-                      className="bg-white dark:bg-black border-2 border-teal-400 text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 flex-1"
-                      maxLength={40}
-                    />
-                    <Button
-                      onClick={saveProfileQuote}
-                      size="sm"
-                      className="bg-teal-500 hover:bg-teal-600 text-white px-3"
-                    >
-                      <Save className="w-4 h-4" />
-                    </Button>
-                  </div>
-                  <p className="text-sm text-black dark:text-white">{profileQuote.length}/40</p>
+                  {isEditingQuote ? (
+                    <div className="flex items-center space-x-2">
+                      <Input
+                        type="text"
+                        placeholder={t('addQuotePlaceholder')}
+                        value={profileQuote}
+                        onChange={(e) => handleQuoteChange(e.target.value)}
+                        className="bg-white dark:bg-black border-2 border-teal-400 text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 flex-1"
+                        maxLength={40}
+                        autoFocus
+                      />
+                      <Button
+                        onClick={saveProfileQuote}
+                        size="sm"
+                        className="bg-teal-500 hover:bg-teal-600 text-white px-3"
+                      >
+                        <Save className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          setProfileQuote(currentUser?.bio || "");
+                          setIsEditingQuote(false);
+                        }}
+                        size="sm"
+                        variant="outline"
+                        className="px-2"
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center space-x-2 group">
+                      <p className="text-gray-700 dark:text-gray-300 font-normal text-base flex-1 min-h-[24px]">
+                        {profileQuote || t('addQuotePlaceholder')}
+                      </p>
+                      <Button
+                        onClick={() => setIsEditingQuote(true)}
+                        size="sm"
+                        variant="ghost"
+                        className="p-1 opacity-60 hover:opacity-100 transition-opacity"
+                      >
+                        <Edit className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                      </Button>
+                    </div>
+                  )}
+                  {isEditingQuote && (
+                    <p className="text-sm text-black dark:text-white">{profileQuote.length}/40</p>
+                  )}
                 </div>
               </div>
 
