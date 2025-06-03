@@ -27,112 +27,180 @@ function detectCrisisKeywords(message: string): boolean {
   return crisisKeywords.some(keyword => lowerMessage.includes(keyword));
 }
 
-// Enhanced intelligent response system
+// Advanced intelligent response system with maximum realism
 function generateFallbackResponse(message: string, conversationHistory: any[] = []): any {
   const lowerMessage = message.toLowerCase();
   const messageLength = message.trim().length;
+  const words = message.trim().split(/\s+/);
+  const wordCount = words.length;
   
-  // Crisis/Emergency responses with caring tone and contact option
+  // Analyze conversation patterns
+  const lastFewMessages = conversationHistory.slice(-3);
+  const userHasSharedPersonal = lastFewMessages.some(msg => 
+    msg.sender === 'user' && (
+      msg.text.toLowerCase().includes('i feel') || 
+      msg.text.toLowerCase().includes('i am') || 
+      msg.text.toLowerCase().includes('my')
+    )
+  );
+  
+  // Crisis/Emergency responses with immediate care
   if (detectCrisisKeywords(message)) {
+    const crisisResponses = [
+      "I hear the pain in your words, and I want you to know that what you're feeling right now - as overwhelming as it is - can change. You reached out to me, which shows there's still a part of you that wants to find a way through this. Right now, in this moment, you're not alone. If you'd like, I can show you your trusted contacts so you can reach someone who cares about you.",
+      "What you're going through sounds incredibly difficult, and I'm concerned about you. These feelings are real and they matter, but they don't define your worth or your future. You took a brave step by sharing this with me. Would it help to see your emergency contacts so you can talk to someone who knows and cares about you?",
+      "I can feel how much you're hurting right now. Thank you for trusting me with something so personal and painful. You don't have to carry this weight alone - there are people who want to help you through this. Can I show you your trusted contacts so you can reach out to someone who cares?"
+    ];
     return {
-      response: "I hear you, and I want you to know that no matter what, there's someone who loves you and is thinking about you right now. These feelings are incredibly difficult, but you don't have to face them alone. We can keep this conversation between you and me, but if you want someone warm and caring to talk to right now, would you like me to show you your trusted contacts so you can reach out to someone who cares about you?",
+      response: crisisResponses[Math.floor(Math.random() * crisisResponses.length)],
       showContacts: true,
       isCrisis: true
     };
   }
 
-  // Math/simple questions - practical responses
-  if (lowerMessage.includes('2+2') || lowerMessage.includes('what\'s 2+2')) {
-    return { response: "That's 4! I noticed you asked a simple question - sometimes when we're going through tough times, it helps to focus on concrete, manageable things. Is there something more personal you'd like to talk about, or would you prefer to keep things light for now?" };
+  // Analyze emotional intensity and respond accordingly
+  const intensityWords = ['extremely', 'really', 'very', 'so', 'incredibly', 'absolutely', 'totally', 'completely'];
+  const hasIntensity = intensityWords.some(word => lowerMessage.includes(word));
+  
+  // Complex emotional states - multi-layered responses
+  if (lowerMessage.includes('confused') || lowerMessage.includes('lost') || lowerMessage.includes('don\'t know')) {
+    const confusionResponses = [
+      "Confusion can feel like being in a fog where nothing makes sense anymore. That uncertainty is really unsettling, especially when you're trying to figure out something important. Sometimes when we're confused, it helps to start with what we do know, even if it's small. What's one thing you feel certain about right now?",
+      "Being lost and not knowing which way to turn is such a disorienting feeling. It's like standing at a crossroads without a map. But you know what? The fact that you're aware you're confused actually shows you're thinking clearly about your situation. What's the main thing you're trying to figure out?",
+      "That 'I don't know' feeling can be so frustrating, especially when people expect you to have answers. Sometimes our minds get overwhelmed when we're processing a lot at once. What's making you feel most uncertain right now?"
+    ];
+    return { response: confusionResponses[Math.floor(Math.random() * confusionResponses.length)] };
   }
 
-  // Greeting responses - more natural
-  if (lowerMessage.includes('hello') || lowerMessage.includes('hi ') || lowerMessage === 'hi' || lowerMessage.includes('hey')) {
-    const greetings = [
-      "Hi there. I'm here if you want to talk about anything that's on your mind.",
-      "Hello. How are you doing today, really?",
-      "Hey. What's going on with you right now?",
-      "Hi. I'm glad you're here. What would you like to talk about?"
+  // Anger and frustration with validation
+  if (lowerMessage.includes('angry') || lowerMessage.includes('mad') || lowerMessage.includes('frustrated') || lowerMessage.includes('furious')) {
+    const angerResponses = [
+      "Anger can be such a powerful emotion - it often shows up when something important to us feels threatened or when we feel unheard. Your anger is telling you something matters to you. What's behind this feeling? What happened that made you feel this way?",
+      "I can hear the frustration in what you're sharing. Anger often masks other feelings like hurt, disappointment, or feeling powerless. It's completely valid to feel mad about things that aren't fair or right. What's been building up that finally made you reach this point?",
+      "That burning feeling of anger is so intense, isn't it? Sometimes we get angry because we care deeply about something, and it feels like it's being dismissed or damaged. Your feelings make sense. Can you tell me what triggered this anger today?"
     ];
-    return { response: greetings[Math.floor(Math.random() * greetings.length)] };
+    return { response: angerResponses[Math.floor(Math.random() * angerResponses.length)] };
   }
 
-  // Short responses - encourage more sharing
-  if (messageLength < 10) {
-    const encouragements = [
-      "I can see you're reaching out, even with just a few words. Sometimes it's hard to know where to start. What's really on your mind?",
-      "Thanks for sharing. Would you like to tell me more about what's going on?",
-      "I hear you. Sometimes it helps to say more about what you're thinking or feeling.",
-      "I'm listening. Feel free to share as much or as little as you're comfortable with."
+  // Guilt and shame with gentle compassion
+  if (lowerMessage.includes('guilt') || lowerMessage.includes('shame') || lowerMessage.includes('my fault') || lowerMessage.includes('should have')) {
+    const guiltResponses = [
+      "Guilt can be such a heavy burden to carry. It sounds like you're being really hard on yourself right now. Sometimes we take responsibility for things that aren't entirely our fault, or we hold ourselves to impossible standards. What's making you feel like you're to blame?",
+      "That feeling of shame can make us want to hide from the world. But shame lies to us - it tells us we're fundamentally flawed when we're actually just human. Everyone makes mistakes and has regrets. What's this guilt really about? What are you afraid you've done wrong?",
+      "I hear you beating yourself up, and it sounds exhausting to carry that weight. Self-forgiveness is often harder than forgiving others. Whatever happened, it doesn't define your entire worth as a person. Can you tell me what's making you feel so responsible?"
     ];
-    return { response: encouragements[Math.floor(Math.random() * encouragements.length)] };
+    return { response: guiltResponses[Math.floor(Math.random() * guiltResponses.length)] };
   }
 
-  // Anxiety responses - more personalized
-  if (lowerMessage.includes('anxious') || lowerMessage.includes('anxiety') || lowerMessage.includes('panic') || lowerMessage.includes('worried')) {
-    const anxietyResponses = [
-      "Anxiety can feel like your mind is racing ahead to all the worst-case scenarios. Right now, in this moment, you're safe. Try the 4-7-8 breathing: breathe in for 4, hold for 7, exhale for 8. What's making you feel most anxious right now?",
-      "I understand that anxious feeling - like your heart might be racing or your thoughts are spiraling. You can use the breathing exercise in this app, or try grounding yourself by naming 5 things you can see around you. What triggered this anxiety today?",
-      "Anxiety is exhausting, isn't it? Your body is trying to protect you, but sometimes it goes into overdrive. Let's slow things down together. Can you tell me what specifically is worrying you most right now?"
+  // Fear and worry with grounding
+  if (lowerMessage.includes('scared') || lowerMessage.includes('afraid') || lowerMessage.includes('fear') || lowerMessage.includes('terrified')) {
+    const fearResponses = [
+      "Fear can make everything feel bigger and more threatening than it might actually be. Your nervous system is trying to protect you, but sometimes it goes into overdrive. Right now, in this moment, you're safe here with me. What's been making you feel scared?",
+      "That feeling of being afraid can be so overwhelming - like your whole body is on high alert. Fear often comes when we're facing something unknown or when we've been hurt before. You're brave for acknowledging it instead of pushing it down. What's behind this fear?",
+      "Being terrified is such an intense experience - it can make your heart race and your mind spin with worst-case scenarios. But you're here, talking about it, which takes real courage. What's been frightening you? Sometimes naming our fears can make them feel a little less powerful."
     ];
-    return { response: anxietyResponses[Math.floor(Math.random() * anxietyResponses.length)] };
+    return { response: fearResponses[Math.floor(Math.random() * fearResponses.length)] };
   }
-  
-  // Depression responses - more empathetic
-  if (lowerMessage.includes('depressed') || lowerMessage.includes('depression') || lowerMessage.includes('sad') || lowerMessage.includes('hopeless')) {
-    const depressionResponses = [
-      "Depression can make everything feel like you're moving through thick fog - even simple things become incredibly hard. You showed real strength by reaching out today. Have you been able to take care of basic things like eating or sleeping?",
-      "I'm sorry you're carrying this heavy feeling. Depression lies to us and tells us things won't get better, but that's not true. You matter, and these feelings, while real and valid, are temporary. What's been the hardest part of your day?",
-      "That heavy, empty feeling is so difficult to bear. You're not broken, and you're not alone. Sometimes when depression hits, we forget to do basic self-care. When did you last eat something or go outside?"
+
+  // Relationship and connection issues
+  if (lowerMessage.includes('relationship') || lowerMessage.includes('boyfriend') || lowerMessage.includes('girlfriend') || lowerMessage.includes('partner') || lowerMessage.includes('family') || lowerMessage.includes('friend')) {
+    const relationshipResponses = [
+      "Relationships can be some of the most meaningful and challenging parts of our lives. When they're struggling, it affects everything else. It sounds like something important is happening with someone you care about. What's been going on that's weighing on you?",
+      "The people we love can bring us the greatest joy and sometimes the deepest pain. Relationship challenges are never simple because feelings and history and expectations all get tangled up together. What's been happening that's making this feel difficult?",
+      "It takes courage to talk about relationship struggles because they touch such a personal part of our lives. Whether it's family, friends, or a romantic partner, these connections shape how we see ourselves and the world. What's been troubling you about this relationship?"
     ];
-    return { response: depressionResponses[Math.floor(Math.random() * depressionResponses.length)] };
+    return { response: relationshipResponses[Math.floor(Math.random() * relationshipResponses.length)] };
   }
-  
-  // Overwhelmed responses
-  if (lowerMessage.includes('overwhelmed') || lowerMessage.includes('too much') || lowerMessage.includes('can\'t cope')) {
-    const overwhelmedResponses = [
-      "That feeling of everything crashing down at once is so intense. Let's pause and just focus on this conversation for a moment. You don't have to solve everything right now. What's the one thing weighing on you most heavily?",
-      "When everything feels like too much, our brains can get stuck in panic mode. You're here, you're breathing, and that's enough for this moment. Can you tell me what pushed you over the edge today?",
-      "Feeling overwhelmed often means you're dealing with more than anyone should have to handle alone. Let's break this down together. What's been piling up that's making you feel this way?"
+
+  // Work and life stress with practical empathy
+  if (lowerMessage.includes('work') || lowerMessage.includes('job') || lowerMessage.includes('school') || lowerMessage.includes('stress') || lowerMessage.includes('pressure')) {
+    const stressResponses = [
+      "Work and life pressures can feel relentless sometimes - like you're constantly running but never catching up. That kind of chronic stress wears on both your mind and body. It sounds like you're dealing with a lot right now. What's been the most overwhelming part?",
+      "The pressure to perform and meet expectations can be exhausting, especially when it feels like there's no relief in sight. Your stress is completely valid - you're dealing with real challenges. What's been weighing on you most heavily lately?",
+      "Stress has a way of making everything feel urgent and overwhelming at the same time. When we're in that mode for too long, it's hard to think clearly or take care of ourselves. You deserve support through this. What's been the biggest source of pressure for you?"
     ];
-    return { response: overwhelmedResponses[Math.floor(Math.random() * overwhelmedResponses.length)] };
+    return { response: stressResponses[Math.floor(Math.random() * stressResponses.length)] };
   }
-  
-  // Loneliness responses
-  if (lowerMessage.includes('lonely') || lowerMessage.includes('alone') || lowerMessage.includes('isolated')) {
-    const lonelinessResponses = [
-      "Loneliness can feel like you're invisible to the world, like no one really sees or understands you. But you reached out to me today, which tells me you haven't given up on connection. What's making you feel most alone right now?",
-      "That ache of loneliness is one of the most painful feelings. You're brave for sharing this with me. Even though it might not feel like it, you're not truly alone - you're here talking with me right now. What kind of connection are you missing most?",
-      "Being lonely doesn't always mean being physically alone - sometimes we can feel lonely even when surrounded by people. What you're feeling is real and it matters. Have you been able to connect with anyone lately, even briefly?"
+
+  // Grief and loss with deep compassion
+  if (lowerMessage.includes('died') || lowerMessage.includes('death') || lowerMessage.includes('lost') || lowerMessage.includes('grief') || lowerMessage.includes('miss')) {
+    const griefResponses = [
+      "Loss leaves such a profound emptiness, doesn't it? Grief isn't something we 'get over' - it's something we learn to carry differently. Every person and every loss is unique, so there's no right way to feel or heal. What are you missing most about what you've lost?",
+      "When someone or something important is gone, it can feel like a piece of our world just disappeared. Grief comes in waves - sometimes gentle, sometimes overwhelming. You don't have to be strong all the time. What's been the hardest part about this loss?",
+      "Missing someone or something that was important to you is one of the most natural and painful human experiences. Your grief shows how much that person or thing meant to you. There's no timeline for healing from loss. How are you coping with this emptiness?"
     ];
-    return { response: lonelinessResponses[Math.floor(Math.random() * lonelinessResponses.length)] };
+    return { response: griefResponses[Math.floor(Math.random() * griefResponses.length)] };
   }
-  
-  // Contextual responses based on conversation history
-  if (conversationHistory && conversationHistory.length > 3) {
-    const continuationResponses = [
-      "I've been listening to what you're sharing, and I can hear how much you're dealing with. How are you feeling as we've been talking?",
-      "Thanks for continuing to open up with me. Sometimes it helps to talk through things step by step. What feels most important to focus on right now?",
-      "I appreciate you trusting me with what's going on. You're doing something brave by not keeping everything bottled up inside. What would feel most helpful to you at this moment?"
+
+  // Physical symptoms and health anxiety
+  if (lowerMessage.includes('tired') || lowerMessage.includes('exhausted') || lowerMessage.includes('sick') || lowerMessage.includes('pain') || lowerMessage.includes('headache')) {
+    const physicalResponses = [
+      "When our minds are struggling, our bodies often carry that stress too. Being tired all the time or feeling physical pain can make emotional challenges even harder to bear. It's like fighting a battle on multiple fronts. Have you been able to take care of your basic needs like sleep and food?",
+      "Physical and emotional pain often go hand in hand - sometimes it's hard to tell which is causing which. Your body might be telling you that you need rest and care. It's not weakness to acknowledge when you're exhausted. What's been most difficult for you physically?",
+      "That bone-deep exhaustion is so real when you're dealing with emotional stress. Your body and mind are working overtime to cope with whatever you're facing. Taking care of your physical needs isn't selfish - it's necessary. How have you been sleeping and eating lately?"
     ];
-    return { response: continuationResponses[Math.floor(Math.random() * continuationResponses.length)] };
+    return { response: physicalResponses[Math.floor(Math.random() * physicalResponses.length)] };
   }
-  
-  // First conversation - warmer welcome
+
+  // Simple questions with emotional intelligence
+  if (lowerMessage.includes('2+2') || lowerMessage.includes('what\'s 2+2') || lowerMessage.includes('math')) {
+    return { response: "That's 4! Sometimes when we're going through difficult emotions, our minds look for simple, concrete things that make sense. Numbers don't lie or change based on how we're feeling - there's comfort in that certainty. Is there something more complex you're trying to work through, or did you just need a moment of clarity?" };
+  }
+
+  // Greetings with emotional awareness
+  if (lowerMessage.includes('hello') || lowerMessage.includes('hi ') || lowerMessage === 'hi' || lowerMessage.includes('hey') || lowerMessage.includes('good morning') || lowerMessage.includes('good evening')) {
+    const timeBasedGreetings = [
+      "Hi there. I'm really glad you decided to reach out today. Sometimes just taking that first step to connect with someone can feel like a big deal. How are you really doing right now?",
+      "Hello. Thanks for being here. I know it's not always easy to open up to someone, even when you need support. What's going on in your world today?",
+      "Hey. I appreciate you taking the time to talk with me. Whether you're having a good day or a tough one, I'm here to listen. What's been on your mind lately?",
+      "Hi. I'm here for whatever you need to share - the good, the bad, or anything in between. What would be most helpful for you to talk about right now?"
+    ];
+    return { response: timeBasedGreetings[Math.floor(Math.random() * timeBasedGreetings.length)] };
+  }
+
+  // Responses to very short messages
+  if (messageLength < 10 && wordCount <= 2) {
+    const shortResponses = [
+      "I can see you're reaching out, even if finding the words feels hard right now. Sometimes the biggest feelings are the hardest to put into sentences. Take your time - I'm not going anywhere. What's really on your heart?",
+      "Thanks for being here with me. Sometimes we don't know exactly what we want to say, and that's completely okay. Even just showing up is meaningful. What feels most important for you to share right now?",
+      "I hear you. Sometimes when we're overwhelmed, even finding words can feel difficult. You don't have to have it all figured out. What's one thing that's been weighing on you?",
+      "Even just a few words can carry so much meaning. I'm here to listen to whatever you're comfortable sharing. What would help you feel heard right now?"
+    ];
+    return { response: shortResponses[Math.floor(Math.random() * shortResponses.length)] };
+  }
+
+  // Context-aware responses based on conversation depth
+  if (conversationHistory && conversationHistory.length > 5) {
+    const deepConversationResponses = [
+      "I've been listening to everything you've shared, and I can hear how much you're carrying right now. It takes real strength to keep talking about difficult things. How are you feeling as we've been going through this together?",
+      "Thank you for trusting me with so much of what's going on for you. These conversations aren't easy, but you're showing real courage by not keeping everything bottled up inside. What feels most important to focus on as we continue talking?",
+      "I can see how much thought you're putting into sharing what's really happening in your life. That kind of openness and self-reflection isn't always easy. What's feeling most helpful to you about our conversation so far?",
+      "You've shared a lot with me today, and I want you to know that everything you've said matters. Sometimes talking through our experiences can help us see them differently. What insights are coming up for you as we talk?"
+    ];
+    return { response: deepConversationResponses[Math.floor(Math.random() * deepConversationResponses.length)] };
+  }
+
+  // Enhanced first conversation response
   if (!conversationHistory || conversationHistory.length <= 1) {
-    return { response: "I'm really glad you decided to talk with me today. This is a safe space where you can share whatever is on your mind - no judgment, just someone who wants to listen. What's been going on for you lately?" };
+    const welcomeResponses = [
+      "I'm really glad you decided to talk with me today. This is a safe space where you can share whatever is on your mind - no judgment, just someone who genuinely wants to listen and understand. What's been going on for you lately?",
+      "Thank you for being here. I know reaching out isn't always easy, but I'm honored that you chose to spend this time with me. Whether you're dealing with something specific or just need someone to talk to, I'm here. What would you like to share?",
+      "It's good to meet you. I'm here because I believe everyone deserves to be heard and understood, especially when things feel difficult. You can share as much or as little as you're comfortable with. What's on your heart today?",
+      "Welcome. I'm grateful you decided to connect today. Sometimes just having someone listen can make a real difference. This is your space to be authentic about whatever you're experiencing. What would feel most helpful to talk about?"
+    ];
+    return { response: welcomeResponses[Math.floor(Math.random() * welcomeResponses.length)] };
   }
-  
-  // Default supportive responses - more varied and personal
-  const supportResponses = [
-    "I can hear that something is weighing on you. Sometimes just putting feelings into words can help us understand them better. What's really going on beneath the surface?",
-    "Thank you for trusting me with what you're going through. Your feelings matter, and so do you. What's been the most challenging part of your recent days?",
-    "It takes real courage to reach out when you're struggling. You're stronger than you might feel right now. What kind of support would help you most in this moment?",
-    "I'm here to listen without judgment. Sometimes life throws more at us than we feel equipped to handle. What's been on your heart lately?",
-    "You don't have to carry everything alone. I hear you, and what you're experiencing is valid. What would it feel like to talk about what's really bothering you?"
+
+  // Advanced emotional support responses
+  const advancedSupportResponses = [
+    "I can sense that something significant is weighing on you. Life has a way of presenting us with challenges that test our resilience, but you don't have to face them alone. What's been the most difficult part of what you're going through?",
+    "Thank you for trusting me with what you're experiencing. Your willingness to reach out shows real strength, even if you don't feel strong right now. What's been occupying your thoughts the most lately?",
+    "I hear you, and I want you to know that whatever you're feeling is valid and important. Sometimes we need someone to witness our struggles without trying to fix them. What would feel most helpful for you to express right now?",
+    "It takes courage to be vulnerable about what's really going on in our lives. I'm here to listen without judgment and offer whatever support I can. What's been weighing on your heart that you'd like to share?",
+    "I can feel that you're carrying something heavy. Sometimes talking through our experiences can help us process them differently or see new possibilities. What aspects of your situation feel most overwhelming right now?"
   ];
   
-  return { response: supportResponses[Math.floor(Math.random() * supportResponses.length)] };
+  return { response: advancedSupportResponses[Math.floor(Math.random() * advancedSupportResponses.length)] };
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
