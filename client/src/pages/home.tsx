@@ -318,7 +318,7 @@ export default function Home() {
         <div className="absolute top-4 left-4">
           <LocationSelector />
         </div>
-        <div className="absolute top-4 right-4 flex gap-2">
+        <div className="absolute top-4 right-6 flex gap-2">
           <LanguageSelector />
           <button
             onClick={toggleTheme}
