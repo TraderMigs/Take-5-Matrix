@@ -19,6 +19,8 @@ import { useToast } from "@/hooks/use-toast";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [filteredResults, setFilteredResults] = useState<any[]>([]);
+  const [showSearchResults, setShowSearchResults] = useState(false);
   const [showBreathingModal, setShowBreathingModal] = useState(false);
   const [showActionModal, setShowActionModal] = useState(false);
   const [selectedAction, setSelectedAction] = useState<any>(null);
@@ -141,6 +143,7 @@ export default function Home() {
       icon: "💨",
       color: "#47556D",
       resource: "https://www.youtube.com/watch?v=nX4dpGQ5wF4",
+      keywords: ["overwhelmed", "stressed", "too much", "can't cope", "pressure", "burden", "drowning", "suffocating", "chaos"],
       action: () => {
         if (!hasAcceptedLegal) {
           toast({
@@ -168,6 +171,7 @@ export default function Home() {
       icon: "😰",
       color: "#6B8E7B",
       resource: "https://www.youtube.com/watch?v=SA1Dz8BloUY",
+      keywords: ["anxious", "anxiety", "panic", "worried", "nervous", "scared", "fear", "panic attack", "heart racing", "restless"],
       action: () => showActionOptions("anxious", "Anxiety Management Resources", "https://www.youtube.com/watch?v=SA1Dz8BloUY")
     },
     {
@@ -177,6 +181,7 @@ export default function Home() {
       icon: "😢",
       color: "#47556D",
       resource: "https://www.youtube.com/watch?v=sWfNosruPPw",
+      keywords: ["depressed", "depression", "sad", "hopeless", "empty", "numb", "worthless", "dark", "heavy", "lost"],
       action: () => showActionOptions("depressed", "Depression Support Resources", "https://www.youtube.com/watch?v=sWfNosruPPw")
     },
     {
@@ -186,6 +191,7 @@ export default function Home() {
       icon: "💬",
       color: "#6B8E7B",
       resource: "https://www.youtube.com/@KatiMorton",
+      keywords: ["talk", "listen", "alone", "lonely", "isolated", "need help", "support", "someone", "chat", "conversation"],
       action: () => showActionOptions("talk", "Mental Health Support", "https://www.youtube.com/@KatiMorton")
     }
   ];
@@ -197,6 +203,7 @@ export default function Home() {
       description: t('breathingGuide'),
       icon: "🫁",
       resource: "https://www.youtube.com/watch?v=ZXh-IGyBegQ",
+      keywords: ["breathing", "breath", "breathe", "calm", "relax", "meditation", "mindfulness", "grounding"],
       action: () => showActionOptions("breathing", "Breathing Exercises", "https://www.youtube.com/watch?v=ZXh-IGyBegQ", () => setShowBreathingModal(true))
     },
     {
@@ -205,6 +212,7 @@ export default function Home() {
       description: t('kindWords'),
       icon: "💭",
       resource: "https://www.youtube.com/user/TheHonestGuys",
+      keywords: ["affirmations", "positive", "thoughts", "self-love", "confidence", "motivation", "encouragement", "uplifting"],
       action: () => showActionOptions("affirmations", "Mental Health Affirmations", "https://www.youtube.com/user/TheHonestGuys")
     },
     {
@@ -213,6 +221,7 @@ export default function Home() {
       description: t('soothingSounds'),
       icon: "🎵",
       resource: "https://www.youtube.com/@sleepeasyrelax",
+      keywords: ["music", "sounds", "relaxing", "peaceful", "sleep", "ambient", "nature sounds", "white noise"],
       action: () => showActionOptions("music", "Relaxing Music Resources", "https://www.youtube.com/@sleepeasyrelax")
     },
     {
@@ -221,13 +230,56 @@ export default function Home() {
       description: t('groundingTechnique'),
       icon: "🌱",
       resource: "https://www.youtube.com/@GreatMeditation",
+      keywords: ["grounding", "5-4-3-2-1", "present", "reality", "focus", "centering", "anchoring", "here and now"],
       action: () => showActionOptions("grounding", "Grounding Techniques", "https://www.youtube.com/@GreatMeditation")
     }
   ];
 
+  // Search functionality
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    
+    if (!query.trim()) {
+      setFilteredResults([]);
+      setShowSearchResults(false);
+      return;
+    }
+
+    const allOptions = [...quickTools, ...supportModules];
+    const searchTerm = query.toLowerCase();
+    
+    const matches = allOptions.filter(option => {
+      const titleMatch = option.title.toLowerCase().includes(searchTerm);
+      const descriptionMatch = (option as any).description?.toLowerCase().includes(searchTerm) || 
+                              (option as any).subtitle?.toLowerCase().includes(searchTerm);
+      const keywordMatch = option.keywords?.some(keyword => 
+        keyword.toLowerCase().includes(searchTerm) || 
+        searchTerm.includes(keyword.toLowerCase())
+      );
+      
+      return titleMatch || descriptionMatch || keywordMatch;
+    });
+
+    setFilteredResults(matches);
+    setShowSearchResults(matches.length > 0);
+  };
+
   const handleQuickToolClick = (tool: any) => {
     tool.action();
   };
+
+  // Close search results when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.search-container')) {
+        setShowSearchResults(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <div className="max-w-md mx-auto bg-white dark:bg-black min-h-screen">
@@ -274,8 +326,33 @@ export default function Home() {
             placeholder={t('searchPlaceholder')}
             className="search-input w-full pl-10 pr-4 py-3 rounded-xl bg-white dark:bg-black text-black dark:text-white placeholder-gray-500 focus:outline-none text-sm"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => handleSearch(e.target.value)}
           />
+          
+          {/* Search Results */}
+          {showSearchResults && (
+            <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl shadow-lg z-50 max-h-60 overflow-y-auto">
+              {filteredResults.map((result) => (
+                <button
+                  key={result.id}
+                  onClick={() => {
+                    result.action();
+                    setShowSearchResults(false);
+                    setSearchQuery("");
+                  }}
+                  className="w-full p-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border-b border-gray-100 dark:border-gray-600 last:border-b-0"
+                >
+                  <div className="flex items-center space-x-3">
+                    <span className="text-xl">{result.icon}</span>
+                    <div>
+                      <div className="font-semibold text-black dark:text-white">{result.title}</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">{result.subtitle || result.description}</div>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Emergency Support */}
