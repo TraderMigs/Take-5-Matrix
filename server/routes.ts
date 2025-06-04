@@ -448,6 +448,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // AI Translation API endpoint for comprehensive language support
+  app.post('/api/translate', async (req, res) => {
+    try {
+      const { text, targetLanguage, context } = req.body;
+      
+      if (!process.env.OPENAI_API_KEY) {
+        return res.status(500).json({ error: 'Translation service not configured' });
+      }
+
+      const OpenAI = (await import('openai')).default;
+      const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+      const response = await openai.chat.completions.create({
+        model: 'gpt-4o',
+        messages: [
+          {
+            role: 'system',
+            content: `You are a professional translator specializing in mental health support applications. Translate the following text to ${targetLanguage} while maintaining the supportive, empathetic tone appropriate for someone experiencing emotional distress. Context: ${context || 'mental health support app'}. Return only the translated text, no explanations.`
+          },
+          {
+            role: 'user',
+            content: text
+          }
+        ],
+        max_tokens: 500,
+        temperature: 0.3
+      });
+
+      const translation = response.choices[0].message.content?.trim();
+      res.json({ translation: translation || text });
+    } catch (error) {
+      console.error('Translation error:', error);
+      res.status(500).json({ error: 'Translation failed', fallback: req.body.text });
+    }
+  });
+
   // Download route for backup signup reports
   app.get('/api/download-signup-report/:filename', (req, res) => {
     try {

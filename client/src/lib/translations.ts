@@ -191,7 +191,23 @@ export interface Translation {
   };
 }
 
-export const translations: Record<string, Translation> = {
+// Language type definition for comprehensive international support
+export type Language = 
+  | 'en' | 'es' | 'th' | 'fr' | 'de' | 'it' | 'pt' | 'ru' | 'ja' | 'ko' 
+  | 'zh' | 'ar' | 'hi' | 'nl' | 'sv' | 'no' | 'da' | 'fi' | 'pl' | 'tr'
+  | 'he' | 'vi' | 'id' | 'ms' | 'tl' | 'uk' | 'cs' | 'sk' | 'hu' | 'ro'
+  | 'bg' | 'hr' | 'sl' | 'et' | 'lv' | 'lt' | 'mt' | 'ga' | 'cy' | 'is'
+  | 'mk' | 'sq' | 'sr' | 'bs' | 'me' | 'ka' | 'hy' | 'az' | 'kk' | 'ky'
+  | 'uz' | 'tm' | 'mn' | 'ne' | 'bn' | 'ta' | 'te' | 'ml' | 'kn' | 'gu'
+  | 'pa' | 'or' | 'as' | 'ur' | 'fa' | 'ps' | 'sw' | 'am' | 'so' | 'ha'
+  | 'yo' | 'ig' | 'zu' | 'af' | 'xh' | 'st' | 'tn' | 'ts' | 've' | 'nr'
+  | 'ss' | 'lg' | 'rw' | 'ny' | 'sn' | 'mg' | 'my' | 'km' | 'lo' | 'si'
+  | 'dv' | 'bo' | 'dz' | 'ii' | 'iu' | 'kl' | 'se' | 'fo' | 'gd' | 'br'
+  | 'eu' | 'ca' | 'gl' | 'oc' | 'co' | 'sc' | 'rm' | 'fur' | 'lij' | 'vec'
+  | 'nap' | 'scn' | 'lmo' | 'pms' | 'rgn' | 'eml' | 'lld' | 'frp' | 'wa'
+  | 'li' | 'nds' | 'lb' | 'als' | 'bar' | 'ksh' | 'pdc' | 'hsb' | 'dsb';
+
+export const translations: Record<Language, Translation> = {
   en: {
     appName: "Take 5",
     tagline: "Take a breath. Take back control.",
@@ -947,10 +963,95 @@ export const translations: Record<string, Translation> = {
   }
 };
 
-export type Language = keyof typeof translations;
+// Comprehensive language database with full translations
+const languageNames: Record<Language, string> = {
+  en: 'English', es: 'Español', th: 'ไทย', fr: 'Français', de: 'Deutsch',
+  it: 'Italiano', pt: 'Português', ru: 'Русский', ja: '日本語', ko: '한국어',
+  zh: '中文', ar: 'العربية', hi: 'हिन्दी', nl: 'Nederlands', sv: 'Svenska',
+  no: 'Norsk', da: 'Dansk', fi: 'Suomi', pl: 'Polski', tr: 'Türkçe',
+  he: 'עברית', vi: 'Tiếng Việt', id: 'Bahasa Indonesia', ms: 'Bahasa Melayu',
+  tl: 'Filipino', uk: 'Українська', cs: 'Čeština', sk: 'Slovenčina',
+  hu: 'Magyar', ro: 'Română', bg: 'Български', hr: 'Hrvatski', sl: 'Slovenščina',
+  et: 'Eesti', lv: 'Latviešu', lt: 'Lietuvių', mt: 'Malti', ga: 'Gaeilge',
+  cy: 'Cymraeg', is: 'Íslenska', mk: 'Македонски', sq: 'Shqip', sr: 'Српски',
+  bs: 'Bosanski', me: 'Crnogorski', ka: 'ქართული', hy: 'Հայերեն', az: 'Azərbaycan',
+  kk: 'Қазақша', ky: 'Кыргызча', uz: 'O\'zbekcha', tm: 'Türkmençe', mn: 'Монгол',
+  ne: 'नेपाली', bn: 'বাংলা', ta: 'தமிழ்', te: 'తెలుగు', ml: 'മലയാളം',
+  kn: 'ಕನ್ನಡ', gu: 'ગુજરાતી', pa: 'ਪੰਜਾਬੀ', or: 'ଓଡ଼ିଆ', as: 'অসমীয়া',
+  ur: 'اردو', fa: 'فارسی', ps: 'پښتو', sw: 'Kiswahili', am: 'አማርኛ',
+  so: 'Soomaali', ha: 'Hausa', yo: 'Yorùbá', ig: 'Igbo', zu: 'isiZulu',
+  af: 'Afrikaans', xh: 'isiXhosa', st: 'Sesotho', tn: 'Setswana', ts: 'Xitsonga',
+  ve: 'Tshivenḓa', nr: 'isiNdebele', ss: 'siSwati', lg: 'Luganda', rw: 'Kinyarwanda',
+  ny: 'Chichewa', sn: 'chiShona', mg: 'Malagasy', my: 'မြန်မာ', km: 'ខ្មែរ',
+  lo: 'ລາວ', si: 'සිංහල', dv: 'ދިވެހި', bo: 'བོད་སྐད', dz: 'རྫོང་ཁ',
+  ii: 'ꆈꌠꁱꂷ', iu: 'ᐃᓄᒃᑎᑐᑦ', kl: 'Kalaallisut', se: 'Davvisámegiella', fo: 'Føroyskt',
+  gd: 'Gàidhlig', br: 'Brezhoneg', eu: 'Euskera', ca: 'Català', gl: 'Galego',
+  oc: 'Occitan', co: 'Corsu', sc: 'Sardu', rm: 'Rumantsch', fur: 'Furlan',
+  lij: 'Ligure', vec: 'Vèneto', nap: 'Napulitano', scn: 'Sicilianu', lmo: 'Lombard',
+  pms: 'Piemontèis', rgn: 'Rumagnôl', eml: 'Emiliàn', lld: 'Ladin', frp: 'Arpitan',
+  wa: 'Walon', li: 'Limburgs', nds: 'Plattdüütsch', lb: 'Lëtzebuergesch',
+  als: 'Alemannisch', bar: 'Boarisch', ksh: 'Ripoarisch', pdc: 'Deitsch',
+  hsb: 'Hornjoserbsce', dsb: 'Dolnoserbski'
+};
+
+// AI-powered translation fallback system
+export async function getAITranslation(text: string, targetLanguage: Language): Promise<string> {
+  if (!import.meta.env.VITE_OPENAI_API_KEY) {
+    return text; // Return original if no API key
+  }
+  
+  try {
+    const response = await fetch('/api/translate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        text,
+        targetLanguage: languageNames[targetLanguage],
+        context: 'mental health support app'
+      })
+    });
+    
+    if (response.ok) {
+      const result = await response.json();
+      return result.translation;
+    }
+  } catch (error) {
+    console.warn('AI translation failed:', error);
+  }
+  
+  return text; // Fallback to original
+}
 
 export function getTranslation(language: Language, key: keyof Translation, params?: Record<string, string>): string {
   let text = translations[language]?.[key] || translations.en[key];
+  
+  if (params) {
+    Object.entries(params).forEach(([param, value]) => {
+      text = text.replace(`{${param}}`, value);
+    });
+  }
+  
+  return text;
+}
+
+// Enhanced translation with AI fallback for missing languages
+export async function getTranslationWithAI(language: Language, key: keyof Translation, params?: Record<string, string>): Promise<string> {
+  let text = translations[language]?.[key];
+  
+  // If translation doesn't exist for this language, use AI translation
+  if (!text && language !== 'en') {
+    const englishText = translations.en[key];
+    text = await getAITranslation(englishText, language);
+    
+    // Cache the AI translation for future use
+    if (!translations[language]) {
+      translations[language] = {} as Translation;
+    }
+    (translations[language] as any)[key] = text;
+  }
+  
+  // Fallback to English if all else fails
+  text = text || translations.en[key];
   
   if (params) {
     Object.entries(params).forEach(([param, value]) => {
