@@ -1038,8 +1038,8 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                   )}
                 </div>
                 
-                {/* Quotes Section - Centered */}
-                <div className="flex justify-center">
+                {/* Quotes Section - Perfectly Centered */}
+                <div className="flex justify-center w-full">
                   {isEditingQuote ? (
                     <div className="flex flex-col items-center space-y-2 w-full max-w-sm">
                       <div className="flex items-center space-x-2 w-full">
@@ -1074,33 +1074,35 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                       <p className="text-sm text-white drop-shadow-lg">{profileQuote.length}/40</p>
                     </div>
                   ) : (
-                    <div className="bg-black/20 rounded-lg px-3 py-2 flex items-center gap-2">
-                      <p className="text-white drop-shadow-lg font-normal text-base text-center">
-                        {profileQuote || t('addQuotePlaceholder')}
-                      </p>
-                      <div className="relative">
-                        <Button
-                          onClick={() => setShowQuoteDropdown(!showQuoteDropdown)}
-                          size="sm"
-                          variant="ghost"
-                          className="bg-transparent hover:bg-white/10 text-white/70 hover:text-white border-none p-1"
-                        >
-                          <ChevronDown className="w-3 h-3" />
-                        </Button>
-                        {showQuoteDropdown && (
-                          <div className="absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg z-10 min-w-[120px]">
-                            <button
-                              onClick={() => {
-                                setIsEditingQuote(true);
-                                setShowQuoteDropdown(false);
-                              }}
-                              className="w-full px-3 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-black dark:text-white flex items-center gap-2 text-sm"
-                            >
-                              <Edit className="w-3 h-3" />
-                              Edit Quote
-                            </button>
-                          </div>
-                        )}
+                    <div className="flex justify-center">
+                      <div className="bg-black/20 rounded-lg px-3 py-2 flex items-center gap-2">
+                        <p className="text-white drop-shadow-lg font-normal text-base text-center">
+                          {profileQuote || t('addQuotePlaceholder')}
+                        </p>
+                        <div className="relative">
+                          <Button
+                            onClick={() => setShowQuoteDropdown(!showQuoteDropdown)}
+                            size="sm"
+                            variant="ghost"
+                            className="bg-transparent hover:bg-white/10 text-white/70 hover:text-white border-none p-1"
+                          >
+                            <ChevronDown className="w-3 h-3" />
+                          </Button>
+                          {showQuoteDropdown && (
+                            <div className="absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg z-10 min-w-[120px]">
+                              <button
+                                onClick={() => {
+                                  setIsEditingQuote(true);
+                                  setShowQuoteDropdown(false);
+                                }}
+                                className="w-full px-3 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-black dark:text-white flex items-center gap-2 text-sm"
+                              >
+                                <Edit className="w-3 h-3" />
+                                Edit Quote
+                              </button>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                   )}
