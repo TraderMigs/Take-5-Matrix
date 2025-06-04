@@ -75,7 +75,12 @@ export default function PersonalContacts({ currentUser, onLogin }: PersonalConta
   });
 
   const handleAddContact = async () => {
+    console.log('handleAddContact called');
+    console.log('currentUser:', currentUser);
+    console.log('newContact:', newContact);
+    
     if (!currentUser) {
+      console.log('No user, redirecting to auth');
       // Require authentication to save contacts
       localStorage.setItem('take5_redirect_after_login', 'contacts');
       window.location.href = '/api/auth/google';
@@ -83,10 +88,19 @@ export default function PersonalContacts({ currentUser, onLogin }: PersonalConta
     }
     
     if (newContact.name && newContact.phone) {
-      // Save to database for authenticated users only
-      await createContactMutation.mutateAsync(newContact);
-      setNewContact({ name: "", phone: "", relationship: "" });
-      setIsAddingContact(false);
+      console.log('Saving contact to database');
+      try {
+        await createContactMutation.mutateAsync(newContact);
+        console.log('Contact saved successfully');
+        setNewContact({ name: "", phone: "", relationship: "" });
+        setIsAddingContact(false);
+      } catch (error) {
+        console.error('Error saving contact:', error);
+      }
+    } else {
+      console.log('Form validation failed - missing name or phone');
+      console.log('Name:', newContact.name);
+      console.log('Phone:', newContact.phone);
     }
   };
 
