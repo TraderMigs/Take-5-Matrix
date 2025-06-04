@@ -42,6 +42,20 @@ export default function EmergencySection() {
     };
 
     getLocationNumbers();
+
+    // Listen for location changes from the location selector
+    const handleLocationChange = (event: CustomEvent) => {
+      const countryCode = event.detail.countryCode;
+      const numbers = getLocationBasedNumbers(countryCode);
+      setLocationData(numbers);
+      setSavedLocation(countryCode);
+    };
+
+    window.addEventListener('locationChanged', handleLocationChange as EventListener);
+
+    return () => {
+      window.removeEventListener('locationChanged', handleLocationChange as EventListener);
+    };
   }, []);
 
   const handleLocationSelect = (countryCode: string) => {

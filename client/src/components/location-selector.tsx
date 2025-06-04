@@ -9,6 +9,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 
+// Location change event for emergency numbers sync
+export const triggerLocationChange = (countryCode: string) => {
+  window.dispatchEvent(new CustomEvent('locationChanged', { detail: { countryCode } }));
+};
+
 const locations = [
   { code: "AD", name: "Andorra", flag: "🇦🇩" },
   { code: "AE", name: "United Arab Emirates", flag: "🇦🇪" },
@@ -287,7 +292,13 @@ export default function LocationSelector() {
         {locations.map((location) => (
           <DropdownMenuItem
             key={location.code}
-            onClick={() => setSelectedLocation(location.code)}
+            onClick={() => {
+              setSelectedLocation(location.code);
+              // Store location for emergency numbers
+              localStorage.setItem('selectedLocation', location.code);
+              // Trigger emergency numbers update
+              triggerLocationChange(location.code);
+            }}
             className="text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 cursor-pointer"
           >
             <span className="mr-2">{location.flag}</span>
