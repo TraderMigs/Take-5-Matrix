@@ -193,12 +193,10 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
       intervalRef.current = null;
     }
     
-    // Cancel any ongoing speech
+    // Cancel any ongoing speech immediately
     if (speechSynthRef.current) {
       speechSynthRef.current.cancel();
     }
-    
-    speak("Well done. You can continue this breathing exercise anytime you need to feel centered and calm.", 0.5);
     
     setPhase("ready");
     setCount(5);
@@ -217,7 +215,21 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
   }, []);
 
   const handleClose = () => {
-    stopBreathing();
+    // Immediately stop all speech and timers
+    setIsActive(false);
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    if (speechSynthRef.current) {
+      speechSynthRef.current.cancel();
+    }
+    
+    // Reset state
+    setPhase("ready");
+    setCount(5);
+    setCycleCount(0);
+    
     onClose();
   };
 

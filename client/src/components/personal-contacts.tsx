@@ -152,7 +152,7 @@ export default function PersonalContacts({ currentUser, onLogin }: PersonalConta
       {!currentUser ? (
         <div className="text-center py-8">
           <p className="text-black dark:text-white text-base font-normal mb-6">
-            {t('logInToCreateContactsList')}
+            {t('loginToCreateContactsList')}
           </p>
           <div className="space-y-3">
             <Button
