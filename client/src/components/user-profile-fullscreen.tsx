@@ -55,6 +55,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
   const [tempUsername, setTempUsername] = useState("");
   const [showDisplayNameDropdown, setShowDisplayNameDropdown] = useState(false);
   const [showUsernameDropdown, setShowUsernameDropdown] = useState(false);
+  const [showQuoteDropdown, setShowQuoteDropdown] = useState(false);
   const [newEntryImages, setNewEntryImages] = useState<string[]>([]);
   const [showImageUploadModal, setShowImageUploadModal] = useState(false);
   const [tempEntryImageSrc, setTempEntryImageSrc] = useState("");
@@ -1029,54 +1030,71 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                   )}
                 </div>
                 
-                <div className="space-y-2">
+                {/* Quotes Section - Centered */}
+                <div className="flex justify-center">
                   {isEditingQuote ? (
-                    <div className="flex items-center space-x-2">
-                      <Input
-                        type="text"
-                        placeholder={t('addQuotePlaceholder')}
-                        value={profileQuote}
-                        onChange={(e) => handleQuoteChange(e.target.value)}
-                        className="bg-white dark:bg-black border-2 border-teal-400 text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 flex-1"
-                        maxLength={40}
-                        autoFocus
-                      />
-                      <Button
-                        onClick={saveProfileQuote}
-                        size="sm"
-                        className="bg-teal-500 hover:bg-teal-600 text-white px-3"
-                      >
-                        <Save className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        onClick={() => {
-                          setProfileQuote(currentUser?.bio || "");
-                          setIsEditingQuote(false);
-                        }}
-                        size="sm"
-                        variant="outline"
-                        className="px-2"
-                      >
-                        <X className="w-4 h-4" />
-                      </Button>
+                    <div className="flex flex-col items-center space-y-2 w-full max-w-sm">
+                      <div className="flex items-center space-x-2 w-full">
+                        <Input
+                          type="text"
+                          placeholder={t('addQuotePlaceholder')}
+                          value={profileQuote}
+                          onChange={(e) => handleQuoteChange(e.target.value)}
+                          className="bg-white dark:bg-black border-2 border-teal-400 text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 flex-1 text-center"
+                          maxLength={40}
+                          autoFocus
+                        />
+                        <Button
+                          onClick={saveProfileQuote}
+                          size="sm"
+                          className="bg-teal-500 hover:bg-teal-600 text-white px-3"
+                        >
+                          <Save className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          onClick={() => {
+                            setProfileQuote(currentUser?.bio || "");
+                            setIsEditingQuote(false);
+                          }}
+                          size="sm"
+                          variant="outline"
+                          className="px-2"
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                      </div>
+                      <p className="text-sm text-white drop-shadow-lg">{profileQuote.length}/40</p>
                     </div>
                   ) : (
-                    <div className="flex items-center space-x-2 group">
-                      <p className="text-white dark:text-black font-normal text-base flex-1 min-h-[24px] bg-black dark:bg-white px-3 py-2 rounded-lg border-2 border-teal-400 text-center">
+                    <div className="bg-black/20 rounded-lg px-3 py-2 flex items-center gap-2">
+                      <p className="text-white drop-shadow-lg font-normal text-base text-center">
                         {profileQuote || t('addQuotePlaceholder')}
                       </p>
-                      <Button
-                        onClick={() => setIsEditingQuote(true)}
-                        size="sm"
-                        variant="ghost"
-                        className="p-1 opacity-60 hover:opacity-100 transition-opacity"
-                      >
-                        <Edit className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-                      </Button>
+                      <div className="relative">
+                        <Button
+                          onClick={() => setShowQuoteDropdown(!showQuoteDropdown)}
+                          size="sm"
+                          variant="ghost"
+                          className="bg-transparent hover:bg-white/10 text-white/70 hover:text-white border-none p-1"
+                        >
+                          <ChevronDown className="w-3 h-3" />
+                        </Button>
+                        {showQuoteDropdown && (
+                          <div className="absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg z-10 min-w-[120px]">
+                            <button
+                              onClick={() => {
+                                setIsEditingQuote(true);
+                                setShowQuoteDropdown(false);
+                              }}
+                              className="w-full px-3 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-black dark:text-white flex items-center gap-2 text-sm"
+                            >
+                              <Edit className="w-3 h-3" />
+                              Edit Quote
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  )}
-                  {isEditingQuote && (
-                    <p className="text-sm text-black dark:text-white">{profileQuote.length}/40</p>
                   )}
                 </div>
               </div>
