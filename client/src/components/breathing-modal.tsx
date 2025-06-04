@@ -113,16 +113,14 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
     setIsFirstTime(false);
     setCycleCount(0);
     
-    // Welcome message with callback to ensure it completes before countdown
-    speak("Welcome to your guided breathing exercise. Find a comfortable position, relax your shoulders, and close your eyes if you feel safe to do so.", 0.5, () => {
-      // Only start countdown after welcome message completes
+    // Give instructions first, then pause for 2 seconds before starting countdown
+    speak("Welcome to your guided breathing exercise. Find a comfortable position, relax your shoulders, and close your eyes if you feel safe to do so. We'll begin with a gentle countdown in just a moment.", 0.5, () => {
+      // 2-second pause before starting the countdown
       setTimeout(() => {
-        speak("Now, let's begin with a gentle countdown. We'll start in 5", 0.6, () => {
-          setPhase("ready");
-          setCount(5);
-          startCountdown();
-        });
-      }, 1500);
+        setPhase("ready");
+        setCount(5);
+        startCountdown();
+      }, 2000);
     });
   };
 
@@ -215,20 +213,23 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
   }, []);
 
   const handleClose = () => {
-    // Immediately stop all speech and timers
+    // Immediately stop all speech and timers - mute completely when closing
     setIsActive(false);
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
+    // Cancel all speech synthesis immediately and completely
     if (speechSynthRef.current) {
       speechSynthRef.current.cancel();
+      speechSynthRef.current.resume(); // Ensure it's not paused
     }
     
     // Reset state
     setPhase("ready");
     setCount(5);
     setCycleCount(0);
+    setIsFirstTime(true); // Reset to show initial message again
     
     onClose();
   };
@@ -244,7 +245,7 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
 
   const getPhaseInstruction = () => {
     if (isFirstTime && !isActive) {
-      return "Press Start to begin your guided breathing session";
+      return "Press Start and listen. Come back anytime 💜";
     }
     return phaseInstructions[phase];
   };
