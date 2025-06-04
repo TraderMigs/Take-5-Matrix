@@ -630,7 +630,7 @@ export const translations: Record<string, Translation> = {
     uploadAnyPhoto: "Sube cualquier foto",
     cropPosition: "Editar y Recortar",
     useEditorToCrop: "Usa nuestro editor para recortar y centrar tu imagen perfectamente",
-    screenImage: "Imagen de Pantalla",
+    screenImage: "Fondo",
     diary: "Diario",
     remove: "Eliminar",
     

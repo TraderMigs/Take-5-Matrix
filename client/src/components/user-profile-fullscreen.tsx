@@ -891,21 +891,21 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
           <TabsList className="grid w-full grid-cols-3 bg-teal-200 dark:bg-teal-800">
             <TabsTrigger 
               value="profile" 
-              className="text-black dark:text-white data-[state=active]:bg-green-800 data-[state=active]:text-white text-sm"
+              className="text-black dark:text-white data-[state=active]:bg-green-800 data-[state=active]:text-white text-xs px-2 py-2 min-w-0"
             >
-              {t('profile')}
+              <span className="truncate">{t('profile')}</span>
             </TabsTrigger>
             <TabsTrigger 
               value="diary" 
-              className="text-black dark:text-white data-[state=active]:bg-green-800 data-[state=active]:text-white text-sm"
+              className="text-black dark:text-white data-[state=active]:bg-green-800 data-[state=active]:text-white text-xs px-2 py-2 min-w-0"
             >
-              {t('diary')}
+              <span className="truncate">{t('diary')}</span>
             </TabsTrigger>
             <TabsTrigger 
               value="background" 
-              className="text-black dark:text-white data-[state=active]:bg-green-800 data-[state=active]:text-white text-sm"
+              className="text-black dark:text-white data-[state=active]:bg-green-800 data-[state=active]:text-white text-xs px-2 py-2 min-w-0"
             >
-              {t('screenImage')}
+              <span className="truncate">{t('screenImage')}</span>
             </TabsTrigger>
           </TabsList>
           
