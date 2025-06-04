@@ -126,28 +126,29 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
     });
   };
 
-  // Countdown sequence
+  // Countdown sequence with slower, more natural timing
   const startCountdown = () => {
     let currentCount = 5;
     
     const countdownInterval = setInterval(() => {
       if (currentCount > 1) {
         currentCount--;
-        speak(currentCount.toString());
+        speak(currentCount.toString(), 0.7);
         setCount(currentCount);
       } else {
         clearInterval(countdownInterval);
-        speak("Begin");
-        startBreathingCycle();
+        speak("Begin breathing", 0.6, () => {
+          startBreathingCycle();
+        });
       }
-    }, 1000);
+    }, 1200); // Slightly slower countdown timing
   };
 
-  // Main breathing cycle
+  // Main breathing cycle with slower, more natural guidance
   const startBreathingCycle = () => {
     setPhase("inhale");
     setCount(4);
-    speak("Breathe in slowly through your nose");
+    speak("Breathe in slowly and deeply through your nose", 0.5);
     
     let currentPhase: "inhale" | "hold" | "exhale" = "inhale";
     let currentCount = 4;
@@ -163,13 +164,13 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
           currentCount = phaseDurations.hold;
           setPhase("hold");
           setCount(currentCount);
-          speak("Hold your breath gently");
+          speak("Hold your breath gently and peacefully", 0.5);
         } else if (currentPhase === "hold") {
           currentPhase = "exhale";
           currentCount = phaseDurations.exhale;
           setPhase("exhale");
           setCount(currentCount);
-          speak("Breathe out slowly through your mouth");
+          speak("Breathe out slowly and completely through your mouth", 0.5);
         } else if (currentPhase === "exhale") {
           // Complete one cycle
           setCycleCount(prev => prev + 1);
@@ -179,7 +180,7 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
           currentCount = phaseDurations.inhale;
           setPhase("inhale");
           setCount(currentCount);
-          speak("Breathe in slowly");
+          speak("Breathe in slowly once more", 0.5);
         }
       }
     }, 1000);
@@ -197,7 +198,7 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
       speechSynthRef.current.cancel();
     }
     
-    speak("Well done. You can continue this breathing exercise anytime you need to feel centered and calm.");
+    speak("Well done. You can continue this breathing exercise anytime you need to feel centered and calm.", 0.5);
     
     setPhase("ready");
     setCount(5);
