@@ -9,141 +9,156 @@ interface BreathingModalProps {
 
 export default function BreathingModal({ isOpen, onClose }: BreathingModalProps) {
   const [isActive, setIsActive] = useState(false);
-  const [phase, setPhase] = useState<"inhale" | "hold" | "exhale" | "pause">("inhale");
+  const [phase, setPhase] = useState<"ready" | "inhale" | "hold" | "exhale">("ready");
   const [count, setCount] = useState(5);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [cycleCount, setCycleCount] = useState(0);
+  const [isFirstTime, setIsFirstTime] = useState(true);
   
-  // Audio refs for breathing sounds
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const oscillatorRef = useRef<OscillatorNode | null>(null);
-  const gainRef = useRef<GainNode | null>(null);
-  const breathingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  // Voice synthesis refs
+  const speechSynthRef = useRef<SpeechSynthesis | null>(null);
+  const voiceRef = useRef<SpeechSynthesisVoice | null>(null);
+  const [voicesLoaded, setVoicesLoaded] = useState(false);
 
   const phaseInstructions = {
-    inhale: "Breathe in slowly",
-    hold: "Hold your breath",
-    exhale: "Breathe out slowly",
-    pause: "Pause",
+    ready: "Get comfortable and close your eyes",
+    inhale: "Breathe in slowly through your nose",
+    hold: "Hold your breath gently",
+    exhale: "Breathe out slowly through your mouth",
   };
 
   const phaseDurations = {
-    inhale: 5,
-    hold: 5,
-    exhale: 7,
-    pause: 3,
+    ready: 5,
+    inhale: 4,
+    hold: 4,
+    exhale: 6,
   };
 
-  // Create gentle breathing sound with soft tones
-  const createBreathingSound = () => {
-    if (!audioContextRef.current) {
-      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
-    }
+  // Initialize speech synthesis
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      speechSynthRef.current = window.speechSynthesis;
+      
+      const loadVoices = () => {
+        const voices = speechSynthRef.current?.getVoices() || [];
+        // Find a female voice, preferring English
+        const femaleVoice = voices.find(voice => 
+          voice.lang.startsWith('en') && 
+          (voice.name.toLowerCase().includes('female') || 
+           voice.name.toLowerCase().includes('woman') ||
+           voice.name.toLowerCase().includes('susan') ||
+           voice.name.toLowerCase().includes('karen') ||
+           voice.name.toLowerCase().includes('samantha') ||
+           voice.name.toLowerCase().includes('victoria'))
+        ) || voices.find(voice => voice.lang.startsWith('en')) || voices[0];
+        
+        voiceRef.current = femaleVoice;
+        setVoicesLoaded(true);
+      };
 
-    const audioContext = audioContextRef.current;
+      // Load voices immediately if available
+      loadVoices();
+      
+      // Also listen for voices changed event
+      speechSynthRef.current.addEventListener('voiceschanged', loadVoices);
+      
+      return () => {
+        speechSynthRef.current?.removeEventListener('voiceschanged', loadVoices);
+      };
+    }
+  }, []);
+
+  // Function to speak with gentle female voice
+  const speak = (text: string, rate: number = 0.8) => {
+    if (!speechSynthRef.current || !voiceRef.current) return;
     
-    // Create oscillator for soft breathing tones
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
+    // Cancel any ongoing speech
+    speechSynthRef.current.cancel();
     
-    // Connect nodes
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.voice = voiceRef.current;
+    utterance.rate = rate; // Slower, more calming
+    utterance.pitch = 1.1; // Slightly higher pitch for gentle female voice
+    utterance.volume = 0.8; // Gentle volume
     
-    // Set initial frequency and volume - much softer
-    oscillator.frequency.setValueAtTime(120, audioContext.currentTime); // Start at lower 120Hz
-    gainNode.gain.setValueAtTime(0, audioContext.currentTime); // Start silent
-    
-    // Use triangle wave for softer, warmer tone
-    oscillator.type = 'triangle';
-    
-    // Start the oscillator
-    oscillator.start();
-    
-    return { oscillator, gainNode };
+    speechSynthRef.current.speak(utterance);
   };
 
-  // Update breathing sound based on phase - gentle and soothing
-  const updateBreathingSound = (currentPhase: string, timeRemaining: number, totalTime: number) => {
-    if (!oscillatorRef.current || !gainRef.current || !audioContextRef.current) return;
-    
-    const audioContext = audioContextRef.current;
-    const now = audioContext.currentTime;
-    
-    if (currentPhase === 'inhale') {
-      // Gentle rising tone during inhale (120Hz to 180Hz) - much smaller range
-      const progress = (totalTime - timeRemaining) / totalTime;
-      const frequency = 120 + (progress * 60); // 120Hz to 180Hz
-      oscillatorRef.current.frequency.exponentialRampToValueAtTime(frequency, now + 0.1);
-      gainRef.current.gain.exponentialRampToValueAtTime(0.03, now + 0.1); // Much quieter
-    } else if (currentPhase === 'exhale') {
-      // Gentle falling tone during exhale (180Hz to 120Hz)
-      const progress = (totalTime - timeRemaining) / totalTime;
-      const frequency = 180 - (progress * 60); // 180Hz to 120Hz
-      oscillatorRef.current.frequency.exponentialRampToValueAtTime(frequency, now + 0.1);
-      gainRef.current.gain.exponentialRampToValueAtTime(0.03, now + 0.1); // Much quieter
-    } else {
-      // Gentle fade to silence during hold and pause
-      gainRef.current.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-    }
-  };
-
-  // Stop all audio
-  const stopAudio = () => {
-    if (oscillatorRef.current) {
-      try {
-        oscillatorRef.current.stop();
-      } catch (e) {
-        // Oscillator may already be stopped
-      }
-      oscillatorRef.current = null;
-    }
-    if (gainRef.current) {
-      gainRef.current = null;
-    }
-    if (breathingIntervalRef.current) {
-      clearInterval(breathingIntervalRef.current);
-      breathingIntervalRef.current = null;
-    }
-    if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
-      audioContextRef.current.close();
-      audioContextRef.current = null;
-    }
-  };
-
-  const startBreathing = () => {
+  // Initial welcome message
+  const startWelcomeSequence = () => {
     setIsActive(true);
-    setPhase("inhale");
-    setCount(5);
+    setIsFirstTime(false);
+    setCycleCount(0);
+    
+    // Welcome message
+    speak("Welcome to your guided breathing exercise. Find a comfortable position and close your eyes if you feel safe to do so.");
+    
+    // Start countdown after welcome
+    setTimeout(() => {
+      speak("Let's begin with a countdown. We'll start in 5");
+      setPhase("ready");
+      setCount(5);
+      startCountdown();
+    }, 4000);
+  };
 
-    // Start breathing sound
-    const { oscillator, gainNode } = createBreathingSound();
-    oscillatorRef.current = oscillator;
-    gainRef.current = gainNode;
-
-    intervalRef.current = setInterval(() => {
-      setCount((prevCount) => {
-        if (prevCount <= 1) {
-          setPhase((prevPhase) => {
-            const phases: Array<"inhale" | "hold" | "exhale" | "pause"> = ["inhale", "hold", "exhale", "pause"];
-            const currentIndex = phases.indexOf(prevPhase);
-            const nextPhase = phases[(currentIndex + 1) % phases.length];
-            return nextPhase;
-          });
-          return phaseDurations[phase] || 4;
-        }
-        // Update breathing sound based on current phase and remaining time
-        updateBreathingSound(phase, prevCount - 1, phaseDurations[phase]);
-        return prevCount - 1;
-      });
+  // Countdown sequence
+  const startCountdown = () => {
+    let currentCount = 5;
+    
+    const countdownInterval = setInterval(() => {
+      if (currentCount > 1) {
+        currentCount--;
+        speak(currentCount.toString());
+        setCount(currentCount);
+      } else {
+        clearInterval(countdownInterval);
+        speak("Begin");
+        startBreathingCycle();
+      }
     }, 1000);
+  };
 
-    // Start sound update interval for smooth transitions
-    breathingIntervalRef.current = setInterval(() => {
-      setCount((currentCount) => {
-        updateBreathingSound(phase, currentCount, phaseDurations[phase]);
-        return currentCount;
-      });
-    }, 100); // Update sound 10 times per second for smooth transitions
+  // Main breathing cycle
+  const startBreathingCycle = () => {
+    setPhase("inhale");
+    setCount(4);
+    speak("Breathe in slowly through your nose");
+    
+    let currentPhase: "inhale" | "hold" | "exhale" = "inhale";
+    let currentCount = 4;
+    
+    intervalRef.current = setInterval(() => {
+      currentCount--;
+      setCount(currentCount);
+      
+      if (currentCount <= 0) {
+        // Move to next phase
+        if (currentPhase === "inhale") {
+          currentPhase = "hold";
+          currentCount = phaseDurations.hold;
+          setPhase("hold");
+          setCount(currentCount);
+          speak("Hold your breath gently");
+        } else if (currentPhase === "hold") {
+          currentPhase = "exhale";
+          currentCount = phaseDurations.exhale;
+          setPhase("exhale");
+          setCount(currentCount);
+          speak("Breathe out slowly through your mouth");
+        } else if (currentPhase === "exhale") {
+          // Complete one cycle
+          setCycleCount(prev => prev + 1);
+          
+          // Start next cycle
+          currentPhase = "inhale";
+          currentCount = phaseDurations.inhale;
+          setPhase("inhale");
+          setCount(currentCount);
+          speak("Breathe in slowly");
+        }
+      }
+    }, 1000);
   };
 
   const stopBreathing = () => {
@@ -152,29 +167,49 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
-    stopAudio(); // Stop all audio when stopping the exercise
-    setPhase("inhale");
-    setCount(5);
-  };
-
-  useEffect(() => {
-    if (phase && isActive) {
-      setCount(phaseDurations[phase]);
+    
+    // Cancel any ongoing speech
+    if (speechSynthRef.current) {
+      speechSynthRef.current.cancel();
     }
-  }, [phase, isActive]);
+    
+    speak("Well done. You can continue this breathing exercise anytime you need to feel centered and calm.");
+    
+    setPhase("ready");
+    setCount(5);
+    setCycleCount(0);
+  };
 
   useEffect(() => {
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
+      if (speechSynthRef.current) {
+        speechSynthRef.current.cancel();
+      }
     };
   }, []);
 
   const handleClose = () => {
     stopBreathing();
-    stopAudio(); // Ensure audio is stopped when modal closes
     onClose();
+  };
+
+  const getPhaseColor = () => {
+    switch (phase) {
+      case "inhale": return "bg-blue-500";
+      case "hold": return "bg-yellow-500";
+      case "exhale": return "bg-green-500";
+      default: return "bg-gray-500";
+    }
+  };
+
+  const getPhaseInstruction = () => {
+    if (isFirstTime && !isActive) {
+      return "Press Start to begin your guided breathing session";
+    }
+    return phaseInstructions[phase];
   };
 
   return (
@@ -186,13 +221,13 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
           </DialogTitle>
         </DialogHeader>
         <div id="breathing-description" className="sr-only">
-          A guided breathing exercise to help you calm down and center yourself
+          A guided breathing exercise with gentle female voice guidance to help you relax and center yourself
         </div>
 
         <div className="space-y-6 p-4">
           <div className="flex justify-center">
-            <div className="w-32 h-32 rounded-full border-4 border-navy-blue flex items-center justify-center">
-              <div className="w-20 h-20 rounded-full flex items-center justify-center text-white font-bold text-lg" style={{ background: 'linear-gradient(to right, #47556D, #6B8E7B)' }}>
+            <div className={`w-32 h-32 rounded-full border-4 border-gray-300 flex items-center justify-center transition-all duration-1000 ${isActive ? getPhaseColor() : 'bg-gray-100'}`}>
+              <div className="w-20 h-20 rounded-full flex items-center justify-center text-white font-bold text-2xl bg-black bg-opacity-20">
                 {count}
               </div>
             </div>
@@ -200,17 +235,27 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
 
           <div className="space-y-2 text-center">
             <p className="text-lg font-medium text-black dark:text-white">
-              {phaseInstructions[phase]}
+              {getPhaseInstruction()}
             </p>
-            <p className="text-gray-600 dark:text-gray-400">Follow the timer and breathe deeply with gentle audio guidance</p>
+            {isActive && (
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Cycle {cycleCount + 1} • Listen to the gentle guidance
+              </p>
+            )}
+            {!isActive && !isFirstTime && (
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                You can start and stop this exercise whenever you want
+              </p>
+            )}
           </div>
 
           <div className="flex space-x-3">
             <Button
-              onClick={isActive ? stopBreathing : startBreathing}
+              onClick={isActive ? stopBreathing : startWelcomeSequence}
               className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-colors"
+              disabled={!voicesLoaded}
             >
-              {isActive ? "Stop" : "Start"}
+              {isActive ? "Stop" : "Start Guided Breathing"}
             </Button>
             <Button
               onClick={handleClose}
@@ -220,6 +265,12 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
               Close
             </Button>
           </div>
+          
+          {!voicesLoaded && (
+            <p className="text-xs text-center text-gray-500">
+              Loading voice guidance...
+            </p>
+          )}
         </div>
       </DialogContent>
     </Dialog>
