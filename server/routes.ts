@@ -758,6 +758,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.patch('/api/diary/:id', async (req, res) => {
+    try {
+      const entryId = parseInt(req.params.id);
+      const { title, content, mood, images } = req.body;
+
+      const updatedEntry = await storage.updateDiaryEntry(entryId, { title, content, mood, images });
+      res.json(updatedEntry);
+    } catch (error) {
+      console.error('Error updating diary entry:', error);
+      res.status(500).json({ error: 'Failed to update diary entry' });
+    }
+  });
+
   app.delete('/api/diary/:id', async (req, res) => {
     try {
       const entryId = parseInt(req.params.id);
