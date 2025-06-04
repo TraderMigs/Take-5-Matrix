@@ -22,12 +22,7 @@ interface UserProfileProps {
 
 export default function UserProfileFullscreen({ isOpen, onClose, currentUser, onLogout }: UserProfileProps) {
   const [profileQuote, setProfileQuote] = useState(currentUser?.bio || "");
-  const [profileImage, setProfileImage] = useState(() => {
-    // Load from localStorage first, then fallback to currentUser data
-    const localImage = localStorage.getItem(`take5_profile_${currentUser?.id}`);
-    return localImage || currentUser?.profileImage || "";
-  });
-  const [imageKey, setImageKey] = useState(Date.now()); // Force refresh key
+  const [profileImage, setProfileImage] = useState("");
   const [username, setUsername] = useState(currentUser?.username || "");
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [isEditingQuote, setIsEditingQuote] = useState(false);
@@ -77,15 +72,15 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
     localStorage.setItem('take5_profile_active_tab', value);
   };
 
-  // Load profile image from localStorage on component mount
+  // Load profile image from localStorage on component mount - stable version
   useEffect(() => {
     if (currentUser?.id) {
       const localImage = localStorage.getItem(`take5_profile_${currentUser.id}`);
-      if (localImage && localImage !== profileImage) {
-        setProfileImage(localImage);
-      }
+      // Priority: localStorage data > currentUser data > empty string
+      const finalImage = localImage || currentUser?.profileImage || "";
+      setProfileImage(finalImage);
     }
-  }, [currentUser?.id]);
+  }, [currentUser?.id, isOpen]); // Only run when modal opens or user changes
 
   const toggleEntryExpansion = (entryId: number) => {
     const newExpanded = new Set(expandedEntries);
@@ -396,52 +391,45 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
 
   const handleSaveCroppedPhoto = async (croppedImageSrc: string) => {
     try {
-      console.log('Saving cropped photo for user:', currentUser.id);
-      
-      // Force immediate state update and UI refresh
+      // Single state update - no forced re-render
       setProfileImage(croppedImageSrc);
-      setImageKey(Date.now()); // Force re-render
       
-      // Save to localStorage immediately for persistence
+      // Single localStorage update with user-specific key
       localStorage.setItem(`take5_profile_${currentUser.id}`, croppedImageSrc);
       
-      // Update the currentUser object in localStorage
+      // Update the main user object in localStorage
       const updatedUser = { ...currentUser, profileImage: croppedImageSrc };
       localStorage.setItem('take5_current_user', JSON.stringify(updatedUser));
       
-      // Save to server (if authenticated)
+      // Server sync (non-blocking to prevent state conflicts)
       if (currentUser.id) {
-        console.log('Sending profile update request to server...');
-        const response = await fetch('/api/auth/profile', {
+        fetch('/api/auth/profile', {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
             userId: currentUser.id, 
             profileImage: croppedImageSrc 
           }),
+        }).catch(error => {
+          console.log('Server sync failed, but local save successful:', error);
         });
-
-        console.log('Server response status:', response.status);
       }
       
-      // Always show success message
-      console.log('Profile photo saved successfully');
       toast({
         title: "Photo saved",
         description: "Your profile photo has been updated successfully.",
         className: "bg-green-800 border-green-700 text-white",
       });
       
-      // Close the modal and dropdown
+      // Close modals
       setShowImageCropModal(false);
       setShowProfileImageDropdown(false);
       
     } catch (error) {
       console.error('Photo save error:', error);
       
-      // Still keep the local change even if there's an error
+      // Fallback: still save locally
       setProfileImage(croppedImageSrc);
-      setImageKey(Date.now()); // Force re-render
       localStorage.setItem(`take5_profile_${currentUser.id}`, croppedImageSrc);
       
       toast({
@@ -450,7 +438,6 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
         className: "bg-green-800 border-green-700 text-white",
       });
       
-      // Close the modal and dropdown
       setShowImageCropModal(false);
       setShowProfileImageDropdown(false);
     }
