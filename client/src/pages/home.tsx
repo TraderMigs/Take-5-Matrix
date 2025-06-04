@@ -14,8 +14,10 @@ import RotatingAffirmations from "@/components/rotating-affirmations";
 import LegalAcceptance from "@/components/legal-acceptance";
 import LegalModal from "@/components/legal-modal";
 import EmailVerificationBanner from "@/components/email-verification-banner";
+import CelebrationPopup from "@/components/celebration-popup";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { useLoginStreak } from "@/hooks/use-login-streak";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -32,6 +34,7 @@ export default function Home() {
   const { theme, toggleTheme } = useTheme();
   const { t } = useLanguage();
   const { toast } = useToast();
+  const { streakData, updateLoginStreak, showCelebration, setShowCelebration } = useLoginStreak();
 
   // Functions to handle profile view persistence
   const openProfileView = () => {
@@ -93,19 +96,25 @@ export default function Home() {
               };
               setCurrentUser(updatedUser);
               localStorage.setItem('take5_current_user', JSON.stringify(updatedUser));
+              
+              // Update login streak for authenticated users
+              updateLoginStreak();
             })
             .catch(profileError => {
               console.error('Error fetching profile data:', profileError);
               // Fall back to session data if profile fetch fails
               setCurrentUser(data.userData);
               localStorage.setItem('take5_current_user', JSON.stringify(data.userData));
+              
+              // Update login streak for authenticated users
+              updateLoginStreak();
             });
         }
       })
       .catch(error => {
         console.error('Error checking server session:', error);
       });
-  }, []);
+  }, [updateLoginStreak]);
 
   // Handle Google OAuth callback
   useEffect(() => {
@@ -120,6 +129,9 @@ export default function Home() {
           if (data.authenticated && data.userData) {
             setCurrentUser(data.userData);
             localStorage.setItem('take5_current_user', JSON.stringify(data.userData));
+            
+            // Update login streak for new Google OAuth login
+            updateLoginStreak();
             
             toast({
               title: "Welcome!",
@@ -692,6 +704,14 @@ export default function Home() {
       <LegalAcceptance
         isOpen={!hasAcceptedLegal}
         onAccept={handleLegalAcceptance}
+      />
+
+      {/* Celebration Popup for Login Streaks */}
+      <CelebrationPopup
+        isOpen={showCelebration}
+        onClose={() => setShowCelebration(false)}
+        dayStreak={streakData.currentStreak}
+        userName={currentUser?.displayName || currentUser?.firstName || "Friend"}
       />
       </div>
     </div>
