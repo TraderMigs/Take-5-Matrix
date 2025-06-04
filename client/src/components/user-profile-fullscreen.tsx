@@ -21,7 +21,11 @@ interface UserProfileProps {
 
 export default function UserProfileFullscreen({ isOpen, onClose, currentUser, onLogout }: UserProfileProps) {
   const [profileQuote, setProfileQuote] = useState(currentUser?.bio || "");
-  const [profileImage, setProfileImage] = useState(currentUser?.profileImage || "");
+  const [profileImage, setProfileImage] = useState(() => {
+    // Load from localStorage first, then fallback to currentUser data
+    const localImage = localStorage.getItem(`take5_profile_${currentUser?.id}`);
+    return localImage || currentUser?.profileImage || "";
+  });
   const [username, setUsername] = useState(currentUser?.username || "");
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [isEditingQuote, setIsEditingQuote] = useState(false);
@@ -59,6 +63,16 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
   const [selectedEntryForDownload, setSelectedEntryForDownload] = useState<any>(null);
   const { toast } = useToast();
   const { t } = useLanguage();
+
+  // Load profile image from localStorage on component mount
+  useEffect(() => {
+    if (currentUser?.id) {
+      const localImage = localStorage.getItem(`take5_profile_${currentUser.id}`);
+      if (localImage && localImage !== profileImage) {
+        setProfileImage(localImage);
+      }
+    }
+  }, [currentUser?.id]);
 
   const toggleEntryExpansion = (entryId: number) => {
     const newExpanded = new Set(expandedEntries);
