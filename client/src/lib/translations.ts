@@ -1022,16 +1022,21 @@ export async function getAITranslation(text: string, targetLanguage: Language): 
   return text; // Fallback to original
 }
 
-export function getTranslation(language: Language, key: keyof Translation, params?: Record<string, string>): string {
-  let text = translations[language]?.[key] || translations.en[key];
+export function getTranslation(language: Language, key: string, params?: Record<string, string>): string {
+  // Handle nested properties like 'legalContent.effectiveDate'
+  const getValue = (obj: any, path: string): string => {
+    return path.split('.').reduce((current, prop) => current?.[prop], obj) || '';
+  };
   
-  if (params) {
+  let text = getValue(translations[language], key) || getValue(translations.en, key);
+  
+  if (params && typeof text === 'string') {
     Object.entries(params).forEach(([param, value]) => {
       text = text.replace(`{${param}}`, value);
     });
   }
   
-  return text;
+  return text || key; // Fallback to key if translation not found
 }
 
 // Enhanced translation with AI fallback for missing languages

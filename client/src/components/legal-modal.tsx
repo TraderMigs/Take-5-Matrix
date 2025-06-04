@@ -57,55 +57,55 @@ export default function LegalModal({ children }: LegalModalProps) {
             <TabsContent value="privacy" className="space-y-4">
               <div className="space-y-4 text-sm text-gray-700 dark:text-gray-300">
                 <p className="text-gray-600 dark:text-gray-400">
-                  <strong>Effective Date:</strong> June 6, 2025
+                  <strong>{t('legalContent.effectiveDate')}</strong> {t('legalContent.privacyIntro')}
                 </p>
                 <p>
-                  <strong>Take 5</strong> ("we," "us," or "our") values your privacy. This Privacy Policy explains how we collect, use, disclose, and protect your personal information when you use the Take 5 app (the "App").
+                  {t('legalContent.privacyIntro')}
                 </p>
                 
                 <div>
-                  <h4 className="font-semibold text-black dark:text-white mb-2">Information We Collect:</h4>
+                  <h4 className="font-semibold text-black dark:text-white mb-2">{t('legalContent.informationWeCollect')}</h4>
                   <ul className="list-disc list-inside space-y-1 ml-4">
-                    <li>Personal details you provide (e.g., name, email address, emergency contact info)</li>
-                    <li>Journaling entries (stored locally or securely encrypted if on our servers)</li>
-                    <li>Usage data (pages visited, buttons clicked, interactions with the app)</li>
-                    <li>Device data (device type, operating system, browser type)</li>
+                    <li>{t('legalContent.personalDetails')}</li>
+                    <li>{t('legalContent.journalingEntries')}</li>
+                    <li>{t('legalContent.usageData')}</li>
+                    <li>{t('legalContent.deviceData')}</li>
                   </ul>
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-black dark:text-white mb-2">How We Use Your Data:</h4>
+                  <h4 className="font-semibold text-black dark:text-white mb-2">{t('legalContent.howWeUseData')}</h4>
                   <ul className="list-disc list-inside space-y-1 ml-4">
-                    <li>To operate and maintain the App</li>
-                    <li>To allow you to use personalized features (e.g., diary, emergency contacts)</li>
-                    <li>To improve user experience and develop new features</li>
-                    <li>To send occasional updates or alerts if you opt-in</li>
+                    <li>{t('legalContent.operateApp')}</li>
+                    <li>{t('legalContent.personalizedFeatures')}</li>
+                    <li>{t('legalContent.improveExperience')}</li>
+                    <li>{t('legalContent.sendUpdates')}</li>
                   </ul>
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-black dark:text-white mb-2">Sharing of Data:</h4>
+                  <h4 className="font-semibold text-black dark:text-white mb-2">{t('legalContent.sharingData')}</h4>
                   <ul className="list-disc list-inside space-y-1 ml-4">
-                    <li>We do <strong>not</strong> sell your data</li>
-                    <li>We do <strong>not</strong> share your private data with third parties unless legally required</li>
-                    <li>We may use third-party services (e.g., YouTube API, Google Analytics), and their data collection practices are governed by their own policies</li>
+                    <li>{t('legalContent.noSellData')}</li>
+                    <li>{t('legalContent.noSharePrivate')}</li>
+                    <li>{t('legalContent.thirdPartyServices')}</li>
                   </ul>
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-black dark:text-white mb-2">Data Security:</h4>
+                  <h4 className="font-semibold text-black dark:text-white mb-2">{t('legalContent.dataSecurity')}</h4>
                   <ul className="list-disc list-inside space-y-1 ml-4">
-                    <li>We implement industry-standard encryption and access controls</li>
-                    <li>Users may request data deletion by emailing tradermigs@gmail.com</li>
+                    <li>{t('legalContent.encryptionControls')}</li>
+                    <li>{t('legalContent.dataDeletion')}</li>
                   </ul>
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-black dark:text-white mb-2">Your Rights (GDPR, CCPA, etc.):</h4>
+                  <h4 className="font-semibold text-black dark:text-white mb-2">{t('legalContent.yourRights')}</h4>
                   <ul className="list-disc list-inside space-y-1 ml-4">
-                    <li>Right to access, correct, or delete your data</li>
-                    <li>Right to withdraw consent or opt-out of communications</li>
-                    <li>Right to lodge a complaint with a data protection authority</li>
+                    <li>{t('legalContent.rightAccess')}</li>
+                    <li>{t('legalContent.rightWithdraw')}</li>
+                    <li>{t('legalContent.rightComplaint')}</li>
                   </ul>
                 </div>
               </div>
@@ -114,65 +114,65 @@ export default function LegalModal({ children }: LegalModalProps) {
             <TabsContent value="terms" className="space-y-4">
               <div className="space-y-4 text-sm text-gray-700 dark:text-gray-300">
                 <p className="text-gray-600 dark:text-gray-400">
-                  <strong>Effective Date:</strong> June 6, 2025
+                  <strong>{t('legalContent.effectiveDate')}</strong>
                 </p>
                 <p>
-                  By using the Take 5 app, you agree to the following terms. If you do not agree, do not use the App.
+                  {t('legalContent.termsIntro')}
                 </p>
 
                 <div>
-                  <h4 className="font-semibold text-black dark:text-white mb-2">Eligibility:</h4>
+                  <h4 className="font-semibold text-black dark:text-white mb-2">{t('legalContent.eligibility')}</h4>
                   <ul className="list-disc list-inside space-y-1 ml-4">
-                    <li>You must be 18 years or older to use the App.</li>
-                    <li>By using the App, you represent that you are at least 18 years old.</li>
+                    <li>{t('legalContent.ageRequirement')}</li>
+                    <li>{t('legalContent.ageRepresentation')}</li>
                   </ul>
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-black dark:text-white mb-2">No Medical Advice:</h4>
+                  <h4 className="font-semibold text-black dark:text-white mb-2">{t('legalContent.noMedicalAdvice')}</h4>
                   <ul className="list-disc list-inside space-y-1 ml-4">
-                    <li>The App is for informational and motivational purposes only.</li>
-                    <li><strong>Take 5 does not provide medical advice, diagnosis, or treatment.</strong></li>
-                    <li>Content within the App (quotes, affirmations, AI chat, linked videos) is not intended to replace professional mental health or medical care.</li>
-                    <li>Always consult a qualified healthcare provider for mental health issues.</li>
+                    <li>{t('legalContent.informationalOnly')}</li>
+                    <li><strong>{t('legalContent.noMedicalDiagnosis')}</strong></li>
+                    <li>{t('legalContent.notReplacement')}</li>
+                    <li>{t('legalContent.consultProvider')}</li>
                   </ul>
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-black dark:text-white mb-2">AI and Content Usage:</h4>
+                  <h4 className="font-semibold text-black dark:text-white mb-2">{t('legalContent.aiContentUsage')}</h4>
                   <ul className="list-disc list-inside space-y-1 ml-4">
-                    <li>The AI chatbot is a basic conversational assistant. It is <strong>not</strong> a therapist, licensed counselor, or crisis worker.</li>
-                    <li>Linked YouTube content is curated for convenience and positivity but is provided by third parties.</li>
+                    <li>{t('legalContent.aiNotTherapist')}</li>
+                    <li>{t('legalContent.thirdPartyContent')}</li>
                   </ul>
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-black dark:text-white mb-2">Emergency Feature Disclaimer:</h4>
+                  <h4 className="font-semibold text-black dark:text-white mb-2">{t('legalContent.emergencyDisclaimer')}</h4>
                   <ul className="list-disc list-inside space-y-1 ml-4">
-                    <li>The emergency contact or services button is a user-triggered tool. <strong>We do not monitor or respond to emergency calls or messages.</strong></li>
+                    <li>{t('legalContent.emergencyUserTool')}</li>
                   </ul>
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-black dark:text-white mb-2">Limitation of Liability:</h4>
+                  <h4 className="font-semibold text-black dark:text-white mb-2">{t('legalContent.limitationLiability')}</h4>
                   <ul className="list-disc list-inside space-y-1 ml-4">
-                    <li>Use of the App is entirely at your own risk.</li>
-                    <li>You agree that Take 5, its creators, affiliates, and team shall not be held liable for any direct, indirect, incidental, or consequential damages resulting from use of the App.</li>
+                    <li>{t('legalContent.useAtRisk')}</li>
+                    <li>{t('legalContent.noLiability')}</li>
                   </ul>
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-black dark:text-white mb-2">Account and Data:</h4>
+                  <h4 className="font-semibold text-black dark:text-white mb-2">{t('legalContent.accountData')}</h4>
                   <ul className="list-disc list-inside space-y-1 ml-4">
-                    <li>You are responsible for maintaining the confidentiality of your data and password if account-based login is used.</li>
-                    <li>You may request data deletion at any time via tradermigs@gmail.com</li>
+                    <li>{t('legalContent.dataConfidentiality')}</li>
+                    <li>{t('legalContent.requestDeletion')}</li>
                   </ul>
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-black dark:text-white mb-2">Changes to the Terms:</h4>
+                  <h4 className="font-semibold text-black dark:text-white mb-2">{t('legalContent.changesTerms')}</h4>
                   <ul className="list-disc list-inside space-y-1 ml-4">
-                    <li>These Terms may be updated periodically. Continued use after updates means you accept the changes.</li>
+                    <li>{t('legalContent.termsUpdated')}</li>
                   </ul>
                 </div>
               </div>
@@ -182,22 +182,22 @@ export default function LegalModal({ children }: LegalModalProps) {
               <div className="space-y-4">
                 <div className="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-4 rounded">
                   <p className="text-sm text-red-800 dark:text-red-200 font-medium">
-                    <strong>DISCLAIMER:</strong> Take 5 is a supportive app created by an individual with personal experience in mental health. It is not a professional service. The App does not provide any diagnosis, treatment, therapy, or emergency support. By using this App, you agree that you are solely responsible for your actions and experiences. If you are experiencing a mental health crisis, please contact local emergency services or a licensed mental health provider immediately.
+                    <strong>{t('legalContent.disclaimerTitle')}</strong> {t('legalContent.disclaimerContent')}
                   </p>
                 </div>
                 <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">
-                  <strong>If you do not agree with any part of these notices, do not use the App.</strong>
+                  <strong>{t('legalContent.agreementRequired')}</strong>
                 </p>
 
                 <Separator className="border-gray-300 dark:border-gray-600" />
 
                 <div>
-                  <h3 className="text-lg font-bold text-black dark:text-white mb-3">Contact Us</h3>
+                  <h3 className="text-lg font-bold text-black dark:text-white mb-3">{t('legalContent.contactUs')}</h3>
                   <div className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
-                    <p>If you have any questions about your data, rights, or the terms listed here, contact:</p>
+                    <p>{t('legalContent.contactInfo')}</p>
                     <div className="space-y-1">
-                      <p><strong>Email:</strong> tradermigs@gmail.com</p>
-                      <p><strong>App Creator:</strong> U.S. Citizen residing in Thailand</p>
+                      <p><strong>{t('legalContent.email')}</strong> tradermigs@gmail.com</p>
+                      <p><strong>{t('legalContent.appCreator')}</strong> {t('legalContent.creatorLocation')}</p>
                       <p><strong>Governing Jurisdiction:</strong> United States (federal law), with international use acknowledged</p>
                     </div>
                   </div>

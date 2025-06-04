@@ -4,7 +4,7 @@ import { type Language, translations, getTranslation } from '@/lib/translations'
 interface LanguageContextType {
   language: Language;
   setLanguage: (language: Language) => void;
-  t: (key: keyof typeof translations.en, params?: Record<string, string>) => string;
+  t: (key: string, params?: Record<string, string>) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -15,7 +15,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     return (saved as Language) || 'en';
   });
 
-  const t = (key: keyof typeof translations.en, params?: Record<string, string>) => {
+  const t = (key: string, params?: Record<string, string>) => {
     return getTranslation(language, key, params);
   };
 
