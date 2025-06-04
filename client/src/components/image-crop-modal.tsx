@@ -138,14 +138,19 @@ export default function ImageCropModal({ isOpen, onClose, imageSrc, onSave }: Im
           </div>
 
           {/* Image Crop Area */}
-          <div className="flex justify-center items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-4 min-h-[300px]">
-            <div className="w-full flex justify-center">
+          <div className="flex justify-center items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-4 min-h-[300px] overflow-hidden">
+            <div className="relative w-full max-w-md mx-auto">
               <ReactCrop
                 crop={crop}
                 onChange={(_, percentCrop) => setCrop(percentCrop)}
                 onComplete={(c) => setCompletedCrop(c)}
                 keepSelection
-                className="max-w-full flex justify-center"
+                className="w-full max-w-full"
+                style={{ 
+                  display: 'flex', 
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
               >
                 <img
                   ref={imgRef}
@@ -153,10 +158,13 @@ export default function ImageCropModal({ isOpen, onClose, imageSrc, onSave }: Im
                   src={imageSrc}
                   style={{ 
                     transform: `scale(${scale}) rotate(${rotate}deg)`,
+                    width: '100%',
                     maxWidth: '100%',
+                    height: 'auto',
                     maxHeight: '400px',
                     display: 'block',
-                    margin: '0 auto'
+                    margin: '0 auto',
+                    objectFit: 'contain'
                   }}
                   onLoad={onImageLoad}
                 />

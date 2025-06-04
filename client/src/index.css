@@ -304,6 +304,20 @@ button:focus, input:focus {
     object-fit: contain !important;
   }
 
+  /* Remove yellow from Radix UI slider components */
+  [data-radix-slider-thumb] {
+    background-color: #64748b !important; /* slate-500 */
+    border-color: #475569 !important; /* slate-600 */
+  }
+
+  [data-radix-slider-track] {
+    background-color: #e2e8f0 !important; /* slate-200 */
+  }
+
+  [data-radix-slider-range] {
+    background-color: #64748b !important; /* slate-500 */
+  }
+
   /* Force remove all yellow colors globally */
   .text-yellow-400,
   .text-yellow-500,
