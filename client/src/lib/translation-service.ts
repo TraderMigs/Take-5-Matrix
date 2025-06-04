@@ -1,9 +1,15 @@
+import { getTranslation, hasTranslations } from './comprehensive-translations';
+import { getExtendedTranslation, hasExtendedTranslations } from './extended-translations';
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
-  apiKey: import.meta.env.VITE_OPENAI_API_KEY || '',
-  dangerouslyAllowBrowser: true
-});
+// Initialize OpenAI only if API key is available
+let openai: OpenAI | null = null;
+if (import.meta.env.VITE_OPENAI_API_KEY) {
+  openai = new OpenAI({
+    apiKey: import.meta.env.VITE_OPENAI_API_KEY,
+    dangerouslyAllowBrowser: true
+  });
+}
 
 // Language mapping for OpenAI translation
 const languageMap: Record<string, string> = {
@@ -63,38 +69,84 @@ export async function translateText(text: string, targetLanguage: string): Promi
     return translationCache.get(cacheKey)!;
   }
 
-  try {
-    const targetLangName = languageMap[targetLanguage];
-    if (!targetLangName) {
-      return text; // Return original if language not supported
-    }
-
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        {
-          role: "system",
-          content: `You are a professional translator. Translate the given text to ${targetLangName}. Maintain the same tone and context. For mental health and wellness content, use compassionate and supportive language. Return only the translation without any additional text or explanations.`
-        },
-        {
-          role: "user",
-          content: text
-        }
-      ],
-      max_tokens: 500,
-      temperature: 0.3
-    });
-
-    const translation = response.choices[0].message.content?.trim() || text;
-    
-    // Cache the translation
-    translationCache.set(cacheKey, translation);
-    
-    return translation;
-  } catch (error) {
-    console.error('Translation error:', error);
-    return text; // Return original text if translation fails
+  // Try comprehensive translations first (core + extended)
+  const extendedTranslated = getExtendedTranslation(targetLanguage, text);
+  if (extendedTranslated !== text) {
+    translationCache.set(cacheKey, extendedTranslated);
+    return extendedTranslated;
   }
+  
+  // Fallback to core translations
+  const preTranslated = getTranslation(targetLanguage, text);
+  if (preTranslated !== text) {
+    translationCache.set(cacheKey, preTranslated);
+    return preTranslated;
+  }
+
+  // If OpenAI is available and language has translations, use AI for dynamic content
+  if (openai && hasTranslations(targetLanguage)) {
+    try {
+      const targetLangName = languageMap[targetLanguage];
+      if (!targetLangName) {
+        return text;
+      }
+
+      const response = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: [
+          {
+            role: "system",
+            content: `You are a professional translator. Translate the given text to ${targetLangName}. Maintain the same tone and context. For mental health and wellness content, use compassionate and supportive language. Return only the translation without any additional text or explanations.`
+          },
+          {
+            role: "user",
+            content: text
+          }
+        ],
+        max_tokens: 500,
+        temperature: 0.3
+      });
+
+      const translation = response.choices[0].message.content?.trim() || text;
+      
+      // Cache the translation
+      translationCache.set(cacheKey, translation);
+      
+      return translation;
+    } catch (error) {
+      console.error('Translation error:', error);
+    }
+  }
+
+  // For languages with extended translations, try comprehensive text matching
+  if (hasExtendedTranslations(targetLanguage) || hasTranslations(targetLanguage)) {
+    // Enhanced common phrases mapping using both translation systems
+    const commonPhrases: Record<string, string> = {
+      'Welcome Back': getExtendedTranslation(targetLanguage, 'welcomeBack', 'Welcome Back'),
+      'Create Account': getExtendedTranslation(targetLanguage, 'createAccount', 'Create Account'),
+      'Continue with Google': getExtendedTranslation(targetLanguage, 'continueWithGoogle', 'Continue with Google'),
+      'OR': getExtendedTranslation(targetLanguage, 'or', 'OR'),
+      'Need an account? Sign up': getExtendedTranslation(targetLanguage, 'needAccountSignUp', 'Need an account? Sign up'),
+      'Email': getExtendedTranslation(targetLanguage, 'email', 'Email'),
+      'Password': getExtendedTranslation(targetLanguage, 'password', 'Password'),
+      'Sign In': getExtendedTranslation(targetLanguage, 'signIn', 'Sign In'),
+      'Sign Up': getExtendedTranslation(targetLanguage, 'signUp', 'Sign Up'),
+      'Close': getExtendedTranslation(targetLanguage, 'close', 'Close'),
+      'Save': getExtendedTranslation(targetLanguage, 'save', 'Save'),
+      'Cancel': getExtendedTranslation(targetLanguage, 'cancel', 'Cancel'),
+      'Loading...': getExtendedTranslation(targetLanguage, 'loading', 'Loading...'),
+      'Error': getExtendedTranslation(targetLanguage, 'error', 'Error'),
+      'Success': getExtendedTranslation(targetLanguage, 'success', 'Success')
+    };
+
+    if (commonPhrases[text]) {
+      const result = commonPhrases[text];
+      translationCache.set(cacheKey, result);
+      return result;
+    }
+  }
+
+  return text; // Return original text if no translation available
 }
 
 // Batch translation for multiple texts
