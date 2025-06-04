@@ -3,7 +3,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send, Bot, User, Volume2, VolumeX, Settings } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Send, Bot, User, Volume2, VolumeX, Settings, Play, Pause } from "lucide-react";
 import { useLanguage } from "@/hooks/use-language";
 
 interface Message {
@@ -31,57 +32,71 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
   const [userName, setUserName] = useState("");
   const [showNameInput, setShowNameInput] = useState(true);
   const [highlightedTool, setHighlightedTool] = useState<string | null>(null);
-  const [isAiMuted, setIsAiMuted] = useState(true);
+  const [isAiMuted, setIsAiMuted] = useState(false);
+  const [selectedVoice, setSelectedVoice] = useState('alloy');
+  const [availableVoices, setAvailableVoices] = useState<any[]>([]);
+  const [showVoiceSettings, setShowVoiceSettings] = useState(false);
+  const [playingAudioId, setPlayingAudioId] = useState<string | null>(null);
 
   const [lastAiMessageId, setLastAiMessageId] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const { t, language } = useLanguage();
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Text-to-speech function with warm, realistic voice
-  const speakText = (text: string) => {
-    // Cancel any ongoing speech
-    window.speechSynthesis.cancel();
+  // Play audio from URL
+  const playAudio = (audioUrl: string, messageId: string) => {
+    if (isAiMuted || !audioUrl) return;
     
-    const utterance = new SpeechSynthesisUtterance(text);
+    // Stop any currently playing audio
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
     
-    // Configure voice settings for warm, realistic speech
-    utterance.rate = 0.9; // Slightly slower for clarity
-    utterance.pitch = 1.0; // Natural pitch
-    utterance.volume = 0.8; // Comfortable volume
+    setPlayingAudioId(messageId);
     
-    // Function to set the best available voice
-    const setVoice = () => {
-      const voices = window.speechSynthesis.getVoices();
-      
-      // Prioritize high-quality voices
-      const preferredVoice = voices.find(voice => 
-        voice.name.includes('Premium') || 
-        voice.name.includes('Enhanced') ||
-        voice.name.includes('Neural') ||
-        voice.name.includes('Samantha') ||
-        voice.name.includes('Zira') ||
-        (voice.lang.startsWith('en') && voice.name.includes('Female')) ||
-        (voice.lang.startsWith('en') && voice.localService && !voice.name.includes('Male'))
-      ) || voices.find(voice => 
-        voice.lang.startsWith('en') && !voice.name.toLowerCase().includes('male')
-      ) || voices.find(voice => voice.lang.startsWith('en'));
-      
-      if (preferredVoice) {
-        utterance.voice = preferredVoice;
-      }
-      
-      window.speechSynthesis.speak(utterance);
+    const audio = new Audio(audioUrl);
+    audioRef.current = audio;
+    
+    audio.onended = () => {
+      setPlayingAudioId(null);
     };
     
-    // Ensure voices are loaded before selecting
-    if (window.speechSynthesis.getVoices().length === 0) {
-      window.speechSynthesis.addEventListener('voiceschanged', setVoice, { once: true });
+    audio.onerror = () => {
+      console.error('Audio playback failed');
+      setPlayingAudioId(null);
+    };
+    
+    audio.play().catch(error => {
+      console.error('Audio play failed:', error);
+      setPlayingAudioId(null);
+    });
+  };
+
+  // Toggle audio playback
+  const toggleAudio = (audioUrl: string, messageId: string) => {
+    if (playingAudioId === messageId) {
+      // Stop current audio
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+      setPlayingAudioId(null);
     } else {
-      setVoice();
+      // Play new audio
+      playAudio(audioUrl, messageId);
     }
   };
+
+  // Load available voices on component mount
+  useEffect(() => {
+    fetch('/api/voice/available-voices')
+      .then(res => res.json())
+      .then(data => setAvailableVoices(data.voices))
+      .catch(err => console.error('Failed to load voices:', err));
+  }, []);
 
   // Load saved name and conversation history from localStorage on component mount
   useEffect(() => {
@@ -127,37 +142,32 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
         setMessages([welcomeBackMessage]);
       }
 
-      // Load contacts for emergency assistance
-      fetch('/api/contacts')
-        .then(res => res.json())
-        .then(data => setContacts(data))
-        .catch(err => console.error('Failed to load contacts:', err));
+      // Load emergency contacts if they exist
+      setContacts([]);
     }
-  }, [isOpen, userName, messages.length]);
+  }, [isOpen, userName, messages.length, showNameInput, t]);
 
-  // Save conversation history and auto-scroll to bottom when new messages arrive
+  // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    
-    // Save only the last 6 messages (3 interactions) to localStorage
+  }, [messages]);
+
+  // Save conversation history to localStorage whenever messages change
+  useEffect(() => {
     if (messages.length > 0) {
-      const lastSixMessages = messages.slice(-6);
-      localStorage.setItem('take5-chat-history', JSON.stringify(lastSixMessages));
+      localStorage.setItem('take5-chat-history', JSON.stringify(messages));
     }
   }, [messages]);
 
   const handleNameSubmit = () => {
     if (userName.trim()) {
-      // Save name to localStorage for persistence
-      const trimmedName = userName.trim();
-      localStorage.setItem('take5-user-name', trimmedName);
-      console.log('Saving name to localStorage:', trimmedName);
+      localStorage.setItem('take5-user-name', userName.trim());
       setShowNameInput(false);
       
-      // Send welcome message after name is provided
+      // Send a welcome message immediately after name is set
       const welcomeMessage: Message = {
         id: Date.now().toString(),
-        text: `Hey, ${trimmedName}! What's going on? Talk to me 🙏🏾`,
+        text: t('aiWelcomeMessage'),
         sender: "ai",
         timestamp: new Date(),
       };
@@ -177,13 +187,13 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
     };
 
     setMessages(prev => [...prev, userMessage]);
-    const messageText = inputText.trim();
     setInputText("");
     setIsLoading(true);
 
-
-
-    setIsTyping(true);
+    // Start typing indicator after a brief delay
+    setTimeout(() => {
+      setIsTyping(true);
+    }, 300);
 
     try {
       const response = await fetch('/api/ai-chat', {
@@ -192,45 +202,46 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          message: inputText,
+          message: inputText.trim(),
           userName: userName,
-          conversationHistory: messages.slice(-6) // Send last 3 exchanges
+          conversationHistory: messages,
+          language
         }),
       });
+
+      setIsTyping(false);
 
       if (response.ok) {
         const data = await response.json();
         
-        setIsTyping(false);
+        const aiMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          text: data.response,
+          sender: "ai",
+          timestamp: new Date(),
+          model: data.model,
+          audioUrl: data.audioUrl
+        };
         
-        // Add small delay to simulate typing
-        setTimeout(() => {
-          const aiMessageId = (Date.now() + 1).toString();
-          const aiMessage: Message = {
-            id: aiMessageId,
-            text: data.response,
-            sender: "ai",
-            timestamp: new Date(),
-          };
-          setMessages(prev => [...prev, aiMessage]);
-          setLastAiMessageId(aiMessageId);
-          
-          // Speak the AI response if not muted
-          if (!isAiMuted && data.response) {
-            speakText(data.response);
-          }
-          
-          // Remove any injected feedback elements that might appear
+        setMessages(prev => [...prev, aiMessage]);
+        setLastAiMessageId(aiMessage.id);
+
+        // Auto-play audio if not muted and audio is available
+        if (!isAiMuted && data.audioUrl) {
           setTimeout(() => {
-            const feedbackElements = document.querySelectorAll('[data-feedback], .feedback-popup, .emoji-feedback');
-            feedbackElements.forEach(el => el.remove());
-          }, 100);
-        }, 1000);
+            playAudio(data.audioUrl, aiMessage.id);
+          }, 500);
+        }
 
         // Handle tool suggestions
-        if (data.suggestedTool && onToolSelect) {
-          setHighlightedTool(data.suggestedTool);
-          setTimeout(() => setHighlightedTool(null), 3000);
+        if (data.suggestedTool) {
+          setTimeout(() => {
+            if (onToolSelect) {
+              onToolSelect(data.suggestedTool);
+              setHighlightedTool(data.suggestedTool);
+              setTimeout(() => setHighlightedTool(null), 3000);
+            }
+          }, 1000);
         }
 
         // Handle emergency contact requests
@@ -266,31 +277,32 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
   if (showNameInput) {
     return (
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="sm:max-w-md bg-white dark:bg-gray-900">
+        <DialogContent className="w-11/12 max-w-md rounded-xl bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950">
           <DialogHeader>
-            <DialogTitle className="text-center text-gray-800 dark:text-gray-200">
-              {t('aiSupportChat')}
+            <DialogTitle className="text-center text-blue-800 dark:text-blue-200">
+              {t('welcomeMessage')}
             </DialogTitle>
           </DialogHeader>
-          <div className="space-y-4 p-4">
-            <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
-              {t('whatsYourName')}
+          <div className="space-y-4">
+            <p className="text-center text-gray-600 dark:text-gray-300">
+              {t('namePrompt')}
             </p>
-            <Input
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
-              placeholder={t('enterYourName')}
-              onKeyPress={(e) => e.key === 'Enter' && handleNameSubmit()}
-              className="text-center bg-black text-white placeholder:text-gray-400 border-gray-600"
-              autoFocus
-            />
-            <Button
-              onClick={handleNameSubmit}
-              disabled={!userName.trim()}
-              className="w-full bg-purple-600 hover:bg-purple-700 text-white"
-            >
-              {t('startConversation')}
-            </Button>
+            <div className="flex space-x-2">
+              <Input
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+                placeholder={t('enterName')}
+                onKeyPress={(e) => e.key === 'Enter' && handleNameSubmit()}
+                className="flex-1"
+              />
+              <Button 
+                onClick={handleNameSubmit}
+                disabled={!userName.trim()}
+                className="px-6"
+              >
+                {t('start')}
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
@@ -299,163 +311,154 @@ export default function AIChat({ isOpen, onClose, onToolSelect }: AIChatProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-2xl h-[600px] bg-white dark:bg-gray-900 flex flex-col">
-        <DialogHeader className="border-b border-gray-200 dark:border-gray-700 pb-4">
-          <DialogTitle className="flex items-center justify-between text-gray-800 dark:text-gray-200">
-            <div className="flex items-center gap-2">
-              <Bot className="w-5 h-5 text-purple-600" />
-              {t('aiSupportChat')}
-            </div>
-            {userName && (
-              <button
-                onClick={() => {
-                  localStorage.removeItem('take5-user-name');
-                  localStorage.removeItem('take5-chat-history');
-                  setUserName('');
-                  setShowNameInput(true);
-                  setMessages([]);
-                }}
-                className="text-xs text-gray-500 hover:text-purple-600 transition-colors"
+      <DialogContent className="w-11/12 max-w-2xl h-[80vh] flex flex-col rounded-xl bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950">
+        <DialogHeader className="flex-shrink-0">
+          <div className="flex items-center justify-between">
+            <DialogTitle className="text-blue-800 dark:text-blue-200">
+              {t('aiChatTitle')} - {userName}
+            </DialogTitle>
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowVoiceSettings(!showVoiceSettings)}
+                className="text-gray-600 dark:text-gray-300"
               >
-                {t('changeNamePrompt')}
-              </button>
-            )}
-          </DialogTitle>
+                <Settings className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsAiMuted(!isAiMuted)}
+                className="text-gray-600 dark:text-gray-300"
+              >
+                {isAiMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+              </Button>
+            </div>
+          </div>
+          
+          {showVoiceSettings && (
+            <div className="mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg">
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
+                Voice Selection:
+              </label>
+              <Select value={selectedVoice} onValueChange={setSelectedVoice}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select voice" />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableVoices.map((voice) => (
+                    <SelectItem key={voice.id} value={voice.id}>
+                      {voice.name} - {voice.description}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
         </DialogHeader>
 
-        {/* Mute/Unmute AI Controls */}
-        <div className="px-4 pb-2 border-b border-gray-200 dark:border-gray-700">
-          <button
-            onClick={() => {
-              const newMutedState = !isAiMuted;
-              setIsAiMuted(newMutedState);
-              // Stop any ongoing speech when muting
-              if (newMutedState) {
-                window.speechSynthesis.cancel();
-              }
-            }}
-            className="text-xs text-green-700 hover:text-green-800 transition-colors font-medium"
-          >
-            {isAiMuted ? t('unmuteAi') : 'Mute AI'}
-          </button>
-        </div>
-
-        <ScrollArea className="flex-1 p-4">
+        <ScrollArea className="flex-1 px-4 py-2">
           <div className="space-y-4">
             {messages.map((message) => (
               <div
                 key={message.id}
-                className={`flex gap-3 ${
+                className={`flex items-start space-x-3 ${
                   message.sender === "user" ? "justify-end" : "justify-start"
                 }`}
               >
                 {message.sender === "ai" && (
-                  <div className="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center flex-shrink-0">
-                    <Bot className="w-4 h-4 text-purple-600" />
+                  <div className="flex-shrink-0 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                    <Bot className="w-4 h-4 text-white" />
                   </div>
                 )}
                 
                 <div
-                  className={`max-w-[80%] px-4 py-2 rounded-lg ${
+                  className={`max-w-[75%] rounded-lg px-4 py-2 ${
                     message.sender === "user"
-                      ? "bg-purple-600 text-white"
-                      : "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+                      ? "bg-blue-500 text-white ml-auto"
+                      : "bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 shadow-sm"
                   }`}
                 >
-                  <p className="text-sm">{message.text}</p>
-                  <p className="text-xs opacity-70 mt-1">
-                    {message.timestamp.toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </p>
+                  <p className="text-sm leading-relaxed">{message.text}</p>
+                  
+                  {message.sender === "ai" && (
+                    <div className="flex items-center justify-between mt-2">
+                      <div className="flex items-center space-x-2">
+                        {message.model && (
+                          <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                            {message.model === 'gpt-3.5-turbo' ? '💙 Emotional Support' : '🧠 General Wellness'}
+                          </span>
+                        )}
+                        
+                        {message.audioUrl && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => toggleAudio(message.audioUrl!, message.id)}
+                            className="h-6 w-6 p-0 text-gray-500 dark:text-gray-400 hover:text-blue-500"
+                          >
+                            {playingAudioId === message.id ? (
+                              <Pause className="w-3 h-3" />
+                            ) : (
+                              <Play className="w-3 h-3" />
+                            )}
+                          </Button>
+                        )}
+                      </div>
+                      
+                      <span className="text-xs text-gray-400">
+                        {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 {message.sender === "user" && (
-                  <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center flex-shrink-0">
-                    <User className="w-4 h-4 text-blue-600" />
+                  <div className="flex-shrink-0 w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center">
+                    <User className="w-4 h-4 text-white" />
                   </div>
                 )}
               </div>
             ))}
-
+            
             {isTyping && (
-              <div className="flex gap-3 justify-start">
-                <div className="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center flex-shrink-0">
-                  <Bot className="w-4 h-4 text-purple-600" />
+              <div className="flex items-start space-x-3">
+                <div className="flex-shrink-0 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                  <Bot className="w-4 h-4 text-white" />
                 </div>
-                <div className="bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-lg">
+                <div className="bg-white dark:bg-gray-800 rounded-lg px-4 py-2 shadow-sm">
                   <div className="flex space-x-1">
                     <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                   </div>
                 </div>
               </div>
             )}
-
+            
             <div ref={messagesEndRef} />
           </div>
         </ScrollArea>
 
-        {/* Emergency Contacts Modal */}
-        {showContactList && (
-          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white dark:bg-gray-900 p-6 rounded-lg max-w-md w-full mx-4">
-              <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Emergency Contacts</h3>
-              <div className="space-y-2 mb-4">
-                {contacts.filter(c => c.isEmergency).map((contact) => (
-                  <Button
-                    key={contact.id}
-                    onClick={() => handleEmergencyContact(contact)}
-                    variant="outline"
-                    className="w-full justify-between"
-                  >
-                    <span>{contact.name}</span>
-                    <span className="text-sm text-gray-500">{contact.phone}</span>
-                  </Button>
-                ))}
-                <Button
-                  onClick={() => window.location.href = 'tel:988'}
-                  className="w-full bg-red-600 hover:bg-red-700 text-white"
-                >
-                  Crisis Lifeline: 988
-                </Button>
-              </div>
-              <Button
-                onClick={() => setShowContactList(false)}
-                variant="outline"
-                className="w-full"
-              >
-                Close
-              </Button>
-            </div>
-          </div>
-        )}
-
-        <div className="border-t border-gray-200 dark:border-gray-700 p-4">
-          <form onSubmit={handleSubmit} className="flex gap-2">
+        <form onSubmit={handleSubmit} className="flex-shrink-0 p-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex space-x-2">
             <Input
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              placeholder={t('typeYourMessage')}
+              placeholder={t('typeMessage')}
               disabled={isLoading}
-              className="flex-1 bg-black text-white placeholder:text-gray-400 border-gray-600"
-              autoFocus
+              className="flex-1"
             />
-            <Button
-              type="submit"
+            <Button 
+              type="submit" 
               disabled={!inputText.trim() || isLoading}
-              className="bg-purple-600 hover:bg-purple-700 text-white"
+              className="px-6"
             >
               <Send className="w-4 h-4" />
             </Button>
-          </form>
-          
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
-            {t('crisisWarning')}
-          </p>
-        </div>
+          </div>
+        </form>
       </DialogContent>
     </Dialog>
   );
