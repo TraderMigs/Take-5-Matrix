@@ -11,6 +11,7 @@ import { useLanguage } from "@/hooks/use-language";
 import DiaryExportModal from "@/components/diary-export-modal";
 import DiaryEntryDownloadModal from "@/components/diary-entry-download-modal";
 import ImageCropModal from "@/components/image-crop-modal";
+import AnimalSpinner from "@/components/animal-spinner";
 
 interface UserProfileProps {
   isOpen: boolean;
@@ -1102,6 +1103,12 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                     </div>
                   )}
                 </div>
+
+                {/* Animal Spinner Mini-Game - Only visible after login */}
+                <AnimalSpinner 
+                  currentUser={currentUser} 
+                  isVisible={true}
+                />
               </div>
 
 
