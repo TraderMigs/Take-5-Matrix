@@ -1435,7 +1435,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                       className="bg-blue-600 hover:bg-blue-700 text-white"
                     >
                       <Camera className="w-4 h-4 mr-2" />
-                      Change Image
+                      {t('uploadImage')}
                     </Button>
                     <Button
                       onClick={() => {
@@ -1445,7 +1445,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                       className="bg-green-600 hover:bg-green-700 text-white"
                     >
                       <Edit className="w-4 h-4 mr-2" />
-                      Edit & Crop
+                      {t('cropPosition')}
                     </Button>
                     <Button
                       onClick={removeBackgroundImage}
