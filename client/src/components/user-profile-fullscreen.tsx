@@ -219,6 +219,13 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
     }
   }, [currentUser, isOpen]);
 
+  // Initialize quote from currentUser.bio on component mount
+  useEffect(() => {
+    if (currentUser?.bio) {
+      setProfileQuote(currentUser.bio);
+    }
+  }, [currentUser?.bio]);
+
   const loadUserProfile = async () => {
     try {
       const response = await fetch(`/api/auth/profile?userId=${currentUser.id}`);
@@ -284,8 +291,10 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
   };
 
   const handleQuoteChange = (value: string) => {
+    console.log('Quote change triggered:', value);
     const trimmedValue = value.slice(0, 40);
     setProfileQuote(trimmedValue);
+    console.log('Quote state updated to:', trimmedValue);
   };
 
   const saveProfileQuote = async () => {
