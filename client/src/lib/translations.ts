@@ -213,9 +213,9 @@ const englishTranslations: Translation = {
   emergencyWarning: "If you're in immediate danger, call emergency services",
   
   // Authentication & User Account
-  login: "login",
-  createAccount: "createAccount",
-  loginToCreateContactsList: "loginToCreateContactsList",
+  login: "Log In",
+  createAccount: "Create Account",
+  loginToCreateContactsList: "Log in to create contacts list",
   signInWithGoogle: "Sign in with Google",
   
   additionalSupport: "Additional Support",
