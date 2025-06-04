@@ -114,7 +114,13 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
   const saveEditedEntry = async (entryId: number) => {
     try {
       const editedData = editedContent[entryId];
-      if (!editedData) return;
+      const originalEntry = diaryEntries.find(entry => entry.id === entryId);
+      if (!editedData && !originalEntry) return;
+
+      // Get the current images from edited content or original entry
+      const currentImages = editedData?.images || originalEntry?.images || [];
+      const title = editedData?.title || originalEntry?.title || '';
+      const content = editedData?.content || originalEntry?.content || '';
 
       const response = await fetch(`/api/diary/${entryId}`, {
         method: 'PATCH',
@@ -122,8 +128,9 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          title: editedData.title,
-          content: editedData.content
+          title: title,
+          content: content,
+          images: currentImages
         }),
       });
 
@@ -136,6 +143,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
         toast({
           title: "Entry updated",
           description: "Your diary entry has been saved successfully.",
+          className: "bg-green-800 border-green-700 text-white",
         });
       } else {
         throw new Error('Failed to update entry');
