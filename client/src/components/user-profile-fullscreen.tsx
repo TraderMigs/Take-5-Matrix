@@ -1346,16 +1346,42 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                                         alt={`Entry image ${index + 1}`}
                                         className="max-w-full h-40 object-contain rounded-lg border border-gray-200 dark:border-gray-600 cursor-pointer hover:opacity-90 transition-opacity"
                                         onClick={() => {
-                                          // Open image in full view
+                                          // Open image in full view with download option
                                           const overlay = document.createElement('div');
-                                          overlay.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
-                                          overlay.onclick = () => document.body.removeChild(overlay);
+                                          overlay.className = 'fixed inset-0 bg-black bg-opacity-75 flex flex-col items-center justify-center z-50 p-4';
+                                          
+                                          // Close overlay when clicking background
+                                          overlay.onclick = (e) => {
+                                            if (e.target === overlay) {
+                                              document.body.removeChild(overlay);
+                                            }
+                                          };
+                                          
+                                          // Image container
+                                          const imageContainer = document.createElement('div');
+                                          imageContainer.className = 'relative max-w-full max-h-full flex flex-col items-center';
                                           
                                           const img = document.createElement('img');
                                           img.src = image;
-                                          img.className = 'max-w-full max-h-full object-contain';
+                                          img.className = 'max-w-full max-h-[80vh] object-contain rounded-lg';
                                           
-                                          overlay.appendChild(img);
+                                          // Download button
+                                          const downloadBtn = document.createElement('button');
+                                          downloadBtn.innerHTML = '<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>Download Image';
+                                          downloadBtn.className = 'mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center justify-center transition-colors';
+                                          downloadBtn.onclick = (e) => {
+                                            e.stopPropagation();
+                                            const link = document.createElement('a');
+                                            link.href = image;
+                                            link.download = `diary-image-${Date.now()}.jpg`;
+                                            document.body.appendChild(link);
+                                            link.click();
+                                            document.body.removeChild(link);
+                                          };
+                                          
+                                          imageContainer.appendChild(img);
+                                          imageContainer.appendChild(downloadBtn);
+                                          overlay.appendChild(imageContainer);
                                           document.body.appendChild(overlay);
                                         }}
                                       />
