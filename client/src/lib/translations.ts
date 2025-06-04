@@ -1,5 +1,5 @@
 export interface Translation {
-  // Header
+  // App core
   appName: string;
   tagline: string;
   
@@ -13,11 +13,28 @@ export interface Translation {
   crisisHotlineCall: string;
   emergencyWarning: string;
   
+  // Authentication & User Account
+  login: string;
+  createAccount: string;
+  loginToCreateContactsList: string;
+  signInWithGoogle: string;
+  emailAddress: string;
+  password: string;
+  confirmPassword: string;
+  firstName: string;
+  lastName: string;
+  createProfile: string;
+  updateProfile: string;
+  signUp: string;
+  welcomeBack: string;
+  signOut: string;
+  myAccount: string;
+  accountSettings: string;
+  deleteAccount: string;
+  
   // Support modules
   additionalSupport: string;
   howCanWeSupport: string;
-  
-  // Quick tools
   feelOverwhelmed: string;
   breathingDescription: string;
   feelAnxious: string;
@@ -27,29 +44,7 @@ export interface Translation {
   needToTalk: string;
   talkDescription: string;
   
-  // Contacts
-  trustedContacts: string;
-  addTrustedContact: string;
-  
-  // Footer
-  footerMessage1: string;
-  footerMessage2: string;
-  footerMessage3: string;
-  footerMessage4: string;
-  
-  // Support resources
-  visitWebsite: string;
-  callNow: string;
-  cancel: string;
-  
-  // Breathing modal
-  breathingExercise: string;
-  inhale: string;
-  hold: string;
-  exhale: string;
-  close: string;
-  
-  // Support modules
+  // Quick tools
   breathing: string;
   breathingGuide: string;
   affirmations: string;
@@ -58,6 +53,23 @@ export interface Translation {
   soothingSounds: string;
   grounding: string;
   groundingTechnique: string;
+  
+  // Contact Management
+  trustedContacts: string;
+  trustedContactsTitle: string;
+  confidenceContacts: string;
+  addTrustedContact: string;
+  addNewContact: string;
+  editContact: string;
+  deleteContact: string;
+  contactName: string;
+  contactPhone: string;
+  contactRelationship: string;
+  saveContact: string;
+  noContactsYet: string;
+  contactAdded: string;
+  contactUpdated: string;
+  contactDeleted: string;
   
   // Contact form
   name: string;
@@ -68,6 +80,24 @@ export interface Translation {
   enterRelationship: string;
   addContact: string;
   
+  // Footer messages
+  footerMessage1: string;
+  footerMessage2: string;
+  footerMessage3: string;
+  footerMessage4: string;
+  
+  // Support resources
+  visitWebsite: string;
+  callNow: string;
+  cancel: string;
+  close: string;
+  
+  // Breathing modal
+  breathingExercise: string;
+  inhale: string;
+  hold: string;
+  exhale: string;
+  
   // Profile
   yourProfile: string;
   profile: string;
@@ -76,6 +106,17 @@ export interface Translation {
   newEntry: string;
   addQuotePlaceholder: string;
   logout: string;
+  backgroundImage: string;
+  noBackgroundImageSet: string;
+  uploadImage: string;
+  setYourPersonalBackground: string;
+  chooseYourImage: string;
+  uploadAnyPhoto: string;
+  cropPosition: string;
+  useEditorToCrop: string;
+  screenImage: string;
+  diary: string;
+  remove: string;
   
   // Diary
   entryTitle: string;
@@ -140,6 +181,62 @@ export interface Translation {
   disclaimer: string;
   effectiveDate: string;
   
+  // Authentication & User Account
+  login: string;
+  createAccount: string;
+  loginToCreateContactsList: string;
+  signInWithGoogle: string;
+  emailAddress: string;
+  password: string;
+  confirmPassword: string;
+  firstName: string;
+  lastName: string;
+  createProfile: string;
+  updateProfile: string;
+  signUp: string;
+  welcomeBack: string;
+  signOut: string;
+  myAccount: string;
+  accountSettings: string;
+  deleteAccount: string;
+  
+  // Contact Management
+  trustedContactsTitle: string;
+  confidenceContacts: string;
+  addNewContact: string;
+  editContact: string;
+  deleteContact: string;
+  contactName: string;
+  contactPhone: string;
+  contactRelationship: string;
+  saveContact: string;
+  noContactsYet: string;
+  contactAdded: string;
+  contactUpdated: string;
+  contactDeleted: string;
+  
+  // Affirmations & Support Messages
+  youAreNotAlone: string;
+  youMatter: string;
+  thisWillPass: string;
+  youAreEnough: string;
+  youAreStrong: string;
+  helpIsAvailable: string;
+  momentIsTemporary: string;
+  youCanDoThis: string;
+  
+  // Music & Audio
+  calmingMusic: string;
+  soothingSounds: string;
+  peacefulMusic: string;
+  relaxingAudio: string;
+  
+  // Grounding & Techniques
+  groundingExercise: string;
+  breathingTechnique: string;
+  mindfulnessExercise: string;
+  relaxationTechnique: string;
+  
   // Legal Content
   legalContent: {
     effectiveDate: string;
@@ -167,21 +264,28 @@ export interface Translation {
     lodgeComplaint: string;
     termsIntro: string;
     eligibility: string;
+    ageRequirement: string;
+    ageRepresentation: string;
     mustBe18: string;
     represent18: string;
     noMedicalAdvice: string;
     informationalOnly: string;
+    noMedicalDiagnosis: string;
+    notReplacement: string;
     noMedicalAdviceText: string;
     notReplaceProfessional: string;
     consultProvider: string;
     aiContentUsage: string;
     aiNotTherapist: string;
+    thirdPartyContent: string;
     youtubeContent: string;
     emergencyDisclaimer: string;
+    emergencyUserTool: string;
     emergencyText: string;
     notEmergencyService: string;
     callEmergencyServices: string;
     limitationLiability: string;
+    noLiability: string;
     useAtRisk: string;
     noWarranties: string;
     disclaimerIntro: string;
@@ -299,6 +403,52 @@ export const translations: Record<Language, Translation> = {
     changeNamePrompt: "Change Name",
     enterYourName: "Enter your name",
     whatsYourName: "What's your name?",
+    
+    // Authentication & User Account
+    login: "login",
+    createAccount: "createAccount",
+    loginToCreateContactsList: "loginToCreateContactsList",
+    signInWithGoogle: "Sign in with Google",
+    emailAddress: "Email Address",
+    password: "Password",
+    confirmPassword: "Confirm Password",
+    firstName: "First Name",
+    lastName: "Last Name",
+    createProfile: "Create Profile",
+    updateProfile: "Update Profile",
+    signUp: "Sign Up",
+    welcomeBack: "Welcome Back",
+    signOut: "Sign Out",
+    myAccount: "My Account",
+    accountSettings: "Account Settings",
+    deleteAccount: "Delete Account",
+    
+    // Contact Management
+    trustedContactsTitle: "Your Trusted Contacts",
+    confidenceContacts: "Your Trusted Contacts",
+    addNewContact: "Add New Contact",
+    editContact: "Edit Contact",
+    deleteContact: "Delete Contact",
+    contactName: "Contact Name",
+    contactPhone: "Contact Phone",
+    contactRelationship: "Contact Relationship",
+    saveContact: "Save Contact",
+    noContactsYet: "No contacts yet",
+    contactAdded: "Contact added successfully",
+    contactUpdated: "Contact updated successfully",
+    contactDeleted: "Contact deleted successfully",
+    
+    // Music & Audio
+    calmingMusic: "Calming Music",
+    soothingSounds: "Soothing Sounds",
+    peacefulMusic: "Peaceful Music",
+    relaxingAudio: "Relaxing Audio",
+    
+    // Grounding & Techniques
+    groundingExercise: "Grounding Exercise",
+    breathingTechnique: "Breathing Technique",
+    mindfulnessExercise: "Mindfulness Exercise",
+    relaxationTechnique: "Relaxation Technique",
     
     // Affirmations/Quotes
     youDeservePeace: "You deserve peace and happiness",
