@@ -213,11 +213,18 @@ const openai = new OpenAI({
 // Using GPT-4.1 Mini (gpt-4-1106-preview) as requested by user
 async function getOpenAIResponse(message: string, conversationHistory: any[] = [], userName?: string): Promise<string> {
   try {
+    // Check for positive feedback or thanks before considering any redirects
+    const lowerMessage = message.toLowerCase().trim();
+    const isPositiveFeedback = lowerMessage.includes('thank') || lowerMessage.includes('thanks') || 
+                              lowerMessage.includes('worked') || lowerMessage.includes('helped') || 
+                              lowerMessage.includes('better') || lowerMessage.includes('good') ||
+                              lowerMessage.includes('appreciate');
+    
     // Count AI messages in current session to implement redirect logic
     const aiMessageCount = conversationHistory.filter(msg => msg.sender === 'ai').length;
     
-    // After 3-5 AI responses, redirect to built-in tools
-    if (aiMessageCount >= 3 && Math.random() > 0.3) { // 70% chance after 3+ exchanges
+    // Only suggest tools after 6+ exchanges and NOT when user is giving positive feedback
+    if (aiMessageCount >= 6 && !isPositiveFeedback && Math.random() > 0.6) { // 40% chance after 6+ exchanges, but never on positive feedback
       const redirectMessages = [
         `You know what helps most right now${userName ? `, ${userName}` : ''}? Try tapping "I Feel Overwhelmed". People say it really helps, and I think it'll do the same for you. I'll be right here after.`,
         `Hey${userName ? ` ${userName}` : ''}, I think you'd really benefit from trying "I Feel Anxious" right now. It's designed exactly for moments like this. Give it a try and come back to chat whenever you need.`,
@@ -234,11 +241,13 @@ async function getOpenAIResponse(message: string, conversationHistory: any[] = [
 
 Always speak like a real human — warm, kind, relaxed, casual. Keep your responses under 100 words.
 
-Focus on having 3 to 5 meaningful back-and-forth conversations before suggesting any tools or redirections. Listen actively, ask follow-up questions, and help users process their feelings through conversation.
+IMPORTANT: When users give positive feedback like "thanks", "it worked", "that helped", or share something good that happened, ALWAYS acknowledge their feedback genuinely first. Don't immediately suggest other activities - let them know you heard them and are glad things went well.
+
+Listen actively, ask follow-up questions, and help users process their feelings through conversation. Take time to truly understand what they're sharing before moving to suggestions.
 
 Never offer to show emergency contacts or trusted contacts. Never suggest contacting people unless the user specifically asks about reaching out to others.
 
-After 3-5 exchanges, you may gently suggest built-in tools like "I Feel Anxious", "I Feel Overwhelmed", or "Daily Reset" if appropriate.
+Only suggest built-in tools after many exchanges and when genuinely appropriate - never when someone is sharing positive news or thanking you.
 
 Never pretend to be a doctor. Never fake empathy — always keep it real, grounded, and emotionally safe. Your job is to connect, not cure.`
       }
