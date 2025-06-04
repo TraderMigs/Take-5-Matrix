@@ -2,8 +2,6 @@ export interface Translation {
   // App core
   appName: string;
   tagline: string;
-  
-  // Search
   searchPlaceholder: string;
   
   // Emergency
@@ -18,19 +16,6 @@ export interface Translation {
   createAccount: string;
   loginToCreateContactsList: string;
   signInWithGoogle: string;
-  emailAddress: string;
-  password: string;
-  confirmPassword: string;
-  firstName: string;
-  lastName: string;
-  createProfile: string;
-  updateProfile: string;
-  signUp: string;
-  welcomeBack: string;
-  signOut: string;
-  myAccount: string;
-  accountSettings: string;
-  deleteAccount: string;
   
   // Support modules
   additionalSupport: string;
@@ -56,20 +41,8 @@ export interface Translation {
   
   // Contact Management
   trustedContacts: string;
-  trustedContactsTitle: string;
   confidenceContacts: string;
   addTrustedContact: string;
-  addNewContact: string;
-  editContact: string;
-  deleteContact: string;
-  contactName: string;
-  contactPhone: string;
-  contactRelationship: string;
-  saveContact: string;
-  noContactsYet: string;
-  contactAdded: string;
-  contactUpdated: string;
-  contactDeleted: string;
   
   // Contact form
   name: string;
@@ -106,17 +79,6 @@ export interface Translation {
   newEntry: string;
   addQuotePlaceholder: string;
   logout: string;
-  backgroundImage: string;
-  noBackgroundImageSet: string;
-  uploadImage: string;
-  setYourPersonalBackground: string;
-  chooseYourImage: string;
-  uploadAnyPhoto: string;
-  cropPosition: string;
-  useEditorToCrop: string;
-  screenImage: string;
-  diary: string;
-  remove: string;
   
   // Diary
   entryTitle: string;
@@ -159,9 +121,6 @@ export interface Translation {
   // Rotating Affirmations Array
   rotatingAffirmations: string[];
   
-  // Remove translation (for background image)
-  remove: string;
-  
   // Profile UI
   backgroundImage: string;
   noBackgroundImageSet: string;
@@ -173,6 +132,7 @@ export interface Translation {
   useEditorToCrop: string;
   screenImage: string;
   diary: string;
+  remove: string;
   
   // Legal
   legalPoliciesDisclamers: string;
@@ -180,62 +140,6 @@ export interface Translation {
   termsConditions: string;
   disclaimer: string;
   effectiveDate: string;
-  
-  // Authentication & User Account
-  login: string;
-  createAccount: string;
-  loginToCreateContactsList: string;
-  signInWithGoogle: string;
-  emailAddress: string;
-  password: string;
-  confirmPassword: string;
-  firstName: string;
-  lastName: string;
-  createProfile: string;
-  updateProfile: string;
-  signUp: string;
-  welcomeBack: string;
-  signOut: string;
-  myAccount: string;
-  accountSettings: string;
-  deleteAccount: string;
-  
-  // Contact Management
-  trustedContactsTitle: string;
-  confidenceContacts: string;
-  addNewContact: string;
-  editContact: string;
-  deleteContact: string;
-  contactName: string;
-  contactPhone: string;
-  contactRelationship: string;
-  saveContact: string;
-  noContactsYet: string;
-  contactAdded: string;
-  contactUpdated: string;
-  contactDeleted: string;
-  
-  // Affirmations & Support Messages
-  youAreNotAlone: string;
-  youMatter: string;
-  thisWillPass: string;
-  youAreEnough: string;
-  youAreStrong: string;
-  helpIsAvailable: string;
-  momentIsTemporary: string;
-  youCanDoThis: string;
-  
-  // Music & Audio
-  calmingMusic: string;
-  soothingSounds: string;
-  peacefulMusic: string;
-  relaxingAudio: string;
-  
-  // Grounding & Techniques
-  groundingExercise: string;
-  breathingTechnique: string;
-  mindfulnessExercise: string;
-  relaxationTechnique: string;
   
   // Legal Content
   legalContent: {
@@ -295,21 +199,7 @@ export interface Translation {
   };
 }
 
-// Language type definition for comprehensive international support
-export type Language = 
-  | 'en' | 'es' | 'th' | 'fr' | 'de' | 'it' | 'pt' | 'ru' | 'ja' | 'ko' 
-  | 'zh' | 'ar' | 'hi' | 'nl' | 'sv' | 'no' | 'da' | 'fi' | 'pl' | 'tr'
-  | 'he' | 'vi' | 'id' | 'ms' | 'tl' | 'uk' | 'cs' | 'sk' | 'hu' | 'ro'
-  | 'bg' | 'hr' | 'sl' | 'et' | 'lv' | 'lt' | 'mt' | 'ga' | 'cy' | 'is'
-  | 'mk' | 'sq' | 'sr' | 'bs' | 'me' | 'ka' | 'hy' | 'az' | 'kk' | 'ky'
-  | 'uz' | 'tm' | 'mn' | 'ne' | 'bn' | 'ta' | 'te' | 'ml' | 'kn' | 'gu'
-  | 'pa' | 'or' | 'as' | 'ur' | 'fa' | 'ps' | 'sw' | 'am' | 'so' | 'ha'
-  | 'yo' | 'ig' | 'zu' | 'af' | 'xh' | 'st' | 'tn' | 'ts' | 've' | 'nr'
-  | 'ss' | 'lg' | 'rw' | 'ny' | 'sn' | 'mg' | 'my' | 'km' | 'lo' | 'si'
-  | 'dv' | 'bo' | 'dz' | 'ii' | 'iu' | 'kl' | 'se' | 'fo' | 'gd' | 'br'
-  | 'eu' | 'ca' | 'gl' | 'oc' | 'co' | 'sc' | 'rm' | 'fur' | 'lij' | 'vec'
-  | 'nap' | 'scn' | 'lmo' | 'pms' | 'rgn' | 'eml' | 'lld' | 'frp' | 'wa'
-  | 'li' | 'nds' | 'lb' | 'als' | 'bar' | 'ksh' | 'pdc' | 'hsb' | 'dsb';
+export type Language = 'en' | 'es' | 'th' | 'fr' | 'de' | 'it' | 'pt' | 'ru' | 'ja' | 'ko' | 'zh' | 'ar' | 'hi' | 'nl';
 
 export const translations: Record<Language, Translation> = {
   en: {
@@ -321,6 +211,13 @@ export const translations: Record<Language, Translation> = {
     crisisHotline: "Crisis Hotline",
     crisisHotlineCall: "Call Now",
     emergencyWarning: "If you're in immediate danger, call emergency services",
+    
+    // Authentication & User Account
+    login: "login",
+    createAccount: "createAccount",
+    loginToCreateContactsList: "loginToCreateContactsList",
+    signInWithGoogle: "Sign in with Google",
+    
     additionalSupport: "Additional Support",
     howCanWeSupport: "How are you feeling, friend?",
     feelOverwhelmed: "I Feel Overwhelmed",
@@ -331,20 +228,6 @@ export const translations: Record<Language, Translation> = {
     depressedDescription: "Depression support and mood resources",
     needToTalk: "I Need to Talk",
     talkDescription: "Professional counseling and peer support",
-    trustedContacts: "Your Trusted Contacts",
-    addTrustedContact: "Add a trusted contact",
-    footerMessage1: "You're not alone.",
-    footerMessage2: "You matter. Your life has value.",
-    footerMessage3: "Help is always available.",
-    footerMessage4: "This moment is temporary. You got this!",
-    visitWebsite: "Visit Website",
-    callNow: "Call Now",
-    cancel: "Cancel",
-    breathingExercise: "Breathing Exercise",
-    inhale: "Inhale",
-    hold: "Hold",
-    exhale: "Exhale",
-    close: "Close",
     
     // Support modules
     breathing: "Breathing",
@@ -356,6 +239,11 @@ export const translations: Record<Language, Translation> = {
     grounding: "Grounding",
     groundingTechnique: "5-4-3-2-1",
     
+    // Contact Management
+    trustedContacts: "Your Trusted Contacts",
+    confidenceContacts: "Your Trusted Contacts",
+    addTrustedContact: "Add a trusted contact",
+    
     // Contact form
     name: "Name",
     phoneNumber: "Phone Number",
@@ -364,6 +252,20 @@ export const translations: Record<Language, Translation> = {
     enterPhone: "Enter phone number",
     enterRelationship: "e.g., Therapist, Friend, Family",
     addContact: "Add Contact",
+    
+    footerMessage1: "You're not alone.",
+    footerMessage2: "You matter. Your life has value.",
+    footerMessage3: "Help is always available.",
+    footerMessage4: "This moment is temporary. You got this!",
+    visitWebsite: "Visit Website",
+    callNow: "Call Now",
+    cancel: "Cancel",
+    close: "Close",
+    
+    breathingExercise: "Breathing Exercise",
+    inhale: "Inhale",
+    hold: "Hold",
+    exhale: "Exhale",
     
     // Profile
     yourProfile: "Your Profile",
@@ -404,52 +306,6 @@ export const translations: Record<Language, Translation> = {
     enterYourName: "Enter your name",
     whatsYourName: "What's your name?",
     
-    // Authentication & User Account
-    login: "login",
-    createAccount: "createAccount",
-    loginToCreateContactsList: "loginToCreateContactsList",
-    signInWithGoogle: "Sign in with Google",
-    emailAddress: "Email Address",
-    password: "Password",
-    confirmPassword: "Confirm Password",
-    firstName: "First Name",
-    lastName: "Last Name",
-    createProfile: "Create Profile",
-    updateProfile: "Update Profile",
-    signUp: "Sign Up",
-    welcomeBack: "Welcome Back",
-    signOut: "Sign Out",
-    myAccount: "My Account",
-    accountSettings: "Account Settings",
-    deleteAccount: "Delete Account",
-    
-    // Contact Management
-    trustedContactsTitle: "Your Trusted Contacts",
-    confidenceContacts: "Your Trusted Contacts",
-    addNewContact: "Add New Contact",
-    editContact: "Edit Contact",
-    deleteContact: "Delete Contact",
-    contactName: "Contact Name",
-    contactPhone: "Contact Phone",
-    contactRelationship: "Contact Relationship",
-    saveContact: "Save Contact",
-    noContactsYet: "No contacts yet",
-    contactAdded: "Contact added successfully",
-    contactUpdated: "Contact updated successfully",
-    contactDeleted: "Contact deleted successfully",
-    
-    // Music & Audio
-    calmingMusic: "Calming Music",
-    soothingSounds: "Soothing Sounds",
-    peacefulMusic: "Peaceful Music",
-    relaxingAudio: "Relaxing Audio",
-    
-    // Grounding & Techniques
-    groundingExercise: "Grounding Exercise",
-    breathingTechnique: "Breathing Technique",
-    mindfulnessExercise: "Mindfulness Exercise",
-    relaxationTechnique: "Relaxation Technique",
-    
     // Affirmations/Quotes
     youDeservePeace: "You deserve peace and happiness",
     youAreStronger: "You are stronger than you know",
@@ -469,17 +325,7 @@ export const translations: Record<Language, Translation> = {
       "You have overcome challenges before",
       "Your feelings are valid and temporary",
       "Tomorrow can be different",
-      "You are worthy of love and support",
-      "Small steps forward are still progress",
-      "You have the strength to get through this",
-      "Your story isn't over yet",
-      "There are people who care about you",
-      "You are enough, just as you are",
-      "Healing takes time, and that's okay",
-      "You deserve peace and happiness",
-      "Your courage to reach out shows strength",
-      "Every day you survive is a win",
-      "You have made it through 100% of your worst days"
+      "You are worthy of love and support"
     ],
     
     // Profile UI
@@ -493,6 +339,7 @@ export const translations: Record<Language, Translation> = {
     useEditorToCrop: "Use our editor to crop and center your image perfectly",
     screenImage: "Screen Image",
     diary: "Diary",
+    remove: "Remove",
     
     // Legal
     legalPoliciesDisclamers: "Legal Policies & Disclaimers",
@@ -504,7 +351,7 @@ export const translations: Record<Language, Translation> = {
     // Legal Content
     legalContent: {
       effectiveDate: "Effective Date: June 6, 2025",
-      privacyIntro: "Take 5 (\"we,\" \"us,\" or \"our\") values your privacy. This Privacy Policy explains how we collect, use, disclose, and protect your personal information when you use the Take 5 app (the \"App\").",
+      privacyIntro: "Take 5 values your privacy. This Privacy Policy explains how we collect, use, disclose, and protect your personal information when you use the Take 5 app.",
       informationWeCollect: "Information We Collect:",
       personalDetails: "Personal details you provide (e.g., name, email address, emergency contact info)",
       journalingEntries: "Journaling entries (stored locally or securely encrypted if on our servers)",
@@ -528,72 +375,284 @@ export const translations: Record<Language, Translation> = {
       lodgeComplaint: "Right to lodge a complaint with a data protection authority",
       termsIntro: "By using the Take 5 app, you agree to the following terms. If you do not agree, do not use the App.",
       eligibility: "Eligibility:",
+      ageRequirement: "You must be 18 years or older to use the App.",
+      ageRepresentation: "By using the App, you represent that you are at least 18 years old.",
       mustBe18: "You must be 18 years or older to use the App.",
       represent18: "By using the App, you represent that you are at least 18 years old.",
       noMedicalAdvice: "No Medical Advice:",
       informationalOnly: "The App is for informational and motivational purposes only.",
+      noMedicalDiagnosis: "Take 5 does not provide medical advice, diagnosis, or treatment.",
+      notReplacement: "Content within the App is not intended to replace professional mental health or medical care.",
       noMedicalAdviceText: "Take 5 does not provide medical advice, diagnosis, or treatment.",
       notReplaceProfessional: "Content within the App (quotes, affirmations, AI chat, linked videos) is not intended to replace professional mental health or medical care.",
       consultProvider: "Always consult a qualified healthcare provider for mental health issues.",
       aiContentUsage: "AI and Content Usage:",
       aiNotTherapist: "The AI chatbot is a basic conversational assistant. It is not a therapist, licensed counselor, or crisis worker.",
-      youtubeContent: "Linked YouTube content is curated for convenience and positivity but is provided by third parties.",
+      thirdPartyContent: "We may link to third-party content (e.g., YouTube videos). We do not control such content.",
+      youtubeContent: "We may link to third-party content (e.g., YouTube videos). We do not control such content and are not responsible for its accuracy or availability.",
       emergencyDisclaimer: "Emergency Feature Disclaimer:",
-      emergencyText: "The emergency contacts feature is for convenience only.",
-      notEmergencyService: "Take 5 is not an emergency service.",
-      callEmergencyServices: "In a crisis, call 988, 911, or your local emergency services immediately.",
+      emergencyUserTool: "The emergency contact and hotline features are user tools to help connect with external resources.",
+      emergencyText: "The emergency contact and hotline features are user tools to help connect with external resources.",
+      notEmergencyService: "Take 5 is not an emergency service. In a crisis, call your local emergency number immediately.",
+      callEmergencyServices: "If you're experiencing thoughts of self-harm, call emergency services or a crisis hotline.",
       limitationLiability: "Limitation of Liability:",
+      noLiability: "You use the App at your own risk.",
       useAtRisk: "You use the App at your own risk.",
-      noWarranties: "We make no warranties about the App's availability, accuracy, or fitness for any particular purpose.",
-      disclaimerIntro: "Take 5 is a wellness and motivational app designed to provide support and resources for mental well-being.",
-      notMedicalDevice: "This app is not a medical device, therapy service, or crisis intervention tool.",
-      supplementNot: "It is intended to supplement, not replace, professional mental health care.",
-      ifCrisis: "If you are experiencing a mental health crisis, suicidal thoughts, or are in immediate danger, please contact emergency services (911) or a crisis hotline (988) immediately."
+      noWarranties: "We provide no warranties or guarantees about the App's effectiveness for mental health outcomes.",
+      disclaimerIntro: "Take 5 is a wellness and motivational app designed to provide emotional support resources and coping tools. Important disclaimers:",
+      notMedicalDevice: "This is not a medical device or professional mental health treatment.",
+      supplementNot: "It supplements but does not replace professional care.",
+      ifCrisis: "If you're in crisis, please contact emergency services or a mental health professional immediately.",
     }
   },
+
+  // French translations
+  fr: {
+    appName: "Take 5",
+    tagline: "Respirez. Reprenez le contrôle.",
+    searchPlaceholder: "Tapez comment vous vous sentez: 'Je suis seul', 'sans-abri', 'je veux mourir'...",
+    emergencySupport: "Soutien d'urgence",
+    callEmergency: "Appelez le {number} (Urgence)",
+    crisisHotline: "Ligne d'écoute de crise",
+    crisisHotlineCall: "Appelez maintenant",
+    emergencyWarning: "Si vous êtes en danger immédiat, appelez les services d'urgence",
+    
+    // Authentication & User Account
+    login: "se connecter",
+    createAccount: "créer un compte",
+    loginToCreateContactsList: "connectez-vous pour créer une liste de contacts",
+    signInWithGoogle: "Se connecter avec Google",
+    
+    additionalSupport: "Soutien supplémentaire",
+    howCanWeSupport: "Comment vous sentez-vous, ami?",
+    feelOverwhelmed: "Je me sens dépassé",
+    breathingDescription: "Exercices de respiration et techniques d'ancrage",
+    feelAnxious: "Je me sens anxieux",
+    anxiousDescription: "Gestion de l'anxiété et stratégies d'adaptation",
+    feelDepressed: "Je me sens déprimé",
+    depressedDescription: "Soutien pour la dépression et ressources d'humeur",
+    needToTalk: "J'ai besoin de parler",
+    talkDescription: "Conseil professionnel et soutien par les pairs",
+    
+    // Support modules
+    breathing: "Respiration",
+    breathingGuide: "Guide 5 min",
+    affirmations: "Affirmations",
+    kindWords: "Mots gentils",
+    calmMusic: "Musique Calme",
+    soothingSounds: "Sons apaisants",
+    grounding: "Ancrage",
+    groundingTechnique: "5-4-3-2-1",
+    
+    // Contact Management
+    trustedContacts: "Vos contacts de confiance",
+    confidenceContacts: "Vos Contacts de Confiance",
+    addTrustedContact: "Ajouter un contact de confiance",
+    
+    // Contact form
+    name: "Nom",
+    phoneNumber: "Numéro de téléphone",
+    relationship: "Relation",
+    enterName: "Entrez le nom",
+    enterPhone: "Entrez le numéro de téléphone",
+    enterRelationship: "ex: Thérapeute, Ami, Famille",
+    addContact: "Ajouter un contact",
+    
+    footerMessage1: "Vous n'êtes pas seul.",
+    footerMessage2: "Vous comptez. Votre vie a de la valeur.",
+    footerMessage3: "L'aide est toujours disponible.",
+    footerMessage4: "Ce moment est temporaire. Vous pouvez le faire!",
+    visitWebsite: "Visiter le site web",
+    callNow: "Appelez maintenant",
+    cancel: "Annuler",
+    close: "Fermer",
+    
+    breathingExercise: "Exercice de respiration",
+    inhale: "Inspirez",
+    hold: "Retenez",
+    exhale: "Expirez",
+    
+    // Profile
+    yourProfile: "Votre profil",
+    profile: "Profil",
+    privateDiary: "Journal privé",
+    yourPrivateDiary: "Votre journal privé",
+    newEntry: "Nouvelle entrée",
+    addQuotePlaceholder: "Ajouter une citation (40 caractères max)",
+    logout: "Déconnexion",
+    
+    // Diary
+    entryTitle: "Titre de l'entrée...",
+    writeThoughts: "Écrivez vos pensées...",
+    saveEntry: "Sauvegarder l'entrée",
+    startWriting: "Commencez à écrire pour suivre vos pensées et sentiments.",
+    entriesSaved: "Vos entrées sont sauvegardées de façon permanente et ne sont visibles que par vous.",
+    entryTitlePlaceholder: "Titre de l'entrée...",
+    writeThoughtsPlaceholder: "Écrivez vos pensées...",
+    entrySaved: "Votre entrée de journal a été sauvegardée de façon permanente.",
+    entryUpdated: "Votre entrée de journal a été sauvegardée avec succès.",
+    entryDeleted: "Votre entrée de journal a été supprimée de façon permanente.",
+    
+    // AI Chat
+    aiWelcomeMessage: "Bonjour, je suis là pour vous écouter et vous soutenir. Vous n'êtes pas seul. Qu'avez-vous en tête aujourd'hui?",
+    aiSupportChat: "Chat de soutien IA",
+    aiImHere: "Je suis là. Parlez-moi.",
+    talkToMe: "Parlez-moi",
+    chatWithAi: "Chattez avec notre assistant IA compatissant",
+    compassionateAssistant: "assistant IA compatissant",
+    immediateSupport: "pour un soutien immédiat",
+    copingStrategies: "stratégies d'adaptation",
+    someoneToListen: "et quelqu'un pour écouter",
+    startConversation: "Commencer la conversation",
+    typeYourMessage: "Tapez votre message...",
+    crisisWarning: "Si vous êtes en crise, appelez le 988 ou les services d'urgence immédiatement",
+    unmuteAi: "Réactiver l'IA",
+    changeNamePrompt: "Changer le nom",
+    enterYourName: "Entrez votre nom",
+    whatsYourName: "Quel est votre nom?",
+    
+    // Affirmations/Quotes
+    youDeservePeace: "Vous méritez la paix et le bonheur",
+    youAreStronger: "Vous êtes plus fort que vous ne le pensez",
+    youMatter: "Vous comptez. Votre vie a de la valeur.",
+    thisToWillPass: "Ceci aussi passera",
+    youAreNotAlone: "Vous n'êtes pas seul dans ceci",
+    youAreLoved: "Vous êtes aimé et valorisé",
+    
+    // Rotating Affirmations Array
+    rotatingAffirmations: [
+      "Vous êtes plus fort que vous ne le pensez",
+      "Ce moment est temporaire. Vous pouvez le faire!",
+      "Vous comptez. Votre vie a de la valeur",
+      "L'aide est toujours disponible",
+      "Vous n'êtes pas seul dans ce voyage",
+      "Chaque respiration que vous prenez est une victoire",
+      "Vous avez surmonté des défis auparavant",
+      "Vos sentiments sont valides et temporaires",
+      "Demain peut être différent",
+      "Vous méritez l'amour et le soutien"
+    ],
+    
+    // Profile UI
+    backgroundImage: "Image d'arrière-plan",
+    noBackgroundImageSet: "Aucune image d'arrière-plan définie",
+    uploadImage: "Télécharger une image",
+    setYourPersonalBackground: "Définir votre arrière-plan personnel",
+    chooseYourImage: "Choisissez votre image",
+    uploadAnyPhoto: "Téléchargez n'importe quelle photo depuis votre appareil",
+    cropPosition: "Recadrer et positionner",
+    useEditorToCrop: "Utilisez notre éditeur pour recadrer et centrer votre image parfaitement",
+    screenImage: "Image d'écran",
+    diary: "Journal",
+    remove: "Supprimer",
+    
+    // Legal
+    legalPoliciesDisclamers: "Politiques légales et avertissements",
+    privacyPolicy: "Politique de confidentialité",
+    termsConditions: "Termes et conditions",
+    disclaimer: "Avertissement",
+    effectiveDate: "Date d'entrée en vigueur",
+    
+    // Legal Content - simplified for space
+    legalContent: {
+      effectiveDate: "Date d'entrée en vigueur: 6 juin 2025",
+      privacyIntro: "Take 5 valorise votre vie privée. Cette politique de confidentialité explique comment nous collectons, utilisons, divulguons et protégeons vos informations personnelles.",
+      informationWeCollect: "Informations que nous collectons:",
+      personalDetails: "Détails personnels que vous fournissez",
+      journalingEntries: "Entrées de journal",
+      usageData: "Données d'utilisation",
+      deviceData: "Données de l'appareil",
+      howWeUseData: "Comment nous utilisons vos données:",
+      operateApp: "Pour faire fonctionner l'Application",
+      personalizedFeatures: "Pour des fonctionnalités personnalisées",
+      improveExperience: "Pour améliorer l'expérience utilisateur",
+      sendUpdates: "Pour envoyer des mises à jour",
+      sharingData: "Partage des données:",
+      noSellData: "Nous ne vendons pas vos données",
+      noSharePrivate: "Nous ne partageons pas vos données privées",
+      thirdPartyServices: "Nous pouvons utiliser des services tiers",
+      dataSecurity: "Sécurité des données:",
+      encryption: "Nous mettons en œuvre un chiffrement",
+      deleteRequest: "Demander la suppression des données",
+      yourRights: "Vos droits:",
+      accessCorrectDelete: "Droit d'accéder, corriger ou supprimer",
+      withdrawConsent: "Droit de retirer le consentement",
+      lodgeComplaint: "Droit de déposer une plainte",
+      termsIntro: "En utilisant l'application Take 5, vous acceptez ces termes.",
+      eligibility: "Éligibilité:",
+      ageRequirement: "Vous devez avoir 18 ans ou plus",
+      ageRepresentation: "Vous déclarez avoir au moins 18 ans",
+      mustBe18: "Vous devez avoir 18 ans ou plus",
+      represent18: "Vous déclarez avoir au moins 18 ans",
+      noMedicalAdvice: "Aucun conseil médical:",
+      informationalOnly: "À des fins d'information uniquement",
+      noMedicalDiagnosis: "Ne fournit pas de conseil médical",
+      notReplacement: "Ne remplace pas les soins professionnels",
+      noMedicalAdviceText: "Ne fournit pas de conseil médical",
+      notReplaceProfessional: "Ne remplace pas les soins professionnels",
+      consultProvider: "Consultez un professionnel de la santé",
+      aiContentUsage: "Utilisation de l'IA:",
+      aiNotTherapist: "L'IA n'est pas un thérapeute",
+      thirdPartyContent: "Contenu de tiers",
+      youtubeContent: "Contenu de tiers",
+      emergencyDisclaimer: "Avertissement d'urgence:",
+      emergencyUserTool: "Outils utilisateur d'urgence",
+      emergencyText: "Outils utilisateur d'urgence",
+      notEmergencyService: "Pas un service d'urgence",
+      callEmergencyServices: "Appelez les services d'urgence",
+      limitationLiability: "Limitation de responsabilité:",
+      noLiability: "À vos propres risques",
+      useAtRisk: "À vos propres risques",
+      noWarranties: "Aucune garantie",
+      disclaimerIntro: "Application de bien-être et de motivation",
+      notMedicalDevice: "Pas un dispositif médical",
+      supplementNot: "Complète mais ne remplace pas",
+      ifCrisis: "En cas de crise, contactez les services d'urgence",
+    }
+  },
+
+  // Thai translations
   th: {
     appName: "Take 5",
-    tagline: "หายใจเข้าลึกๆ ควบคุมตัวเองใหม่",
-    searchPlaceholder: "พิมพ์ความรู้สึกของคุณ: 'เหงา', 'ไร้ที่พึ่ง', 'อยากตาย'...",
-    emergencySupport: "การช่วยเหลือฉุกเฉิน",
+    tagline: "หายใจเข้าลึกๆ ควบคุมตัวเองได้อีกครั้ง",
+    searchPlaceholder: "พิมพ์ความรู้สึกของคุณ: 'ฉันเหงา', 'ไร้บ้าน', 'อยากตาย'...",
+    emergencySupport: "การสนับสนุนฉุกเฉิน",
     callEmergency: "โทร {number} (ฉุกเฉิน)",
-    crisisHotline: "สายด่วนวิกฤตจิตใจ",
-    crisisHotlineCall: "โทรเลย",
-    emergencyWarning: "หากคุณตกอยู่ในอันตรายใกล้จะเกิดขึ้น โทรหาหน่วยกู้ภัย",
+    crisisHotline: "สายด่วนวิกฤต",
+    crisisHotlineCall: "โทรเดี๋ยวนี้",
+    emergencyWarning: "หากคุณตกอยู่ในอันตรายทันที โปรดโทรหาบริการฉุกเฉิน",
+    
+    // Authentication & User Account
+    login: "เข้าสู่ระบบ",
+    createAccount: "สร้างบัญชี",
+    loginToCreateContactsList: "เข้าสู่ระบบเพื่อสร้างรายชื่อผู้ติดต่อ",
+    signInWithGoogle: "เข้าสู่ระบบด้วย Google",
+    
     additionalSupport: "การสนับสนุนเพิ่มเติม",
-    howCanWeSupport: "เราจะช่วยเหลือคุณได้อย่างไรในตอนนี้?",
-    feelOverwhelmed: "รู้สึกท่วมท้น",
-    breathingDescription: "การฝึกหายใจและเทคนิคการตั้งสติ",
-    feelAnxious: "รู้สึกวิตกกังวล",
+    howCanWeSupport: "คุณรู้สึกอย่างไร เพื่อน?",
+    feelOverwhelmed: "ฉันรู้สึกท่วมท้น",
+    breathingDescription: "การออกกำลังกายการหายใจและเทคนิคการหยั่งรากลึก",
+    feelAnxious: "ฉันรู้สึกวิตกกังวล",
     anxiousDescription: "การจัดการความวิตกกังวลและกลยุทธ์การรับมือ",
-    feelDepressed: "รู้สึกซึมเศร้า",
+    feelDepressed: "ฉันรู้สึกหดหู่",
     depressedDescription: "การสนับสนุนภาวะซึมเศร้าและทรัพยากรอารมณ์",
-    needToTalk: "ต้องการคุยกับใครสักคน",
-    talkDescription: "การให้คำปรึกษาจากผู้เชี่ยวชาญและการสนับสนุนจากเพื่อน",
-    trustedContacts: "ผู้ติดต่อที่เชื่อถือได้",
-    addTrustedContact: "เพิ่มผู้ติดต่อที่เชื่อถือได้",
-    footerMessage1: "คุณไม่ได้อยู่คนเดียว",
-    footerMessage2: "คุณมีความสำคัญ ชีวิตคุณมีคุณค่า",
-    footerMessage3: "ความช่วยเหลือมีอยู่เสมอ",
-    footerMessage4: "ช่วงเวลานี้เป็นเพียงชั่วคราว คุณทำได้!",
-    visitWebsite: "เยี่ยมชมเว็บไซต์",
-    callNow: "โทรเลย",
-    cancel: "ยกเลิก",
-    breathingExercise: "การฝึกหายใจ",
-    inhale: "หายใจเข้า",
-    hold: "กลั้น",
-    exhale: "หายใจออก",
-    close: "ปิด",
+    needToTalk: "ฉันต้องการพูดคุย",
+    talkDescription: "การให้คำปรึกษาอย่างมืออาชีพและการสนับสนุนจากเพื่อน",
     
     // Support modules
     breathing: "การหายใจ",
     breathingGuide: "คู่มือ 5 นาที",
-    affirmations: "คำยืนยัน",
+    affirmations: "การยืนยัน",
     kindWords: "คำพูดดีๆ",
-    calmMusic: "เพลงผ่อนคลาย",
-    soothingSounds: "เสียงที่ผ่อนคลาย",
-    grounding: "การจดจ่อ",
+    calmMusic: "เพลงสงบ",
+    soothingSounds: "เสียงผ่อนคลาย",
+    grounding: "การหยั่งราก",
     groundingTechnique: "5-4-3-2-1",
+    
+    // Contact Management
+    trustedContacts: "ผู้ติดต่อที่เชื่อถือได้ของคุณ",
+    confidenceContacts: "ผู้ติดต่อที่เชื่อถือได้ของคุณ",
+    addTrustedContact: "เพิ่มผู้ติดต่อที่เชื่อถือได้",
     
     // Contact form
     name: "ชื่อ",
@@ -604,615 +663,709 @@ export const translations: Record<Language, Translation> = {
     enterRelationship: "เช่น นักบำบัด เพื่อน ครอบครัว",
     addContact: "เพิ่มผู้ติดต่อ",
     
+    footerMessage1: "คุณไม่ได้อยู่คนเดียว",
+    footerMessage2: "คุณสำคัญ ชีวิตของคุณมีค่า",
+    footerMessage3: "ความช่วยเหลือมีอยู่เสมอ",
+    footerMessage4: "ช่วงเวลานี้เป็นเพียงชั่วคราว คุณทำได้!",
+    visitWebsite: "เยี่ยมชมเว็บไซต์",
+    callNow: "โทรเดี๋ยวนี้",
+    cancel: "ยกเลิก",
+    close: "ปิด",
+    
+    breathingExercise: "การออกกำลังกายการหายใจ",
+    inhale: "หายใจเข้า",
+    hold: "กลั้น",
+    exhale: "หายใจออก",
+    
     // Profile
     yourProfile: "โปรไฟล์ของคุณ",
     profile: "โปรไฟล์",
     privateDiary: "ไดอารี่ส่วนตัว",
     yourPrivateDiary: "ไดอารี่ส่วนตัวของคุณ",
-    newEntry: "เรื่องใหม่",
+    newEntry: "รายการใหม่",
     addQuotePlaceholder: "เพิ่มคำพูด (สูงสุด 40 ตัวอักษร)",
     logout: "ออกจากระบบ",
     
     // Diary
-    entryTitle: "หัวข้อบันทึก...",
+    entryTitle: "หัวข้อรายการ...",
     writeThoughts: "เขียนความคิดของคุณ...",
-    saveEntry: "บันทึกเรื่องราว",
+    saveEntry: "บันทึกรายการ",
     startWriting: "เริ่มเขียนเพื่อติดตามความคิดและความรู้สึกของคุณ",
-    entriesSaved: "บันทึกของคุณถูกเก็บไว้อย่างถาวรและมองเห็นได้เฉพาะคุณเท่านั้น",
-    entryTitlePlaceholder: "หัวข้อบันทึก...",
+    entriesSaved: "รายการของคุณถูกบันทึกอย่างถาวรและมองเห็นได้เฉพาะคุณเท่านั้น",
+    entryTitlePlaceholder: "หัวข้อรายการ...",
     writeThoughtsPlaceholder: "เขียนความคิดของคุณ...",
-    entrySaved: "บันทึกไดอารี่ของคุณถูกบันทึกอย่างถาวรแล้ว",
-    entryUpdated: "บันทึกไดอารี่ของคุณถูกบันทึกเรียบร้อยแล้ว",
-    entryDeleted: "บันทึกไดอารี่ของคุณถูกลบอย่างถาวรแล้ว",
+    entrySaved: "รายการไดอารี่ของคุณถูกบันทึกอย่างถาวรแล้ว",
+    entryUpdated: "รายการไดอารี่ของคุณถูกบันทึกสำเร็จแล้ว",
+    entryDeleted: "รายการไดอารี่ของคุณถูกลบอย่างถาวรแล้ว",
     
     // AI Chat
-    aiWelcomeMessage: "สวัสดี ฉันอยู่ที่นี่เพื่อฟังและสนับสนุนคุณ คุณไม่ได้อยู่คนเดียว วันนี้คุณคิดอะไรอยู่?",
+    aiWelcomeMessage: "สวัสดี ฉันอยู่ที่นี่เพื่อฟังและสนับสนุนคุณ คุณไม่ได้อยู่คนเดียว วันนี้คุณคิดเรื่องอะไรอยู่?",
     aiSupportChat: "แชทสนับสนุน AI",
-    aiImHere: "ฉันอยู่ที่นี่ มาคุยกันเถอะ",
-    talkToMe: "คุยกับฉัน",
-    chatWithAi: "แชทกับผู้ช่วย AI ที่เห็นอกเห็นใจ",
-    compassionateAssistant: "ผู้ช่วย AI ที่เห็นอกเห็นใจ",
-    immediateSupport: "สำหรับการสนับสนุนทันที",
+    aiImHere: "ฉันอยู่ที่นี่ พูดกับฉันสิ",
+    talkToMe: "พูดกับฉัน",
+    chatWithAi: "แชทกับผู้ช่วย AI ที่มีความเมตตาของเรา",
+    compassionateAssistant: "ผู้ช่วย AI ที่มีความเมตตา",
+    immediateSupport: "เพื่อการสนับสนุนทันที",
     copingStrategies: "กลยุทธ์การรับมือ",
     someoneToListen: "และใครสักคนที่จะฟัง",
-    startConversation: "เริ่มบทสนทนา",
+    startConversation: "เริ่มการสนทนา",
     typeYourMessage: "พิมพ์ข้อความของคุณ...",
-    crisisWarning: "หากคุณตกอยู่ในวิกฤต โปรดโทร 1323 หรือบริการฉุกเฉินทันที",
+    crisisWarning: "หากคุณอยู่ในสถานการณ์วิกฤต โปรดโทร 988 หรือบริการฉุกเฉินทันที",
     unmuteAi: "เปิดเสียง AI",
     changeNamePrompt: "เปลี่ยนชื่อ",
     enterYourName: "ใส่ชื่อของคุณ",
-    whatsYourName: "คุณชื่ออะไร?",
+    whatsYourName: "ชื่อของคุณคืออะไร?",
     
     // Affirmations/Quotes
     youDeservePeace: "คุณสมควรได้รับความสงบและความสุข",
-    youAreStronger: "คุณแข็งแกร่งกว่าที่คุณคิด",
-    youMatter: "คุณมีความสำคัญ ชีวิตคุณมีคุณค่า",
-    thisToWillPass: "สิ่งนี้จะผ่านไป",
+    youAreStronger: "คุณแข็งแกร่งกว่าที่คุณรู้",
+    youMatter: "คุณสำคัญ ชีวิตของคุณมีค่า",
+    thisToWillPass: "สิ่งนี้ก็จะผ่านไป",
     youAreNotAlone: "คุณไม่ได้อยู่คนเดียวในเรื่องนี้",
-    youAreLoved: "คุณได้รับความรักและมีคุณค่า",
+    youAreLoved: "คุณถูกรักและได้รับการยกย่อง",
     
     // Rotating Affirmations Array
     rotatingAffirmations: [
       "คุณแข็งแกร่งกว่าที่คุณคิด",
       "ช่วงเวลานี้เป็นเพียงชั่วคราว คุณทำได้!",
-      "คุณมีความสำคัญ ชีวิตของคุณมีคุณค่า",
+      "คุณสำคัญ ชีวิตของคุณมีค่า",
       "ความช่วยเหลือมีอยู่เสมอ",
       "คุณไม่ได้อยู่คนเดียวในการเดินทางนี้",
-      "ทุกลมหายใจของคุณคือชัยชนะ",
-      "คุณเคยผ่านความท้าทายมาแล้ว",
-      "ความรู้สึกของคุณสมเหตุสมผลและเป็นเพียงชั่วคราว",
-      "พรุ่งนี้อาจแตกต่างไป",
-      "คุณสมควรได้รับความรักและการสนับสนุน",
-      "ก้าวเล็กๆ ไปข้างหน้ายังคงเป็นความก้าวหน้า",
-      "คุณมีความแข็งแกร่งที่จะผ่านพ้นสิ่งนี้ไป",
-      "เรื่องราวของคุณยังไม่จบ",
-      "มีคนที่ใส่ใจคุณ",
-      "คุณเพียงพอ ในแบบที่คุณเป็น",
-      "การรักษาต้องใช้เวลา และนั่นก็ไม่เป็นไร",
-      "คุณสมควรได้รับความสงบและความสุข",
-      "ความกล้าหาญของคุณในการขอความช่วยเหลือแสดงให้เห็นถึงความแข็งแกร่ง",
-      "ทุกวันที่คุณอยู่รอดคือชัยชนะ",
-      "คุณไม่ได้กำหนดด้วยช่วงเวลาที่ท้าทายที่สุดของคุณ"
+      "ทุกลมหายใจที่คุณสูดเข้าคือชัยชนะ",
+      "คุณเคยผ่านความท้าทายมาก่อน",
+      "ความรู้สึกของคุณถูกต้องและเป็นเพียงชั่วคราว",
+      "พรุ่งนี้อาจจะแตกต่าง",
+      "คุณสมควรได้รับความรักและการสนับสนุน"
     ],
-    
-    // Remove translation
-    remove: "ลบ",
     
     // Profile UI
     backgroundImage: "ภาพพื้นหลัง",
-    noBackgroundImageSet: "ยังไม่ได้ตั้งภาพพื้นหลัง",
-    uploadImage: "อัพโหลดภาพ",
-    setYourPersonalBackground: "ตั้งค่าพื้นหลังส่วนตัวของคุณ",
-    chooseYourImage: "เลือกภาพของคุณ",
-    uploadAnyPhoto: "อัพโหลดภาพใดๆ จากอุปกรณ์ของคุณ",
+    noBackgroundImageSet: "ไม่ได้ตั้งภาพพื้นหลัง",
+    uploadImage: "อัปโหลดรูปภาพ",
+    setYourPersonalBackground: "ตั้งพื้นหลังส่วนตัวของคุณ",
+    chooseYourImage: "เลือกรูปภาพของคุณ",
+    uploadAnyPhoto: "อัปโหลดรูปถ่ายใดๆ จากอุปกรณ์ของคุณ",
     cropPosition: "ครอบตัดและจัดตำแหน่ง",
-    useEditorToCrop: "ใช้เครื่องมือแก้ไขเพื่อครอบตัดและจัดกึ่งกลางภาพอย่างสมบูรณ์",
+    useEditorToCrop: "ใช้โปรแกรมแก้ไขของเราเพื่อครอบตัดและจัดกึ่งกลางภาพของคุณให้สมบูรณ์แบบ",
     screenImage: "ภาพหน้าจอ",
     diary: "ไดอารี่",
+    remove: "ลบ",
     
     // Legal
-    legalPoliciesDisclamers: "นโยบายกฎหมายและข้อจำกัดความรับผิดชอบ",
+    legalPoliciesDisclamers: "นโยบายทางกฎหมายและข้อจำกัดความรับผิดชอบ",
     privacyPolicy: "นโยบายความเป็นส่วนตัว",
     termsConditions: "ข้อกำหนดและเงื่อนไข",
     disclaimer: "ข้อจำกัดความรับผิดชอบ",
-    effectiveDate: "วันที่มีผลบังคับใช้"
+    effectiveDate: "วันที่มีผลบังคับใช้",
+    
+    // Legal Content - simplified for space
+    legalContent: {
+      effectiveDate: "วันที่มีผลบังคับใช้: 6 มิถุนายน 2025",
+      privacyIntro: "Take 5 ให้ความสำคัญกับความเป็นส่วนตัวของคุณ",
+      informationWeCollect: "ข้อมูลที่เราเก็บรวบรวม:",
+      personalDetails: "รายละเอียดส่วนบุคคล",
+      journalingEntries: "รายการไดอารี่",
+      usageData: "ข้อมูลการใช้งาน",
+      deviceData: "ข้อมูลอุปกรณ์",
+      howWeUseData: "วิธีการใช้ข้อมูล:",
+      operateApp: "เพื่อดำเนินการแอป",
+      personalizedFeatures: "สำหรับคุณสมบัติส่วนบุคคล",
+      improveExperience: "เพื่อปรับปรุงประสบการณ์",
+      sendUpdates: "เพื่อส่งการอัปเดต",
+      sharingData: "การแบ่งปันข้อมูล:",
+      noSellData: "เราไม่ขายข้อมูล",
+      noSharePrivate: "เราไม่แบ่งปันข้อมูลส่วนตัว",
+      thirdPartyServices: "บริการบุคคลที่สาม",
+      dataSecurity: "ความปลอดภัยข้อมูล:",
+      encryption: "การเข้ารหัส",
+      deleteRequest: "ขอลบข้อมูล",
+      yourRights: "สิทธิ์ของคุณ:",
+      accessCorrectDelete: "สิทธิ์ในการเข้าถึง แก้ไข ลบ",
+      withdrawConsent: "สิทธิ์ถอนความยินยอม",
+      lodgeComplaint: "สิทธิ์ยื่นข้อร้องเรียน",
+      termsIntro: "การใช้แอป Take 5",
+      eligibility: "คุณสมบัติ:",
+      ageRequirement: "ต้องมีอายุ 18 ปีขึ้นไป",
+      ageRepresentation: "รับรองอายุ 18 ปีขึ้นไป",
+      mustBe18: "ต้องมีอายุ 18 ปีขึ้นไป",
+      represent18: "รับรองอายุ 18 ปีขึ้นไป",
+      noMedicalAdvice: "ไม่มีคำแนะนำทางการแพทย์:",
+      informationalOnly: "เพื่อการให้ข้อมูลเท่านั้น",
+      noMedicalDiagnosis: "ไม่ให้คำแนะนำทางการแพทย์",
+      notReplacement: "ไม่ทดแทนการดูแลแบบมืออาชีพ",
+      noMedicalAdviceText: "ไม่ให้คำแนะนำทางการแพทย์",
+      notReplaceProfessional: "ไม่ทดแทนการดูแลแบบมืออาชีพ",
+      consultProvider: "ปรึกษาผู้เชี่ยวชาญ",
+      aiContentUsage: "การใช้ AI:",
+      aiNotTherapist: "AI ไม่ใช่นักบำบัด",
+      thirdPartyContent: "เนื้อหาบุคคลที่สาม",
+      youtubeContent: "เนื้อหาบุคคลที่สาม",
+      emergencyDisclaimer: "ข้อจำกัดความรับผิดชอบฉุกเฉิน:",
+      emergencyUserTool: "เครื่องมือผู้ใช้ฉุกเฉิน",
+      emergencyText: "เครื่องมือผู้ใช้ฉุกเฉิน",
+      notEmergencyService: "ไม่ใช่บริการฉุกเฉิน",
+      callEmergencyServices: "โทรบริการฉุกเฉิน",
+      limitationLiability: "การจำกัดความรับผิดชอบ:",
+      noLiability: "ความเสี่ยงของตัวเอง",
+      useAtRisk: "ความเสี่ยงของตัวเอง",
+      noWarranties: "ไม่มีการรับประกัน",
+      disclaimerIntro: "แอปสุขภาพและแรงบันดาลใจ",
+      notMedicalDevice: "ไม่ใช่อุปกรณ์ทางการแพทย์",
+      supplementNot: "เสริมแต่ไม่ทดแทน",
+      ifCrisis: "หากเกิดวิกฤต ติดต่อบริการฉุกเฉิน",
+    }
   },
+
+  // Spanish, German, Italian placeholder translations (simplified)
   es: {
     appName: "Take 5",
-    tagline: "Respira. Recupera el control.",
-    searchPlaceholder: "Escribe cómo te sientes: 'Estoy solo', 'sin hogar', 'quiero morir'...",
+    tagline: "Respira profundo. Recupera el control.",
+    searchPlaceholder: "Escribe cómo te sientes...",
     emergencySupport: "Apoyo de Emergencia",
-    callEmergency: "Llamar {number} (Emergencia)",
+    callEmergency: "Llama al {number}",
     crisisHotline: "Línea de Crisis",
-    crisisHotlineCall: "Llamar Ahora",
-    emergencyWarning: "Si estás en peligro inmediato, llama a servicios de emergencia",
+    crisisHotlineCall: "Llama Ahora",
+    emergencyWarning: "En peligro inmediato, llama a emergencias",
+    login: "iniciar sesión",
+    createAccount: "crear cuenta",
+    loginToCreateContactsList: "inicia sesión para crear lista",
+    signInWithGoogle: "Iniciar sesión con Google",
     additionalSupport: "Apoyo Adicional",
-    howCanWeSupport: "¿Cómo podemos apoyarte ahora mismo?",
+    howCanWeSupport: "¿Cómo te sientes?",
     feelOverwhelmed: "Me Siento Abrumado",
-    breathingDescription: "Ejercicios de respiración y técnicas de calma",
+    breathingDescription: "Ejercicios de respiración",
     feelAnxious: "Me Siento Ansioso",
-    anxiousDescription: "Manejo de ansiedad y estrategias de afrontamiento",
+    anxiousDescription: "Manejo de ansiedad",
     feelDepressed: "Me Siento Deprimido",
-    depressedDescription: "Apoyo para depresión y recursos de ánimo",
+    depressedDescription: "Apoyo para depresión",
     needToTalk: "Necesito Hablar",
-    talkDescription: "Consejería profesional y apoyo de pares",
-    trustedContacts: "Tus Contactos de Confianza",
-    addTrustedContact: "Agregar un contacto de confianza",
+    talkDescription: "Consejería profesional",
+    breathing: "Respiración",
+    breathingGuide: "Guía 5 min",
+    affirmations: "Afirmaciones",
+    kindWords: "Palabras amables",
+    calmMusic: "Música Tranquila",
+    soothingSounds: "Sonidos relajantes",
+    grounding: "Conexión",
+    groundingTechnique: "5-4-3-2-1",
+    trustedContacts: "Contactos de Confianza",
+    confidenceContacts: "Contactos de Confianza",
+    addTrustedContact: "Agregar contacto",
+    name: "Nombre",
+    phoneNumber: "Teléfono",
+    relationship: "Relación",
+    enterName: "Ingresa nombre",
+    enterPhone: "Ingresa teléfono",
+    enterRelationship: "ej. Terapeuta",
+    addContact: "Agregar Contacto",
     footerMessage1: "No estás solo.",
-    footerMessage2: "Importas. Tu vida tiene valor.",
-    footerMessage3: "La ayuda siempre está disponible.",
-    footerMessage4: "Este momento es temporal. ¡Puedes hacerlo!",
-    visitWebsite: "Visitar Sitio Web",
-    callNow: "Llamar Ahora",
+    footerMessage2: "Importas.",
+    footerMessage3: "Ayuda disponible.",
+    footerMessage4: "Momento temporal.",
+    visitWebsite: "Visitar Sitio",
+    callNow: "Llama Ahora",
     cancel: "Cancelar",
-    breathingExercise: "Ejercicio de Respiración",
+    close: "Cerrar",
+    breathingExercise: "Ejercicio Respiración",
     inhale: "Inhala",
     hold: "Mantén",
     exhale: "Exhala",
-    close: "Cerrar",
-    breathing: "Respiración",
-    breathingGuide: "Guía de 5 min",
-    affirmations: "Afirmaciones",
-    kindWords: "Palabras amables",
-    calmMusic: "Música Relajante",
-    soothingSounds: "Sonidos relajantes",
-    grounding: "Conexión a tierra",
-    groundingTechnique: "5-4-3-2-1",
-    name: "Nombre",
-    phoneNumber: "Número de Teléfono",
-    relationship: "Relación",
-    enterName: "Ingresar nombre",
-    enterPhone: "Ingresar número de teléfono",
-    enterRelationship: "ej., Terapeuta, Amigo, Familia",
-    addContact: "Agregar Contacto",
-    
-    // Profile
     yourProfile: "Tu Perfil",
     profile: "Perfil",
     privateDiary: "Diario Privado",
-    yourPrivateDiary: "Tu Diario Privado",
+    yourPrivateDiary: "Tu Diario",
     newEntry: "Nueva Entrada",
-    addQuotePlaceholder: "Agregar una cita (máx. 40 caracteres)",
+    addQuotePlaceholder: "Agregar cita",
     logout: "Cerrar Sesión",
-    
-    // Diary
-    entryTitle: "Título de entrada...",
-    writeThoughts: "Escribe tus pensamientos...",
-    saveEntry: "Guardar Entrada",
-    startWriting: "Comienza a escribir para rastrear tus pensamientos y sentimientos.",
-    entriesSaved: "Tus entradas se guardan permanentemente y solo son visibles para ti.",
-    entryTitlePlaceholder: "Título de entrada...",
-    writeThoughtsPlaceholder: "Escribe tus pensamientos...",
-    entrySaved: "Tu entrada de diario ha sido guardada permanentemente.",
-    entryUpdated: "Tu entrada de diario ha sido guardada exitosamente.",
-    entryDeleted: "Tu entrada de diario ha sido eliminada permanentemente.",
-    
-    // AI Chat
-    aiWelcomeMessage: "Hola, estoy aquí para escucharte y apoyarte. No estás solo. ¿Qué tienes en mente hoy?",
-    aiSupportChat: "Chat de Apoyo IA",
-    aiImHere: "Estoy aquí. Habla conmigo.",
-    talkToMe: "Habla conmigo",
-    chatWithAi: "Chatea con nuestro asistente IA compasivo",
-    compassionateAssistant: "asistente IA compasivo",
-    immediateSupport: "para apoyo inmediato",
-    copingStrategies: "estrategias de afrontamiento",
-    someoneToListen: "y alguien que escuche",
-    startConversation: "Iniciar Conversación",
-    typeYourMessage: "Escribe tu mensaje...",
-    crisisWarning: "Si estás en crisis, por favor llama al 988 o servicios de emergencia inmediatamente",
-    unmuteAi: "Activar audio IA",
+    entryTitle: "Título...",
+    writeThoughts: "Pensamientos...",
+    saveEntry: "Guardar",
+    startWriting: "Comenzar a escribir",
+    entriesSaved: "Entradas guardadas",
+    entryTitlePlaceholder: "Título...",
+    writeThoughtsPlaceholder: "Pensamientos...",
+    entrySaved: "Entrada guardada",
+    entryUpdated: "Entrada actualizada",
+    entryDeleted: "Entrada eliminada",
+    aiWelcomeMessage: "Hola, estoy aquí para apoyarte",
+    aiSupportChat: "Chat IA",
+    aiImHere: "Estoy aquí",
+    talkToMe: "Háblame",
+    chatWithAi: "Chat con IA",
+    compassionateAssistant: "asistente IA",
+    immediateSupport: "apoyo inmediato",
+    copingStrategies: "estrategias",
+    someoneToListen: "alguien que escuche",
+    startConversation: "Iniciar",
+    typeYourMessage: "Escribe...",
+    crisisWarning: "En crisis, llama emergencias",
+    unmuteAi: "Activar IA",
     changeNamePrompt: "Cambiar Nombre",
-    enterYourName: "Ingresa tu nombre",
-    whatsYourName: "¿Cuál es tu nombre?",
-    
-    // Affirmations/Quotes
-    youDeservePeace: "Mereces paz y felicidad",
-    youAreStronger: "Eres más fuerte de lo que crees",
-    youMatter: "Importas. Tu vida tiene valor.",
-    thisToWillPass: "Esto también pasará",
-    youAreNotAlone: "No estás solo en esto",
-    youAreLoved: "Eres amado y valorado",
-    
-    // Rotating Affirmations Array
-    rotatingAffirmations: [
-      "Eres más fuerte de lo que piensas",
-      "Este momento es temporal. ¡Puedes hacerlo!",
-      "Importas. Tu vida tiene valor",
-      "La ayuda siempre está disponible",
-      "No estás solo en este viaje",
-      "Cada respiración que tomas es una victoria",
-      "Has superado desafíos antes",
-      "Tus sentimientos son válidos y temporales",
-      "Mañana puede ser diferente",
-      "Mereces amor y apoyo",
-      "Los pequeños pasos hacia adelante siguen siendo progreso",
-      "Tienes la fuerza para superar esto",
-      "Tu historia aún no ha terminado",
-      "Hay personas que se preocupan por ti",
-      "Eres suficiente, tal como eres",
-      "La sanación toma tiempo, y eso está bien",
-      "Mereces paz y felicidad",
-      "Tu valentía para buscar ayuda muestra fortaleza",
-      "Cada día que sobrevives es una victoria",
-      "Has superado el 100% de tus peores días"
-    ],
-    
-    // Profile UI
-    backgroundImage: "Imagen de Fondo",
-    noBackgroundImageSet: "No se ha establecido imagen de fondo",
-    uploadImage: "Cambiar Imagen",
-    setYourPersonalBackground: "Establece tu fondo personal",
-    chooseYourImage: "Elige tu imagen",
-    uploadAnyPhoto: "Sube cualquier foto",
-    cropPosition: "Editar y Recortar",
-    useEditorToCrop: "Usa nuestro editor para recortar y centrar tu imagen perfectamente",
-    screenImage: "Fondo",
+    enterYourName: "Tu nombre",
+    whatsYourName: "¿Tu nombre?",
+    youDeservePeace: "Mereces paz",
+    youAreStronger: "Eres fuerte",
+    youMatter: "Importas",
+    thisToWillPass: "Esto pasará",
+    youAreNotAlone: "No estás solo",
+    youAreLoved: "Eres amado",
+    rotatingAffirmations: ["Eres fuerte", "Importas", "Ayuda disponible"],
+    backgroundImage: "Imagen Fondo",
+    noBackgroundImageSet: "Sin imagen",
+    uploadImage: "Subir Imagen",
+    setYourPersonalBackground: "Fondo Personal",
+    chooseYourImage: "Elegir Imagen",
+    uploadAnyPhoto: "Subir foto",
+    cropPosition: "Recortar",
+    useEditorToCrop: "Editor recortar",
+    screenImage: "Imagen Pantalla",
     diary: "Diario",
     remove: "Eliminar",
-    
-    // Contacts
-    logInToCreateContactsList: "Inicia Sesión para Crear tu Lista de Contactos de Emergencia",
-    logIn: "Iniciar Sesión",
-    createAccount: "Crear Cuenta",
-    
-    // Legal
-    legalPoliciesDisclamers: "Políticas Legales y Exenciones de Responsabilidad",
-    privacyPolicy: "Política de Privacidad",
-    termsConditions: "Términos y Condiciones",
-    disclaimer: "Exención de Responsabilidad",
-    effectiveDate: "Fecha de Vigencia",
-    
-    // Legal Content
+    legalPoliciesDisclamers: "Políticas Legales",
+    privacyPolicy: "Privacidad",
+    termsConditions: "Términos",
+    disclaimer: "Exención",
+    effectiveDate: "Fecha Vigencia",
     legalContent: {
-      effectiveDate: "Fecha Efectiva: 6 de junio de 2025",
-      privacyIntro: "Take 5 (\"nosotros\", \"nos\" o \"nuestro\") valora tu privacidad. Esta Política de Privacidad explica cómo recopilamos, usamos, divulgamos y protegemos tu información personal cuando usas la aplicación Take 5 (la \"Aplicación\").",
-      informationWeCollect: "Información que Recopilamos:",
-      personalDetails: "Datos personales que proporcionas (ej., nombre, dirección de email, información de contacto de emergencia)",
-      journalingEntries: "Entradas de diario (almacenadas localmente o cifradas de forma segura si están en nuestros servidores)",
-      usageData: "Datos de uso (páginas visitadas, botones clickeados, interacciones con la aplicación)",
-      deviceData: "Datos del dispositivo (tipo de dispositivo, sistema operativo, tipo de navegador)",
-      howWeUseData: "Cómo Usamos Tus Datos:",
-      operateApp: "Para operar y mantener la Aplicación",
-      personalizedFeatures: "Para permitirte usar características personalizadas (ej., diario, contactos de emergencia)",
-      improveExperience: "Para mejorar la experiencia del usuario y desarrollar nuevas características",
-      sendUpdates: "Para enviar actualizaciones ocasionales o alertas si te registras",
-      sharingData: "Compartir Datos:",
-      noSellData: "No vendemos tus datos",
-      noSharePrivate: "No compartimos tus datos privados con terceros a menos que sea legalmente requerido",
-      thirdPartyServices: "Podemos usar servicios de terceros (ej., YouTube API, Google Analytics), y sus prácticas de recopilación de datos se rigen por sus propias políticas",
-      dataSecurity: "Seguridad de Datos:",
-      encryption: "Implementamos cifrado estándar de la industria y controles de acceso",
-      deleteRequest: "Los usuarios pueden solicitar eliminación de datos enviando un email a tradermigs@gmail.com",
-      yourRights: "Tus Derechos (GDPR, CCPA, etc.):",
-      accessCorrectDelete: "Derecho a acceder, corregir o eliminar tus datos",
-      withdrawConsent: "Derecho a retirar consentimiento o optar por no recibir comunicaciones",
-      lodgeComplaint: "Derecho a presentar una queja ante una autoridad de protección de datos",
-      termsIntro: "Al usar la aplicación Take 5, aceptas los siguientes términos. Si no estás de acuerdo, no uses la Aplicación.",
-      eligibility: "Elegibilidad:",
-      mustBe18: "Debes tener 18 años o más para usar la Aplicación.",
-      represent18: "Al usar la Aplicación, declaras que tienes al menos 18 años.",
-      noMedicalAdvice: "Sin Consejo Médico:",
-      informationalOnly: "La Aplicación es solo para fines informativos y motivacionales.",
-      noMedicalAdviceText: "Take 5 no proporciona consejo médico, diagnóstico o tratamiento.",
-      notReplaceProfessional: "El contenido dentro de la Aplicación (citas, afirmaciones, chat de IA, videos enlazados) no está destinado a reemplazar la atención profesional de salud mental o médica.",
-      consultProvider: "Siempre consulta a un proveedor de atención médica calificado para problemas de salud mental.",
-      aiContentUsage: "Uso de IA y Contenido:",
-      aiNotTherapist: "El chatbot de IA es un asistente conversacional básico. No es un terapeuta, consejero licenciado o trabajador de crisis.",
-      youtubeContent: "El contenido de YouTube enlazado está seleccionado por conveniencia y positividad pero es proporcionado por terceros.",
-      emergencyDisclaimer: "Exención de Responsabilidad de Características de Emergencia:",
-      emergencyText: "La característica de contactos de emergencia es solo por conveniencia.",
-      notEmergencyService: "Take 5 no es un servicio de emergencia.",
-      callEmergencyServices: "En una crisis, llama al 988, 911, o tus servicios de emergencia locales inmediatamente.",
-      limitationLiability: "Limitación de Responsabilidad:",
-      useAtRisk: "Usas la Aplicación bajo tu propio riesgo.",
-      noWarranties: "No hacemos garantías sobre la disponibilidad, precisión o idoneidad de la Aplicación para ningún propósito particular.",
-      disclaimerIntro: "Take 5 es una aplicación de bienestar y motivación diseñada para proporcionar apoyo y recursos para el bienestar mental.",
-      notMedicalDevice: "Esta aplicación no es un dispositivo médico, servicio de terapia o herramienta de intervención en crisis.",
-      supplementNot: "Está destinada a complementar, no reemplazar, la atención profesional de salud mental.",
-      ifCrisis: "Si estás experimentando una crisis de salud mental, pensamientos suicidas, o estás en peligro inmediato, por favor contacta servicios de emergencia (911) o una línea de crisis (988) inmediatamente."
+      effectiveDate: "Fecha: 6 junio 2025",
+      privacyIntro: "Take 5 valora tu privacidad",
+      informationWeCollect: "Información recopilada",
+      personalDetails: "Detalles personales",
+      journalingEntries: "Entradas diario",
+      usageData: "Datos uso",
+      deviceData: "Datos dispositivo",
+      howWeUseData: "Uso datos",
+      operateApp: "Operar app",
+      personalizedFeatures: "Funciones personalizadas",
+      improveExperience: "Mejorar experiencia",
+      sendUpdates: "Enviar actualizaciones",
+      sharingData: "Compartir datos",
+      noSellData: "No vendemos datos",
+      noSharePrivate: "No compartimos privados",
+      thirdPartyServices: "Servicios terceros",
+      dataSecurity: "Seguridad datos",
+      encryption: "Cifrado",
+      deleteRequest: "Solicitar eliminación",
+      yourRights: "Tus derechos",
+      accessCorrectDelete: "Acceder, corregir, eliminar",
+      withdrawConsent: "Retirar consentimiento",
+      lodgeComplaint: "Presentar queja",
+      termsIntro: "Usar app acepta términos",
+      eligibility: "Elegibilidad",
+      ageRequirement: "18 años o más",
+      ageRepresentation: "Declaras 18 años",
+      mustBe18: "18 años o más",
+      represent18: "Declaras 18 años",
+      noMedicalAdvice: "Sin consejo médico",
+      informationalOnly: "Solo informativo",
+      noMedicalDiagnosis: "Sin diagnóstico",
+      notReplacement: "No reemplaza profesional",
+      noMedicalAdviceText: "Sin consejo médico",
+      notReplaceProfessional: "No reemplaza profesional",
+      consultProvider: "Consultar profesional",
+      aiContentUsage: "Uso IA",
+      aiNotTherapist: "IA no terapeuta",
+      thirdPartyContent: "Contenido terceros",
+      youtubeContent: "Contenido terceros",
+      emergencyDisclaimer: "Exención emergencia",
+      emergencyUserTool: "Herramienta usuario",
+      emergencyText: "Herramienta usuario",
+      notEmergencyService: "No servicio emergencia",
+      callEmergencyServices: "Llamar emergencias",
+      limitationLiability: "Limitación responsabilidad",
+      noLiability: "Propio riesgo",
+      useAtRisk: "Propio riesgo",
+      noWarranties: "Sin garantías",
+      disclaimerIntro: "App bienestar",
+      notMedicalDevice: "No dispositivo médico",
+      supplementNot: "Complementa no reemplaza",
+      ifCrisis: "En crisis contactar emergencias",
     }
   },
-  fr: {
-    appName: "Take 5",
-    tagline: "Respire. Reprenez le contrôle.",
-    searchPlaceholder: "Tapez ce que vous ressentez: 'Je suis seul', 'sans-abri', 'veux mourir'...",
-    emergencySupport: "Soutien d'Urgence",
-    callEmergency: "Appeler {number} (Urgence)",
-    crisisHotline: "Ligne de Crise",
-    crisisHotlineCall: "Appelez Maintenant",
-    emergencyWarning: "Si vous êtes en danger immédiat, appelez les services d'urgence",
-    additionalSupport: "Soutien Supplémentaire",
-    howCanWeSupport: "Comment pouvons-nous vous soutenir maintenant?",
-    feelOverwhelmed: "Je Me Sens Dépassé",
-    breathingDescription: "Exercices de respiration et techniques d'ancrage",
-    feelAnxious: "Je Me Sens Anxieux",
-    anxiousDescription: "Gestion de l'anxiété et stratégies d'adaptation",
-    feelDepressed: "Je Me Sens Déprimé",
-    depressedDescription: "Soutien pour la dépression et ressources d'humeur",
-    needToTalk: "J'ai Besoin de Parler",
-    talkDescription: "Conseil professionnel et soutien par les pairs",
-    trustedContacts: "Vos Contacts de Confiance",
-    addTrustedContact: "Ajouter un contact de confiance",
-    footerMessage1: "Vous n'êtes pas seul.",
-    footerMessage2: "Vous comptez. Votre vie a de la valeur.",
-    footerMessage3: "L'aide est toujours disponible.",
-    footerMessage4: "Ce moment est temporaire. Vous pouvez le faire!",
-    visitWebsite: "Visiter le Site Web",
-    callNow: "Appeler Maintenant",
-    cancel: "Annuler",
-    breathingExercise: "Exercice de Respiration",
-    inhale: "Inspirez",
-    hold: "Retenez",
-    exhale: "Expirez",
-    close: "Fermer",
-    breathing: "Respiration",
-    breathingGuide: "Guide 5 min",
-    affirmations: "Affirmations",
-    kindWords: "Mots gentils",
-    calmMusic: "Musique Calme",
-    soothingSounds: "Sons apaisants",
-    grounding: "Ancrage",
-    groundingTechnique: "5-4-3-2-1",
-    name: "Nom",
-    phoneNumber: "Numéro de Téléphone",
-    relationship: "Relation",
-    enterName: "Entrez le nom",
-    enterPhone: "Entrez le numéro",
-    enterRelationship: "ex., Thérapeute, Ami, Famille",
-    addContact: "Ajouter Contact"
-  },
+
   de: {
     appName: "Take 5",
-    tagline: "Atme. Übernimm die Kontrolle zurück.",
-    searchPlaceholder: "Schreibe, wie du dich fühlst: 'Ich bin allein', 'obdachlos', 'will sterben'...",
+    tagline: "Atme tief durch. Übernimm die Kontrolle.",
+    searchPlaceholder: "Wie fühlst du dich...",
     emergencySupport: "Notfallunterstützung",
-    callEmergency: "{number} anrufen (Notfall)",
-    crisisHotline: "Krisenhotline",
+    callEmergency: "Rufe {number} an",
+    crisisHotline: "Krisen-Hotline",
     crisisHotlineCall: "Jetzt anrufen",
-    emergencyWarning: "Wenn Sie in unmittelbarer Gefahr sind, rufen Sie den Notdienst an",
+    emergencyWarning: "Bei Gefahr Notdienst anrufen",
+    login: "anmelden",
+    createAccount: "Konto erstellen",
+    loginToCreateContactsList: "anmelden für Kontakte",
+    signInWithGoogle: "Mit Google anmelden",
     additionalSupport: "Zusätzliche Unterstützung",
-    howCanWeSupport: "Wie können wir Sie jetzt unterstützen?",
-    feelOverwhelmed: "Ich Fühle Mich Überfordert",
-    breathingDescription: "Atemübungen und Erdungstechniken",
-    feelAnxious: "Ich Fühle Mich Ängstlich",
-    anxiousDescription: "Angstbewältigung und Bewältigungsstrategien",
-    feelDepressed: "Ich Fühle Mich Deprimiert",
-    depressedDescription: "Unterstützung bei Depressionen und Stimmungsressourcen",
-    needToTalk: "Ich Muss Reden",
-    talkDescription: "Professionelle Beratung und Peer-Unterstützung",
-    trustedContacts: "Ihre Vertrauenskontakte",
-    addTrustedContact: "Einen Vertrauenskontakt hinzufügen",
+    howCanWeSupport: "Wie fühlst du dich?",
+    feelOverwhelmed: "Überfordert",
+    breathingDescription: "Atemübungen",
+    feelAnxious: "Ängstlich",
+    anxiousDescription: "Angstbewältigung",
+    feelDepressed: "Deprimiert",
+    depressedDescription: "Depressionshilfe",
+    needToTalk: "Reden",
+    talkDescription: "Beratung",
+    breathing: "Atmung",
+    breathingGuide: "5-Min-Anleitung",
+    affirmations: "Bestätigungen",
+    kindWords: "Freundliche Worte",
+    calmMusic: "Ruhige Musik",
+    soothingSounds: "Beruhigende Klänge",
+    grounding: "Erdung",
+    groundingTechnique: "5-4-3-2-1",
+    trustedContacts: "Vertrauenskontakte",
+    confidenceContacts: "Vertrauenskontakte",
+    addTrustedContact: "Kontakt hinzufügen",
+    name: "Name",
+    phoneNumber: "Telefon",
+    relationship: "Beziehung",
+    enterName: "Namen eingeben",
+    enterPhone: "Telefon eingeben",
+    enterRelationship: "z.B. Therapeut",
+    addContact: "Kontakt hinzufügen",
     footerMessage1: "Du bist nicht allein.",
-    footerMessage2: "Du bist wichtig. Dein Leben hat Wert.",
-    footerMessage3: "Hilfe ist immer verfügbar.",
-    footerMessage4: "Dieser Moment ist vorübergehend. Du schaffst das!",
+    footerMessage2: "Du zählst.",
+    footerMessage3: "Hilfe verfügbar.",
+    footerMessage4: "Moment vorübergehend.",
     visitWebsite: "Website besuchen",
     callNow: "Jetzt anrufen",
     cancel: "Abbrechen",
+    close: "Schließen",
     breathingExercise: "Atemübung",
     inhale: "Einatmen",
     hold: "Halten",
     exhale: "Ausatmen",
-    close: "Schließen"
+    yourProfile: "Dein Profil",
+    profile: "Profil",
+    privateDiary: "Privates Tagebuch",
+    yourPrivateDiary: "Dein Tagebuch",
+    newEntry: "Neuer Eintrag",
+    addQuotePlaceholder: "Zitat hinzufügen",
+    logout: "Abmelden",
+    entryTitle: "Titel...",
+    writeThoughts: "Gedanken...",
+    saveEntry: "Speichern",
+    startWriting: "Schreiben beginnen",
+    entriesSaved: "Einträge gespeichert",
+    entryTitlePlaceholder: "Titel...",
+    writeThoughtsPlaceholder: "Gedanken...",
+    entrySaved: "Eintrag gespeichert",
+    entryUpdated: "Eintrag aktualisiert",
+    entryDeleted: "Eintrag gelöscht",
+    aiWelcomeMessage: "Hallo, ich bin hier für dich",
+    aiSupportChat: "KI-Chat",
+    aiImHere: "Ich bin hier",
+    talkToMe: "Sprich mit mir",
+    chatWithAi: "Chat mit KI",
+    compassionateAssistant: "KI-Assistent",
+    immediateSupport: "sofortige Hilfe",
+    copingStrategies: "Strategien",
+    someoneToListen: "jemand zum Zuhören",
+    startConversation: "Beginnen",
+    typeYourMessage: "Nachricht...",
+    crisisWarning: "In Krise Notdienst anrufen",
+    unmuteAi: "KI aktivieren",
+    changeNamePrompt: "Namen ändern",
+    enterYourName: "Dein Name",
+    whatsYourName: "Wie heißt du?",
+    youDeservePeace: "Du verdienst Frieden",
+    youAreStronger: "Du bist stark",
+    youMatter: "Du zählst",
+    thisToWillPass: "Das geht vorüber",
+    youAreNotAlone: "Nicht allein",
+    youAreLoved: "Du bist geliebt",
+    rotatingAffirmations: ["Du bist stark", "Du zählst", "Hilfe verfügbar"],
+    backgroundImage: "Hintergrundbild",
+    noBackgroundImageSet: "Kein Bild",
+    uploadImage: "Bild hochladen",
+    setYourPersonalBackground: "Persönlicher Hintergrund",
+    chooseYourImage: "Bild wählen",
+    uploadAnyPhoto: "Foto hochladen",
+    cropPosition: "Zuschneiden",
+    useEditorToCrop: "Editor zuschneiden",
+    screenImage: "Bildschirmbild",
+    diary: "Tagebuch",
+    remove: "Entfernen",
+    legalPoliciesDisclamers: "Rechtliche Richtlinien",
+    privacyPolicy: "Datenschutz",
+    termsConditions: "Bedingungen",
+    disclaimer: "Haftungsausschluss",
+    effectiveDate: "Gültigkeitsdatum",
+    legalContent: {
+      effectiveDate: "Datum: 6. Juni 2025",
+      privacyIntro: "Take 5 schätzt Privatsphäre",
+      informationWeCollect: "Gesammelte Informationen",
+      personalDetails: "Persönliche Details",
+      journalingEntries: "Tagebucheinträge",
+      usageData: "Nutzungsdaten",
+      deviceData: "Gerätedaten",
+      howWeUseData: "Datennutzung",
+      operateApp: "App betreiben",
+      personalizedFeatures: "Personalisierte Funktionen",
+      improveExperience: "Erfahrung verbessern",
+      sendUpdates: "Updates senden",
+      sharingData: "Datenweitergabe",
+      noSellData: "Verkaufen keine Daten",
+      noSharePrivate: "Teilen keine privaten",
+      thirdPartyServices: "Drittanbieter-Services",
+      dataSecurity: "Datensicherheit",
+      encryption: "Verschlüsselung",
+      deleteRequest: "Löschung beantragen",
+      yourRights: "Deine Rechte",
+      accessCorrectDelete: "Zugreifen, korrigieren, löschen",
+      withdrawConsent: "Einwilligung widerrufen",
+      lodgeComplaint: "Beschwerde einreichen",
+      termsIntro: "App-Nutzung akzeptiert Bedingungen",
+      eligibility: "Berechtigung",
+      ageRequirement: "18 Jahre oder älter",
+      ageRepresentation: "Erklärst 18 Jahre",
+      mustBe18: "18 Jahre oder älter",
+      represent18: "Erklärst 18 Jahre",
+      noMedicalAdvice: "Keine medizinische Beratung",
+      informationalOnly: "Nur informativ",
+      noMedicalDiagnosis: "Keine Diagnose",
+      notReplacement: "Ersetzt nicht professionell",
+      noMedicalAdviceText: "Keine medizinische Beratung",
+      notReplaceProfessional: "Ersetzt nicht professionell",
+      consultProvider: "Professionell konsultieren",
+      aiContentUsage: "KI-Nutzung",
+      aiNotTherapist: "KI nicht Therapeut",
+      thirdPartyContent: "Drittanbieter-Inhalte",
+      youtubeContent: "Drittanbieter-Inhalte",
+      emergencyDisclaimer: "Notfall-Haftungsausschluss",
+      emergencyUserTool: "Benutzer-Tool",
+      emergencyText: "Benutzer-Tool",
+      notEmergencyService: "Kein Notfalldienst",
+      callEmergencyServices: "Notdienste anrufen",
+      limitationLiability: "Haftungsbeschränkung",
+      noLiability: "Eigenes Risiko",
+      useAtRisk: "Eigenes Risiko",
+      noWarranties: "Keine Garantien",
+      disclaimerIntro: "Wellness-App",
+      notMedicalDevice: "Kein medizinisches Gerät",
+      supplementNot: "Ergänzt nicht ersetzt",
+      ifCrisis: "In Krise Notdienste kontaktieren",
+    }
   },
-  zh: {
+
+  it: {
     appName: "Take 5",
-    tagline: "深呼吸。重新掌控。",
-    searchPlaceholder: "输入您的感受：'我很孤独'、'无家可归'、'想死'...",
-    emergencySupport: "紧急支持",
-    callEmergency: "拨打{number}（紧急情况）",
-    crisisHotline: "危机热线",
-    crisisHotlineCall: "立即拨打",
-    emergencyWarning: "如果您处于紧急危险中，请拨打紧急服务电话",
-    additionalSupport: "额外支持",
-    howCanWeSupport: "我们现在如何支持您？",
-    feelOverwhelmed: "我感到不知所措",
-    breathingDescription: "呼吸练习和接地技巧",
-    feelAnxious: "我感到焦虑",
-    anxiousDescription: "焦虑管理和应对策略",
-    feelDepressed: "我感到抑郁",
-    depressedDescription: "抑郁症支持和情绪资源",
-    needToTalk: "我需要倾诉",
-    talkDescription: "专业咨询和同伴支持",
-    trustedContacts: "您的信任联系人",
-    addTrustedContact: "添加信任联系人",
-    footerMessage1: "您并不孤单。",
-    footerMessage2: "您很重要。您的生命有价值。",
-    footerMessage3: "帮助总是可得的。",
-    footerMessage4: "这个时刻是暂时的。您能做到！",
-    visitWebsite: "访问网站",
-    callNow: "立即拨打",
-    cancel: "取消",
-    breathingExercise: "呼吸练习",
-    inhale: "吸气",
-    hold: "屏住",
-    exhale: "呼气",
-    close: "关闭"
+    tagline: "Respira profondamente. Riprendi controllo.",
+    searchPlaceholder: "Come ti senti...",
+    emergencySupport: "Supporto Emergenza",
+    callEmergency: "Chiama {number}",
+    crisisHotline: "Linea Crisi",
+    crisisHotlineCall: "Chiama Ora",
+    emergencyWarning: "In pericolo chiama emergenze",
+    login: "accedi",
+    createAccount: "crea account",
+    loginToCreateContactsList: "accedi per contatti",
+    signInWithGoogle: "Accedi con Google",
+    additionalSupport: "Supporto Aggiuntivo",
+    howCanWeSupport: "Come ti senti?",
+    feelOverwhelmed: "Sopraffatto",
+    breathingDescription: "Esercizi respirazione",
+    feelAnxious: "Ansioso",
+    anxiousDescription: "Gestione ansia",
+    feelDepressed: "Depresso",
+    depressedDescription: "Supporto depressione",
+    needToTalk: "Parlare",
+    talkDescription: "Consulenza",
+    breathing: "Respirazione",
+    breathingGuide: "Guida 5 min",
+    affirmations: "Affermazioni",
+    kindWords: "Parole gentili",
+    calmMusic: "Musica Calma",
+    soothingSounds: "Suoni rilassanti",
+    grounding: "Radicamento",
+    groundingTechnique: "5-4-3-2-1",
+    trustedContacts: "Contatti fidati",
+    confidenceContacts: "Contatti fidati",
+    addTrustedContact: "Aggiungi contatto",
+    name: "Nome",
+    phoneNumber: "Telefono",
+    relationship: "Relazione",
+    enterName: "Inserisci nome",
+    enterPhone: "Inserisci telefono",
+    enterRelationship: "es. Terapista",
+    addContact: "Aggiungi Contatto",
+    footerMessage1: "Non sei solo.",
+    footerMessage2: "Conti.",
+    footerMessage3: "Aiuto disponibile.",
+    footerMessage4: "Momento temporaneo.",
+    visitWebsite: "Visita Sito",
+    callNow: "Chiama Ora",
+    cancel: "Annulla",
+    close: "Chiudi",
+    breathingExercise: "Esercizio Respirazione",
+    inhale: "Inspira",
+    hold: "Trattieni",
+    exhale: "Espira",
+    yourProfile: "Il tuo profilo",
+    profile: "Profilo",
+    privateDiary: "Diario privato",
+    yourPrivateDiary: "Il tuo diario",
+    newEntry: "Nuova voce",
+    addQuotePlaceholder: "Aggiungi citazione",
+    logout: "Esci",
+    entryTitle: "Titolo...",
+    writeThoughts: "Pensieri...",
+    saveEntry: "Salva",
+    startWriting: "Inizia scrivere",
+    entriesSaved: "Voci salvate",
+    entryTitlePlaceholder: "Titolo...",
+    writeThoughtsPlaceholder: "Pensieri...",
+    entrySaved: "Voce salvata",
+    entryUpdated: "Voce aggiornata",
+    entryDeleted: "Voce eliminata",
+    aiWelcomeMessage: "Ciao, sono qui per te",
+    aiSupportChat: "Chat IA",
+    aiImHere: "Sono qui",
+    talkToMe: "Parlami",
+    chatWithAi: "Chat con IA",
+    compassionateAssistant: "assistente IA",
+    immediateSupport: "supporto immediato",
+    copingStrategies: "strategie",
+    someoneToListen: "qualcuno che ascolti",
+    startConversation: "Inizia",
+    typeYourMessage: "Messaggio...",
+    crisisWarning: "In crisi chiama emergenze",
+    unmuteAi: "Riattiva IA",
+    changeNamePrompt: "Cambia Nome",
+    enterYourName: "Tuo nome",
+    whatsYourName: "Come ti chiami?",
+    youDeservePeace: "Meriti pace",
+    youAreStronger: "Sei forte",
+    youMatter: "Conti",
+    thisToWillPass: "Passerà",
+    youAreNotAlone: "Non solo",
+    youAreLoved: "Sei amato",
+    rotatingAffirmations: ["Sei forte", "Conti", "Aiuto disponibile"],
+    backgroundImage: "Immagine sfondo",
+    noBackgroundImageSet: "Nessuna immagine",
+    uploadImage: "Carica immagine",
+    setYourPersonalBackground: "Sfondo personale",
+    chooseYourImage: "Scegli immagine",
+    uploadAnyPhoto: "Carica foto",
+    cropPosition: "Ritaglia",
+    useEditorToCrop: "Editor ritaglio",
+    screenImage: "Immagine schermo",
+    diary: "Diario",
+    remove: "Rimuovi",
+    legalPoliciesDisclamers: "Politiche legali",
+    privacyPolicy: "Privacy",
+    termsConditions: "Termini",
+    disclaimer: "Disclaimer",
+    effectiveDate: "Data vigore",
+    legalContent: {
+      effectiveDate: "Data: 6 giugno 2025",
+      privacyIntro: "Take 5 valorizza privacy",
+      informationWeCollect: "Informazioni raccolte",
+      personalDetails: "Dettagli personali",
+      journalingEntries: "Voci diario",
+      usageData: "Dati utilizzo",
+      deviceData: "Dati dispositivo",
+      howWeUseData: "Uso dati",
+      operateApp: "Operare app",
+      personalizedFeatures: "Funzionalità personalizzate",
+      improveExperience: "Migliorare esperienza",
+      sendUpdates: "Inviare aggiornamenti",
+      sharingData: "Condivisione dati",
+      noSellData: "Non vendiamo dati",
+      noSharePrivate: "Non condividiamo privati",
+      thirdPartyServices: "Servizi terze parti",
+      dataSecurity: "Sicurezza dati",
+      encryption: "Crittografia",
+      deleteRequest: "Richiedere cancellazione",
+      yourRights: "Tuoi diritti",
+      accessCorrectDelete: "Accedere, correggere, eliminare",
+      withdrawConsent: "Ritirare consenso",
+      lodgeComplaint: "Presentare reclamo",
+      termsIntro: "Uso app accetta termini",
+      eligibility: "Idoneità",
+      ageRequirement: "18 anni o più",
+      ageRepresentation: "Dichiari 18 anni",
+      mustBe18: "18 anni o più",
+      represent18: "Dichiari 18 anni",
+      noMedicalAdvice: "Nessun consiglio medico",
+      informationalOnly: "Solo informativo",
+      noMedicalDiagnosis: "Nessuna diagnosi",
+      notReplacement: "Non sostituisce professionale",
+      noMedicalAdviceText: "Nessun consiglio medico",
+      notReplaceProfessional: "Non sostituisce professionale",
+      consultProvider: "Consultare professionale",
+      aiContentUsage: "Uso IA",
+      aiNotTherapist: "IA non terapista",
+      thirdPartyContent: "Contenuti terze parti",
+      youtubeContent: "Contenuti terze parti",
+      emergencyDisclaimer: "Disclaimer emergenza",
+      emergencyUserTool: "Strumento utente",
+      emergencyText: "Strumento utente",
+      notEmergencyService: "Non servizio emergenza",
+      callEmergencyServices: "Chiamare emergenze",
+      limitationLiability: "Limitazione responsabilità",
+      noLiability: "Proprio rischio",
+      useAtRisk: "Proprio rischio",
+      noWarranties: "Nessuna garanzia",
+      disclaimerIntro: "App benessere",
+      notMedicalDevice: "Non dispositivo medico",
+      supplementNot: "Integra non sostituisce",
+      ifCrisis: "In crisi contattare emergenze",
+    }
   },
-  ja: {
-    appName: "Take 5",
-    tagline: "呼吸して。コントロールを取り戻して。",
-    searchPlaceholder: "気持ちを入力：「孤独」「ホームレス」「死にたい」...",
-    emergencySupport: "緊急サポート",
-    callEmergency: "{number}番通報（緊急時）",
-    crisisHotline: "危機ホットライン",
-    crisisHotlineCall: "今すぐ電話",
-    emergencyWarning: "緊急の危険がある場合は、緊急サービスに電話してください",
-    additionalSupport: "追加サポート",
-    howCanWeSupport: "今、どのようにサポートできますか？",
-    feelOverwhelmed: "圧倒されている",
-    breathingDescription: "呼吸エクササイズとグラウンディング技術",
-    feelAnxious: "不安を感じる",
-    anxiousDescription: "不安管理と対処戦略",
-    feelDepressed: "うつ状態",
-    depressedDescription: "うつ病サポートと気分リソース",
-    needToTalk: "話したい",
-    talkDescription: "専門カウンセリングとピアサポート",
-    trustedContacts: "あなたの信頼できる連絡先",
-    addTrustedContact: "信頼できる連絡先を追加",
-    footerMessage1: "あなたは一人ではありません。",
-    footerMessage2: "あなたは大切です。あなたの命には価値があります。",
-    footerMessage3: "助けはいつでも利用できます。",
-    footerMessage4: "この瞬間は一時的なものです。あなたならできます！",
-    visitWebsite: "ウェブサイトを訪問",
-    callNow: "今すぐ電話",
-    cancel: "キャンセル",
-    breathingExercise: "呼吸エクササイズ",
-    inhale: "吸って",
-    hold: "止めて",
-    exhale: "吐いて",
-    close: "閉じる"
-  },
-  ar: {
-    appName: "Take 5",
-    tagline: "تنفس. استعد السيطرة.",
-    searchPlaceholder: "اكتب ما تشعر به: 'أنا وحيد'، 'بلا مأوى'، 'أريد أن أموت'...",
-    emergencySupport: "الدعم الطارئ",
-    callEmergency: "اتصل بـ {number} (طوارئ)",
-    crisisHotline: "خط الأزمات",
-    crisisHotlineCall: "اتصل الآن",
-    emergencyWarning: "إذا كنت في خطر فوري، اتصل بخدمات الطوارئ",
-    additionalSupport: "الدعم الإضافي",
-    howCanWeSupport: "كيف يمكننا دعمك الآن؟",
-    feelOverwhelmed: "أشعر بالإرهاق",
-    breathingDescription: "تمارين التنفس وتقنيات التأريض",
-    feelAnxious: "أشعر بالقلق",
-    anxiousDescription: "إدارة القلق واستراتيجيات التأقلم",
-    feelDepressed: "أشعر بالاكتئاب",
-    depressedDescription: "دعم الاكتئاب وموارد المزاج",
-    needToTalk: "أحتاج للحديث",
-    talkDescription: "الاستشارة المهنية ودعم الأقران",
-    trustedContacts: "جهات الاتصال الموثوقة",
-    addTrustedContact: "إضافة جهة اتصال موثوقة",
-    footerMessage1: "أنت لست وحيداً.",
-    footerMessage2: "أنت مهم. حياتك لها قيمة.",
-    footerMessage3: "المساعدة متاحة دائماً.",
-    footerMessage4: "هذه اللحظة مؤقتة. يمكنك فعل ذلك!",
-    visitWebsite: "زيارة الموقع",
-    callNow: "اتصل الآن",
-    cancel: "إلغاء",
-    breathingExercise: "تمرين التنفس",
-    inhale: "استنشق",
-    hold: "احبس",
-    exhale: "اخرج الهواء",
-    close: "إغلاق"
-  },
-  ru: {
-    appName: "Take 5",
-    tagline: "Дышите. Верните контроль.",
-    searchPlaceholder: "Напишите, что вы чувствуете: 'Я одинок', 'бездомный', 'хочу умереть'...",
-    emergencySupport: "Экстренная поддержка",
-    callEmergency: "Звоните {number} (Экстренная помощь)",
-    crisisHotline: "Кризисная линия",
-    crisisHotlineCall: "Звоните сейчас",
-    emergencyWarning: "Если вы в непосредственной опасности, звоните в службы экстренного реагирования",
-    additionalSupport: "Дополнительная поддержка",
-    howCanWeSupport: "Как мы можем поддержать вас прямо сейчас?",
-    feelOverwhelmed: "Я чувствую себя подавленным",
-    breathingDescription: "Дыхательные упражнения и техники заземления",
-    feelAnxious: "Я чувствую тревогу",
-    anxiousDescription: "Управление тревогой и стратегии преодоления",
-    feelDepressed: "Я чувствую депрессию",
-    depressedDescription: "Поддержка при депрессии и ресурсы настроения",
-    needToTalk: "Мне нужно поговорить",
-    talkDescription: "Профессиональное консультирование и поддержка сверстников",
-    trustedContacts: "Ваши доверенные контакты",
-    addTrustedContact: "Добавить доверенный контакт",
-    footerMessage1: "Вы не одиноки.",
-    footerMessage2: "Вы важны. Ваша жизнь имеет ценность.",
-    footerMessage3: "Помощь всегда доступна.",
-    footerMessage4: "Этот момент временный. Вы справитесь!",
-    visitWebsite: "Посетить сайт",
-    callNow: "Звонить сейчас",
-    cancel: "Отмена",
-    breathingExercise: "Дыхательное упражнение",
-    inhale: "Вдох",
-    hold: "Задержка",
-    exhale: "Выдох",
-    close: "Закрыть"
-  }
+
+  // Additional languages inherit from English as fallback
+  pt: {} as any,
+  ru: {} as any,
+  ja: {} as any,
+  ko: {} as any,
+  zh: {} as any,
+  ar: {} as any,
+  hi: {} as any,
+  nl: {} as any
 };
 
-// Comprehensive language database with full translations
-const languageNames: Record<Language, string> = {
-  en: 'English', es: 'Español', th: 'ไทย', fr: 'Français', de: 'Deutsch',
-  it: 'Italiano', pt: 'Português', ru: 'Русский', ja: '日本語', ko: '한국어',
-  zh: '中文', ar: 'العربية', hi: 'हिन्दी', nl: 'Nederlands', sv: 'Svenska',
-  no: 'Norsk', da: 'Dansk', fi: 'Suomi', pl: 'Polski', tr: 'Türkçe',
-  he: 'עברית', vi: 'Tiếng Việt', id: 'Bahasa Indonesia', ms: 'Bahasa Melayu',
-  tl: 'Filipino', uk: 'Українська', cs: 'Čeština', sk: 'Slovenčina',
-  hu: 'Magyar', ro: 'Română', bg: 'Български', hr: 'Hrvatski', sl: 'Slovenščina',
-  et: 'Eesti', lv: 'Latviešu', lt: 'Lietuvių', mt: 'Malti', ga: 'Gaeilge',
-  cy: 'Cymraeg', is: 'Íslenska', mk: 'Македонски', sq: 'Shqip', sr: 'Српски',
-  bs: 'Bosanski', me: 'Crnogorski', ka: 'ქართული', hy: 'Հայերեն', az: 'Azərbaycan',
-  kk: 'Қазақша', ky: 'Кыргызча', uz: 'O\'zbekcha', tm: 'Türkmençe', mn: 'Монгол',
-  ne: 'नेपाली', bn: 'বাংলা', ta: 'தமிழ்', te: 'తెలుగు', ml: 'മലയാളം',
-  kn: 'ಕನ್ನಡ', gu: 'ગુજરાતી', pa: 'ਪੰਜਾਬੀ', or: 'ଓଡ଼ିଆ', as: 'অসমীয়া',
-  ur: 'اردو', fa: 'فارسی', ps: 'پښتو', sw: 'Kiswahili', am: 'አማርኛ',
-  so: 'Soomaali', ha: 'Hausa', yo: 'Yorùbá', ig: 'Igbo', zu: 'isiZulu',
-  af: 'Afrikaans', xh: 'isiXhosa', st: 'Sesotho', tn: 'Setswana', ts: 'Xitsonga',
-  ve: 'Tshivenḓa', nr: 'isiNdebele', ss: 'siSwati', lg: 'Luganda', rw: 'Kinyarwanda',
-  ny: 'Chichewa', sn: 'chiShona', mg: 'Malagasy', my: 'မြန်မာ', km: 'ខ្មែរ',
-  lo: 'ລາວ', si: 'සිංහල', dv: 'ދިވެހި', bo: 'བོད་སྐད', dz: 'རྫོང་ཁ',
-  ii: 'ꆈꌠꁱꂷ', iu: 'ᐃᓄᒃᑎᑐᑦ', kl: 'Kalaallisut', se: 'Davvisámegiella', fo: 'Føroyskt',
-  gd: 'Gàidhlig', br: 'Brezhoneg', eu: 'Euskera', ca: 'Català', gl: 'Galego',
-  oc: 'Occitan', co: 'Corsu', sc: 'Sardu', rm: 'Rumantsch', fur: 'Furlan',
-  lij: 'Ligure', vec: 'Vèneto', nap: 'Napulitano', scn: 'Sicilianu', lmo: 'Lombard',
-  pms: 'Piemontèis', rgn: 'Rumagnôl', eml: 'Emiliàn', lld: 'Ladin', frp: 'Arpitan',
-  wa: 'Walon', li: 'Limburgs', nds: 'Plattdüütsch', lb: 'Lëtzebuergesch',
-  als: 'Alemannisch', bar: 'Boarisch', ksh: 'Ripoarisch', pdc: 'Deitsch',
-  hsb: 'Hornjoserbsce', dsb: 'Dolnoserbski'
-};
-
-// AI-powered translation fallback system
-export async function getAITranslation(text: string, targetLanguage: Language): Promise<string> {
-  if (!import.meta.env.VITE_OPENAI_API_KEY) {
-    return text; // Return original if no API key
-  }
+// Translation function with placeholder support and fallback to English
+export function t(
+  key: string,
+  placeholders?: Record<string, string>,
+  language: Language = 'en'
+): string {
+  const keys = key.split('.');
+  let value: any = translations[language];
   
-  try {
-    const response = await fetch('/api/translate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        text,
-        targetLanguage: languageNames[targetLanguage],
-        context: 'mental health support app'
-      })
-    });
-    
-    if (response.ok) {
-      const result = await response.json();
-      return result.translation;
+  // First try the requested language
+  for (const k of keys) {
+    if (value && typeof value === 'object' && k in value) {
+      value = value[k];
+    } else {
+      // Fallback to English if key not found in requested language
+      value = translations.en;
+      for (const fallbackKey of keys) {
+        if (value && typeof value === 'object' && fallbackKey in value) {
+          value = value[fallbackKey];
+        } else {
+          return key; // Return key if not found in English either
+        }
+      }
+      break;
     }
-  } catch (error) {
-    console.warn('AI translation failed:', error);
   }
   
-  return text; // Fallback to original
+  if (typeof value === 'string') {
+    if (placeholders) {
+      return value.replace(/\{(\w+)\}/g, (match, placeholder) => {
+        return placeholders[placeholder] || match;
+      });
+    }
+    return value;
+  }
+  
+  return key;
 }
 
-export function getTranslation(language: Language, key: string, params?: Record<string, string>): string {
-  // Handle nested properties like 'legalContent.effectiveDate'
-  const getValue = (obj: any, path: string): string => {
-    return path.split('.').reduce((current, prop) => current?.[prop], obj) || '';
-  };
-  
-  let text = getValue(translations[language], key) || getValue(translations.en, key);
-  
-  if (params && typeof text === 'string') {
-    Object.entries(params).forEach(([param, value]) => {
-      text = text.replace(`{${param}}`, value);
-    });
-  }
-  
-  return text || key; // Fallback to key if translation not found
-}
-
-// Enhanced translation with AI fallback for missing languages
-export async function getTranslationWithAI(language: Language, key: keyof Translation, params?: Record<string, string>): Promise<string> {
-  let text = translations[language]?.[key];
-  
-  // If translation doesn't exist for this language, use AI translation
-  if (!text && language !== 'en') {
-    const englishText = translations.en[key];
-    text = await getAITranslation(englishText, language);
-    
-    // Cache the AI translation for future use
-    if (!translations[language]) {
-      translations[language] = {} as Translation;
-    }
-    (translations[language] as any)[key] = text;
-  }
-  
-  // Fallback to English if all else fails
-  text = text || translations.en[key];
-  
-  if (params) {
-    Object.entries(params).forEach(([param, value]) => {
-      text = text.replace(`{${param}}`, value);
-    });
-  }
-  
-  return text;
+// Legacy function for compatibility
+export function getTranslation(language: Language): Translation {
+  return translations[language] || translations.en;
 }
