@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { type Language, translations, getTranslation } from '@/lib/translations';
+import { type Language, translations, t as translateFunction } from '@/lib/translations';
 
 interface LanguageContextType {
   language: Language;
@@ -16,7 +16,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   });
 
   const t = (key: string, params?: Record<string, string>) => {
-    return getTranslation(language, key, params);
+    return translateFunction(key, params, language);
   };
 
   const handleSetLanguage = (newLanguage: Language) => {

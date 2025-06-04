@@ -6,7 +6,14 @@ export default function RotatingAffirmations() {
   const [currentAffirmation, setCurrentAffirmation] = useState(0);
 
   // Get affirmations from translations
-  const affirmations = t('rotatingAffirmations') as string[];
+  const affirmations = [
+    t('youAreStronger'),
+    t('youMatter'), 
+    t('youAreNotAlone'),
+    t('thisToWillPass'),
+    t('youDeservePeace'),
+    t('youAreLoved')
+  ];
 
   useEffect(() => {
     const interval = setInterval(() => {
