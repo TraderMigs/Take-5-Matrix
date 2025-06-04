@@ -274,7 +274,7 @@ export default function UserAccountClean({ isOpen, onClose, currentUser, onLogin
           <Button
             onClick={handleGoogleLogin}
             variant="outline"
-            className="w-full border-2 border-black dark:border-white text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="w-full border-2 border-black dark:border-white text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-black dark:hover:text-white"
           >
             <img src={googleIcon} alt="Google" className="w-4 h-4 mr-2" />
             Continue with Google
