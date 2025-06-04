@@ -115,6 +115,9 @@ export interface Translation {
   youAreNotAlone: string;
   youAreLoved: string;
   
+  // Rotating Affirmations Array
+  rotatingAffirmations: string[];
+  
   // Profile UI
   backgroundImage: string;
   noBackgroundImageSet: string;
@@ -133,6 +136,56 @@ export interface Translation {
   termsConditions: string;
   disclaimer: string;
   effectiveDate: string;
+  
+  // Legal Content
+  legalContent: {
+    effectiveDate: string;
+    privacyIntro: string;
+    informationWeCollect: string;
+    personalDetails: string;
+    journalingEntries: string;
+    usageData: string;
+    deviceData: string;
+    howWeUseData: string;
+    operateApp: string;
+    personalizedFeatures: string;
+    improveExperience: string;
+    sendUpdates: string;
+    sharingData: string;
+    noSellData: string;
+    noSharePrivate: string;
+    thirdPartyServices: string;
+    dataSecurity: string;
+    encryption: string;
+    deleteRequest: string;
+    yourRights: string;
+    accessCorrectDelete: string;
+    withdrawConsent: string;
+    lodgeComplaint: string;
+    termsIntro: string;
+    eligibility: string;
+    mustBe18: string;
+    represent18: string;
+    noMedicalAdvice: string;
+    informationalOnly: string;
+    noMedicalAdviceText: string;
+    notReplaceProfessional: string;
+    consultProvider: string;
+    aiContentUsage: string;
+    aiNotTherapist: string;
+    youtubeContent: string;
+    emergencyDisclaimer: string;
+    emergencyText: string;
+    notEmergencyService: string;
+    callEmergencyServices: string;
+    limitationLiability: string;
+    useAtRisk: string;
+    noWarranties: string;
+    disclaimerIntro: string;
+    notMedicalDevice: string;
+    supplementNot: string;
+    ifCrisis: string;
+  };
 }
 
 export const translations: Record<string, Translation> = {
@@ -236,6 +289,30 @@ export const translations: Record<string, Translation> = {
     youAreNotAlone: "You are not alone in this",
     youAreLoved: "You are loved and valued",
     
+    // Rotating Affirmations Array
+    rotatingAffirmations: [
+      "You are stronger than you think",
+      "This moment is temporary. You got this!",
+      "You matter. Your life has value",
+      "Help is always available",
+      "You are not alone in this journey",
+      "Every breath you take is a victory",
+      "You have overcome challenges before",
+      "Your feelings are valid and temporary",
+      "Tomorrow can be different",
+      "You are worthy of love and support",
+      "Small steps forward are still progress",
+      "You have the strength to get through this",
+      "Your story isn't over yet",
+      "There are people who care about you",
+      "You are enough, just as you are",
+      "Healing takes time, and that's okay",
+      "You deserve peace and happiness",
+      "Your courage to reach out shows strength",
+      "Every day you survive is a win",
+      "You have made it through 100% of your worst days"
+    ],
+    
     // Profile UI
     backgroundImage: "Background Image",
     noBackgroundImageSet: "No background image set",
@@ -253,7 +330,57 @@ export const translations: Record<string, Translation> = {
     privacyPolicy: "Privacy Policy",
     termsConditions: "Terms & Conditions",
     disclaimer: "Disclaimer",
-    effectiveDate: "Effective Date"
+    effectiveDate: "Effective Date",
+    
+    // Legal Content
+    legalContent: {
+      effectiveDate: "Effective Date: June 6, 2025",
+      privacyIntro: "Take 5 (\"we,\" \"us,\" or \"our\") values your privacy. This Privacy Policy explains how we collect, use, disclose, and protect your personal information when you use the Take 5 app (the \"App\").",
+      informationWeCollect: "Information We Collect:",
+      personalDetails: "Personal details you provide (e.g., name, email address, emergency contact info)",
+      journalingEntries: "Journaling entries (stored locally or securely encrypted if on our servers)",
+      usageData: "Usage data (pages visited, buttons clicked, interactions with the app)",
+      deviceData: "Device data (device type, operating system, browser type)",
+      howWeUseData: "How We Use Your Data:",
+      operateApp: "To operate and maintain the App",
+      personalizedFeatures: "To allow you to use personalized features (e.g., diary, emergency contacts)",
+      improveExperience: "To improve user experience and develop new features",
+      sendUpdates: "To send occasional updates or alerts if you opt-in",
+      sharingData: "Sharing of Data:",
+      noSellData: "We do not sell your data",
+      noSharePrivate: "We do not share your private data with third parties unless legally required",
+      thirdPartyServices: "We may use third-party services (e.g., YouTube API, Google Analytics), and their data collection practices are governed by their own policies",
+      dataSecurity: "Data Security:",
+      encryption: "We implement industry-standard encryption and access controls",
+      deleteRequest: "Users may request data deletion by emailing tradermigs@gmail.com",
+      yourRights: "Your Rights (GDPR, CCPA, etc.):",
+      accessCorrectDelete: "Right to access, correct, or delete your data",
+      withdrawConsent: "Right to withdraw consent or opt-out of communications",
+      lodgeComplaint: "Right to lodge a complaint with a data protection authority",
+      termsIntro: "By using the Take 5 app, you agree to the following terms. If you do not agree, do not use the App.",
+      eligibility: "Eligibility:",
+      mustBe18: "You must be 18 years or older to use the App.",
+      represent18: "By using the App, you represent that you are at least 18 years old.",
+      noMedicalAdvice: "No Medical Advice:",
+      informationalOnly: "The App is for informational and motivational purposes only.",
+      noMedicalAdviceText: "Take 5 does not provide medical advice, diagnosis, or treatment.",
+      notReplaceProfessional: "Content within the App (quotes, affirmations, AI chat, linked videos) is not intended to replace professional mental health or medical care.",
+      consultProvider: "Always consult a qualified healthcare provider for mental health issues.",
+      aiContentUsage: "AI and Content Usage:",
+      aiNotTherapist: "The AI chatbot is a basic conversational assistant. It is not a therapist, licensed counselor, or crisis worker.",
+      youtubeContent: "Linked YouTube content is curated for convenience and positivity but is provided by third parties.",
+      emergencyDisclaimer: "Emergency Feature Disclaimer:",
+      emergencyText: "The emergency contacts feature is for convenience only.",
+      notEmergencyService: "Take 5 is not an emergency service.",
+      callEmergencyServices: "In a crisis, call 988, 911, or your local emergency services immediately.",
+      limitationLiability: "Limitation of Liability:",
+      useAtRisk: "You use the App at your own risk.",
+      noWarranties: "We make no warranties about the App's availability, accuracy, or fitness for any particular purpose.",
+      disclaimerIntro: "Take 5 is a wellness and motivational app designed to provide support and resources for mental well-being.",
+      notMedicalDevice: "This app is not a medical device, therapy service, or crisis intervention tool.",
+      supplementNot: "It is intended to supplement, not replace, professional mental health care.",
+      ifCrisis: "If you are experiencing a mental health crisis, suicidal thoughts, or are in immediate danger, please contact emergency services (911) or a crisis hotline (988) immediately."
+    }
   },
   th: {
     appName: "Take 5",
