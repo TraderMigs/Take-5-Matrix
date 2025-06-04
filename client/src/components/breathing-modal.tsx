@@ -41,18 +41,32 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
       
       const loadVoices = () => {
         const voices = speechSynthRef.current?.getVoices() || [];
-        // Find a female voice, preferring English
-        const femaleVoice = voices.find(voice => 
-          voice.lang.startsWith('en') && 
-          (voice.name.toLowerCase().includes('female') || 
-           voice.name.toLowerCase().includes('woman') ||
-           voice.name.toLowerCase().includes('susan') ||
-           voice.name.toLowerCase().includes('karen') ||
-           voice.name.toLowerCase().includes('samantha') ||
-           voice.name.toLowerCase().includes('victoria'))
-        ) || voices.find(voice => voice.lang.startsWith('en')) || voices[0];
         
-        voiceRef.current = femaleVoice;
+        // Priority 1: British female voices for natural, realistic speech
+        const britishFemaleVoice = voices.find(voice => 
+          (voice.lang.includes('en-GB') || voice.name.toLowerCase().includes('british') || voice.name.toLowerCase().includes('uk')) &&
+          (voice.name.toLowerCase().includes('female') || voice.name.toLowerCase().includes('woman'))
+        );
+        
+        // Priority 2: High-quality female voices with natural speech
+        const qualityFemaleVoice = voices.find(voice => 
+          voice.lang.startsWith('en') && 
+          (voice.name.toLowerCase().includes('karen') ||
+           voice.name.toLowerCase().includes('serena') ||
+           voice.name.toLowerCase().includes('fiona') ||
+           voice.name.toLowerCase().includes('samantha') ||
+           voice.name.toLowerCase().includes('victoria') ||
+           voice.name.toLowerCase().includes('susan'))
+        );
+        
+        // Priority 3: Any English female voice
+        const anyFemaleVoice = voices.find(voice => 
+          voice.lang.startsWith('en') && 
+          (voice.name.toLowerCase().includes('female') || voice.name.toLowerCase().includes('woman'))
+        );
+        
+        voiceRef.current = britishFemaleVoice || qualityFemaleVoice || anyFemaleVoice || 
+                          voices.find(voice => voice.lang.startsWith('en')) || voices[0];
         setVoicesLoaded(true);
       };
 
@@ -68,8 +82,8 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
     }
   }, []);
 
-  // Function to speak with gentle female voice
-  const speak = (text: string, rate: number = 0.8) => {
+  // Function to speak with gentle British female voice
+  const speak = (text: string, rate: number = 0.6, callback?: () => void) => {
     if (!speechSynthRef.current || !voiceRef.current) return;
     
     // Cancel any ongoing speech
@@ -77,29 +91,39 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
     
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.voice = voiceRef.current;
-    utterance.rate = rate; // Slower, more calming
-    utterance.pitch = 1.1; // Slightly higher pitch for gentle female voice
-    utterance.volume = 0.8; // Gentle volume
+    utterance.rate = rate; // Even slower for more human-like delivery
+    utterance.pitch = 1.0; // Natural pitch for British accent
+    utterance.volume = 0.9; // Clear, gentle volume
+    
+    // Add pauses for more natural speech
+    const textWithPauses = text.replace(/\./g, '... ').replace(/,/g, ', ');
+    utterance.text = textWithPauses;
+    
+    // Callback when speech ends
+    if (callback) {
+      utterance.onend = callback;
+    }
     
     speechSynthRef.current.speak(utterance);
   };
 
-  // Initial welcome message
+  // Initial welcome message with proper timing
   const startWelcomeSequence = () => {
     setIsActive(true);
     setIsFirstTime(false);
     setCycleCount(0);
     
-    // Welcome message
-    speak("Welcome to your guided breathing exercise. Find a comfortable position and close your eyes if you feel safe to do so.");
-    
-    // Start countdown after welcome
-    setTimeout(() => {
-      speak("Let's begin with a countdown. We'll start in 5");
-      setPhase("ready");
-      setCount(5);
-      startCountdown();
-    }, 4000);
+    // Welcome message with callback to ensure it completes before countdown
+    speak("Welcome to your guided breathing exercise. Find a comfortable position, relax your shoulders, and close your eyes if you feel safe to do so.", 0.5, () => {
+      // Only start countdown after welcome message completes
+      setTimeout(() => {
+        speak("Now, let's begin with a gentle countdown. We'll start in 5", 0.6, () => {
+          setPhase("ready");
+          setCount(5);
+          startCountdown();
+        });
+      }, 1500);
+    });
   };
 
   // Countdown sequence
