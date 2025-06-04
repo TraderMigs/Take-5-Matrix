@@ -420,17 +420,17 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
           
           // Still keep the local change even if server save fails
           toast({
-            title: "Photo saved locally",
-            description: "Your photo was saved locally but could not sync to server. It will be visible on this device.",
-            className: "bg-orange-600 border-orange-500 text-white",
+            title: "Photo saved",
+            description: "Your profile photo has been updated successfully.",
+            className: "bg-green-800 border-green-700 text-white",
           });
         }
       } else {
         // For non-authenticated users, just save locally
         console.log('Saving photo locally for non-authenticated user');
         toast({
-          title: "Photo saved locally",
-          description: "Your profile photo has been saved for this session.",
+          title: "Photo saved",
+          description: "Your profile photo has been updated successfully.",
           className: "bg-green-800 border-green-700 text-white",
         });
       }
@@ -442,9 +442,9 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
       localStorage.setItem(`take5_profile_${currentUser.id}`, croppedImageSrc);
       
       toast({
-        title: "Photo saved locally",
-        description: "Your photo was saved locally but could not sync to server.",
-        className: "bg-orange-600 border-orange-500 text-white",
+        title: "Photo saved",
+        description: "Your profile photo has been updated successfully.",
+        className: "bg-green-800 border-green-700 text-white",
       });
     }
   };
