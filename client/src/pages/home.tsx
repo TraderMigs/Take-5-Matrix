@@ -340,7 +340,8 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="max-w-md mx-auto bg-white dark:bg-black min-h-screen">
+    <div className="min-h-screen bg-white dark:bg-black">
+      <div className="max-w-md mx-auto bg-white dark:bg-black min-h-screen">
       {/* Email Verification Banner */}
       {needsVerification && (
         <EmailVerificationBanner 
@@ -692,6 +693,7 @@ export default function Home() {
         isOpen={!hasAcceptedLegal}
         onAccept={handleLegalAcceptance}
       />
+      </div>
     </div>
   );
 }
