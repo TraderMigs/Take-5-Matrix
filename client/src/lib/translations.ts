@@ -634,6 +634,11 @@ export const translations: Record<string, Translation> = {
     diary: "Diario",
     remove: "Eliminar",
     
+    // Contacts
+    logInToCreateContactsList: "Inicia Sesión para Crear tu Lista de Contactos de Emergencia",
+    logIn: "Iniciar Sesión",
+    createAccount: "Crear Cuenta",
+    
     // Legal
     legalPoliciesDisclamers: "Políticas Legales y Exenciones de Responsabilidad",
     privacyPolicy: "Política de Privacidad",

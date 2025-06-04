@@ -152,21 +152,21 @@ export default function PersonalContacts({ currentUser, onLogin }: PersonalConta
       {!currentUser ? (
         <div className="text-center py-8">
           <p className="text-black dark:text-white text-base font-normal mb-6">
-            Log In to Create Your Emergency Contacts List
+            {t('logInToCreateContactsList')}
           </p>
           <div className="space-y-3">
             <Button
               onClick={() => setShowUserAccount(true)}
               className="w-full bg-gray-800 hover:bg-gray-900 text-white px-6 py-3 rounded-lg"
             >
-              Log In
+              {t('logIn')}
             </Button>
             <Button
               onClick={() => setShowUserAccount(true)}
               variant="outline"
               className="w-full bg-white dark:bg-black hover:bg-gray-100 dark:hover:bg-gray-900 border-2 border-gray-800 dark:border-white text-gray-800 dark:text-white px-6 py-3 rounded-lg"
             >
-              Create Account
+              {t('createAccount')}
             </Button>
           </div>
         </div>
