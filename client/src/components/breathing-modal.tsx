@@ -13,10 +13,11 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
   const [count, setCount] = useState(5);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   
-  // Audio refs for ocean waves
+  // Audio refs for breathing sounds
   const audioContextRef = useRef<AudioContext | null>(null);
-  const oceanSourceRef = useRef<AudioBufferSourceNode | null>(null);
-  const oceanGainRef = useRef<GainNode | null>(null);
+  const oscillatorRef = useRef<OscillatorNode | null>(null);
+  const gainRef = useRef<GainNode | null>(null);
+  const breathingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const phaseInstructions = {
     inhale: "Breathe in slowly",
@@ -32,7 +33,7 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
     pause: 3,
   };
 
-  // Create gentle breathing sound using Web Audio API
+  // Create dynamic breathing sound with pitch changes
   const createBreathingSound = () => {
     if (!audioContextRef.current) {
       audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -40,71 +41,68 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
 
     const audioContext = audioContextRef.current;
     
-    // Create buffer for gentle meditation bell sound (3 seconds of audio data)
-    const bufferSize = audioContext.sampleRate * 3;
-    const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
-    const output = buffer.getChannelData(0);
-
-    // Generate soft meditation bell/chime sound
-    for (let i = 0; i < bufferSize; i++) {
-      const time = i / audioContext.sampleRate;
-      
-      // Create gentle bell-like harmonics at peaceful frequencies
-      const fundamental = Math.sin(2 * Math.PI * 220 * time) * 0.4; // A3 note (peaceful)
-      const harmonic2 = Math.sin(2 * Math.PI * 440 * time) * 0.2; // A4 (octave)
-      const harmonic3 = Math.sin(2 * Math.PI * 660 * time) * 0.1; // E5 (fifth)
-      const harmonic4 = Math.sin(2 * Math.PI * 880 * time) * 0.05; // A5
-      
-      // Add very subtle background texture
-      const texture = (Math.random() - 0.5) * 0.005;
-      
-      // Apply exponential decay envelope for bell-like sustain
-      const envelope = Math.exp(-time * 1.2); // Gentle decay over 3 seconds
-      
-      // Combine all frequencies with envelope
-      output[i] = (fundamental + harmonic2 + harmonic3 + harmonic4 + texture) * envelope * 0.12;
-    }
-
-    // Create and configure audio nodes
-    const source = audioContext.createBufferSource();
+    // Create oscillator for breathing tones
+    const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
-    const filter = audioContext.createBiquadFilter();
-
-    // Set up gentle filter for meditation bell sound
-    filter.type = "lowpass";
-    filter.frequency.setValueAtTime(2000, audioContext.currentTime);
-    filter.Q.setValueAtTime(0.3, audioContext.currentTime);
-
-    // Connect audio chain
-    source.connect(filter);
-    filter.connect(gainNode);
+    
+    // Connect nodes
+    oscillator.connect(gainNode);
     gainNode.connect(audioContext.destination);
-
-    // Configure source
-    source.buffer = buffer;
-    source.loop = true; // Loop continuously
     
-    // Set volume
-    gainNode.gain.setValueAtTime(0.6, audioContext.currentTime);
-
-    // Start playing
-    source.start();
+    // Set initial frequency and volume
+    oscillator.frequency.setValueAtTime(200, audioContext.currentTime); // Start at 200Hz
+    gainNode.gain.setValueAtTime(0, audioContext.currentTime); // Start silent
     
-    return { source, gainNode };
+    // Use a gentle sine wave
+    oscillator.type = 'sine';
+    
+    // Start the oscillator
+    oscillator.start();
+    
+    return { oscillator, gainNode };
+  };
+
+  // Update breathing sound based on phase
+  const updateBreathingSound = (currentPhase: string, timeRemaining: number, totalTime: number) => {
+    if (!oscillatorRef.current || !gainRef.current || !audioContextRef.current) return;
+    
+    const audioContext = audioContextRef.current;
+    const now = audioContext.currentTime;
+    
+    if (currentPhase === 'inhale') {
+      // Rising tone during inhale (200Hz to 400Hz)
+      const progress = (totalTime - timeRemaining) / totalTime;
+      const frequency = 200 + (progress * 200); // 200Hz to 400Hz
+      oscillatorRef.current.frequency.setValueAtTime(frequency, now);
+      gainRef.current.gain.setValueAtTime(0.08, now);
+    } else if (currentPhase === 'exhale') {
+      // Falling tone during exhale (400Hz to 200Hz)
+      const progress = (totalTime - timeRemaining) / totalTime;
+      const frequency = 400 - (progress * 200); // 400Hz to 200Hz
+      oscillatorRef.current.frequency.setValueAtTime(frequency, now);
+      gainRef.current.gain.setValueAtTime(0.08, now);
+    } else {
+      // Silence during hold and pause
+      gainRef.current.gain.setValueAtTime(0, now);
+    }
   };
 
   // Stop all audio
   const stopAudio = () => {
-    if (oceanSourceRef.current) {
+    if (oscillatorRef.current) {
       try {
-        oceanSourceRef.current.stop();
+        oscillatorRef.current.stop();
       } catch (e) {
-        // Source may already be stopped
+        // Oscillator may already be stopped
       }
-      oceanSourceRef.current = null;
+      oscillatorRef.current = null;
     }
-    if (oceanGainRef.current) {
-      oceanGainRef.current = null;
+    if (gainRef.current) {
+      gainRef.current = null;
+    }
+    if (breathingIntervalRef.current) {
+      clearInterval(breathingIntervalRef.current);
+      breathingIntervalRef.current = null;
     }
     if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
       audioContextRef.current.close();
@@ -118,9 +116,9 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
     setCount(5);
 
     // Start breathing sound
-    const { source, gainNode } = createBreathingSound();
-    oceanSourceRef.current = source;
-    oceanGainRef.current = gainNode;
+    const { oscillator, gainNode } = createBreathingSound();
+    oscillatorRef.current = oscillator;
+    gainRef.current = gainNode;
 
     intervalRef.current = setInterval(() => {
       setCount((prevCount) => {
@@ -133,9 +131,19 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
           });
           return phaseDurations[phase] || 4;
         }
+        // Update breathing sound based on current phase and remaining time
+        updateBreathingSound(phase, prevCount - 1, phaseDurations[phase]);
         return prevCount - 1;
       });
     }, 1000);
+
+    // Start sound update interval for smooth transitions
+    breathingIntervalRef.current = setInterval(() => {
+      setCount((currentCount) => {
+        updateBreathingSound(phase, currentCount, phaseDurations[phase]);
+        return currentCount;
+      });
+    }, 100); // Update sound 10 times per second for smooth transitions
   };
 
   const stopBreathing = () => {
