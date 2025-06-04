@@ -5,6 +5,24 @@ export default {
   content: ["./client/index.html", "./client/src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      colors: {
+        calm: {
+          blue: "#5A8DEE",
+          lavender: "#B388EB",
+          coral: "#F67280",
+          background: "#f7f9fb",
+          darkbg: "#1f1f1f",
+          softgray: "#f4f4f4",
+          darktext: "#333333"
+        }
+      },
+      fontFamily: {
+        sans: ["'Inter'", "system-ui", "sans-serif"]
+      },
+      maxWidth: {
+        'screen-app': '640px'
+      },
+    
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

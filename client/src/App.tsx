@@ -24,7 +24,9 @@ function App() {
         <QueryClientProvider client={queryClient}>
           <TooltipProvider>
             <Toaster />
-            <Router />
+            <div className="min-h-screen bg-calm-background text-calm-darktext px-4 py-6 max-w-screen-app mx-auto">
+              <Router />
+            </div>
           </TooltipProvider>
         </QueryClientProvider>
       </LanguageProvider>

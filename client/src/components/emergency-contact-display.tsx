@@ -45,7 +45,7 @@ export default function EmergencyContactDisplay({ isOpen, onClose, currentUser }
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md bg-blue-900 dark:bg-green-800">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-red-600">
+          <DialogTitle className="flex items-center gap-2 text-red-600 font-semibold">
             <Heart className="w-5 h-5 text-red-500" />
             Emergency Contacts
           </DialogTitle>
