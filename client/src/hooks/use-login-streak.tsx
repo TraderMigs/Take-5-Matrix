@@ -4,6 +4,7 @@ interface LoginStreakData {
   currentStreak: number;
   lastLoginDate: string;
   totalDays: number;
+  lastCelebrationDate?: string;
 }
 
 export function useLoginStreak() {
@@ -38,6 +39,16 @@ export function useLoginStreak() {
     return today !== lastLoginDay;
   };
 
+  // Check if celebration should be shown (once per day)
+  const shouldShowCelebration = (lastCelebrationDate?: string): boolean => {
+    if (!lastCelebrationDate) return true;
+    
+    const today = new Date().toDateString();
+    const lastCelebrationDay = new Date(lastCelebrationDate).toDateString();
+    
+    return today !== lastCelebrationDay;
+  };
+
   // Check if streak should continue (within 24-48 hours)
   const shouldContinueStreak = (lastDate: string): boolean => {
     if (!lastDate) return false;
@@ -64,14 +75,24 @@ export function useLoginStreak() {
       const newStreakData: LoginStreakData = {
         currentStreak: newStreak,
         lastLoginDate: today,
-        totalDays: streakData.totalDays + 1
+        totalDays: streakData.totalDays + 1,
+        lastCelebrationDate: streakData.lastCelebrationDate
       };
       
       setStreakData(newStreakData);
       localStorage.setItem('take5_login_streak', JSON.stringify(newStreakData));
       
-      // Show celebration popup for new day login
-      setShowCelebration(true);
+      // Only show celebration if we haven't shown it today
+      if (shouldShowCelebration(streakData.lastCelebrationDate)) {
+        setShowCelebration(true);
+        // Update the celebration date
+        const updatedStreakData = {
+          ...newStreakData,
+          lastCelebrationDate: today
+        };
+        setStreakData(updatedStreakData);
+        localStorage.setItem('take5_login_streak', JSON.stringify(updatedStreakData));
+      }
       
       return newStreak;
     }
@@ -83,7 +104,8 @@ export function useLoginStreak() {
     const resetData: LoginStreakData = {
       currentStreak: 1,
       lastLoginDate: new Date().toISOString(),
-      totalDays: 1
+      totalDays: 1,
+      lastCelebrationDate: undefined
     };
     
     setStreakData(resetData);
