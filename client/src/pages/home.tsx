@@ -516,7 +516,7 @@ export default function Home() {
         <footer className="mt-8 text-center pb-4">
           <LegalModal>
             <button className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white underline">
-              Legal Policies & Disclaimers
+              {t('legalPoliciesDisclamers')}
             </button>
           </LegalModal>
         </footer>

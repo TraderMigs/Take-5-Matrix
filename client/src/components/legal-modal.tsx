@@ -29,27 +29,27 @@ export default function LegalModal({ children }: LegalModalProps) {
         </DialogHeader>
         
         <Tabs defaultValue="privacy" className="flex-1">
-          <TabsList className="grid w-full grid-cols-3 mb-6 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg h-auto min-h-[60px]">
+          <TabsList className="grid w-full grid-cols-3 mb-6 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg h-auto min-h-[80px]">
             <TabsTrigger 
               value="privacy" 
-              className="flex flex-col items-center justify-center gap-1 px-2 py-3 rounded-md bg-transparent data-[state=active]:bg-black data-[state=active]:text-white text-black dark:text-white dark:data-[state=active]:bg-white dark:data-[state=active]:text-black transition-all h-auto"
+              className="flex flex-col items-center justify-center gap-1 px-1 py-2 rounded-md bg-transparent data-[state=active]:bg-black data-[state=active]:text-white text-black dark:text-white dark:data-[state=active]:bg-white dark:data-[state=active]:text-black transition-all h-auto min-h-[70px]"
             >
               <Shield className="w-4 h-4 flex-shrink-0" />
-              <span className="text-xs font-medium text-center leading-tight whitespace-nowrap">{t('privacyPolicy')}</span>
+              <span className="text-[10px] font-medium text-center leading-tight break-words max-w-full">{t('privacyPolicy')}</span>
             </TabsTrigger>
             <TabsTrigger 
               value="terms" 
-              className="flex flex-col items-center justify-center gap-1 px-2 py-3 rounded-md bg-transparent data-[state=active]:bg-black data-[state=active]:text-white text-black dark:text-white dark:data-[state=active]:bg-white dark:data-[state=active]:text-black transition-all h-auto"
+              className="flex flex-col items-center justify-center gap-1 px-1 py-2 rounded-md bg-transparent data-[state=active]:bg-black data-[state=active]:text-white text-black dark:text-white dark:data-[state=active]:bg-white dark:data-[state=active]:text-black transition-all h-auto min-h-[70px]"
             >
               <FileText className="w-4 h-4 flex-shrink-0" />
-              <span className="text-xs font-medium text-center leading-tight whitespace-nowrap">{t('termsConditions')}</span>
+              <span className="text-[10px] font-medium text-center leading-tight break-words max-w-full">{t('termsConditions')}</span>
             </TabsTrigger>
             <TabsTrigger 
               value="disclaimer" 
-              className="flex flex-col items-center justify-center gap-1 px-2 py-3 rounded-md bg-transparent data-[state=active]:bg-black data-[state=active]:text-white text-black dark:text-white dark:data-[state=active]:bg-white dark:data-[state=active]:text-black transition-all h-auto"
+              className="flex flex-col items-center justify-center gap-1 px-1 py-2 rounded-md bg-transparent data-[state=active]:bg-black data-[state=active]:text-white text-black dark:text-white dark:data-[state=active]:bg-white dark:data-[state=active]:text-black transition-all h-auto min-h-[70px]"
             >
               <AlertTriangle className="w-4 h-4 flex-shrink-0" />
-              <span className="text-xs font-medium text-center leading-tight whitespace-nowrap">{t('disclaimer')}</span>
+              <span className="text-[10px] font-medium text-center leading-tight break-words max-w-full">{t('disclaimer')}</span>
             </TabsTrigger>
           </TabsList>
 

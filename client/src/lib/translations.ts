@@ -597,6 +597,30 @@ export const translations: Record<string, Translation> = {
     youAreNotAlone: "No estás solo en esto",
     youAreLoved: "Eres amado y valorado",
     
+    // Rotating Affirmations Array
+    rotatingAffirmations: [
+      "Eres más fuerte de lo que piensas",
+      "Este momento es temporal. ¡Puedes hacerlo!",
+      "Importas. Tu vida tiene valor",
+      "La ayuda siempre está disponible",
+      "No estás solo en este viaje",
+      "Cada respiración que tomas es una victoria",
+      "Has superado desafíos antes",
+      "Tus sentimientos son válidos y temporales",
+      "Mañana puede ser diferente",
+      "Mereces amor y apoyo",
+      "Los pequeños pasos hacia adelante siguen siendo progreso",
+      "Tienes la fuerza para superar esto",
+      "Tu historia aún no ha terminado",
+      "Hay personas que se preocupan por ti",
+      "Eres suficiente, tal como eres",
+      "La sanación toma tiempo, y eso está bien",
+      "Mereces paz y felicidad",
+      "Tu valentía para buscar ayuda muestra fortaleza",
+      "Cada día que sobrevives es una victoria",
+      "Has superado el 100% de tus peores días"
+    ],
+    
     // Legal
     legalPoliciesDisclamers: "Políticas Legales y Exenciones de Responsabilidad",
     privacyPolicy: "Política de Privacidad",

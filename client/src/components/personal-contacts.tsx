@@ -38,7 +38,7 @@ export default function PersonalContacts({ currentUser, onLogin }: PersonalConta
   });
 
   // Only fetch contacts from database for authenticated users
-  const { data: contacts = [], isLoading } = useQuery({
+  const { data: contacts = [], isLoading } = useQuery<Contact[]>({
     queryKey: ["/api/contacts"],
     enabled: !!currentUser,
     retry: false,
@@ -204,12 +204,9 @@ export default function PersonalContacts({ currentUser, onLogin }: PersonalConta
                     <Label htmlFor="edit-name" className="text-black dark:text-white">Name</Label>
                     <Input
                       id="edit-name"
-                      value={contact.name}
+                      value={newContact.name || contact.name}
                       onChange={(e) => {
-                        const updatedContacts = contacts.map(c => 
-                          c.id === contact.id ? { ...c, name: e.target.value } : c
-                        );
-                        setContacts(updatedContacts);
+                        setNewContact({ ...newContact, name: e.target.value });
                       }}
                       className="bg-white dark:bg-black text-black dark:text-white border border-black dark:border-white"
                     />
@@ -219,12 +216,9 @@ export default function PersonalContacts({ currentUser, onLogin }: PersonalConta
                     <Input
                       id="edit-phone"
                       type="tel"
-                      value={contact.phone}
+                      value={newContact.phone || contact.phone}
                       onChange={(e) => {
-                        const updatedContacts = contacts.map(c => 
-                          c.id === contact.id ? { ...c, phone: e.target.value } : c
-                        );
-                        setContacts(updatedContacts);
+                        setNewContact({ ...newContact, phone: e.target.value });
                       }}
                       className="bg-white dark:bg-black text-black dark:text-white border border-black dark:border-white"
                     />
