@@ -1062,7 +1062,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                     </div>
                   ) : (
                     <div className="flex items-center space-x-2 group">
-                      <p className="text-white dark:text-black font-normal text-base flex-1 min-h-[24px] bg-black dark:bg-white px-3 py-2 rounded-lg border-2 border-teal-400">
+                      <p className="text-white dark:text-black font-normal text-base flex-1 min-h-[24px] bg-black dark:bg-white px-3 py-2 rounded-lg border-2 border-teal-400 text-center">
                         {profileQuote || t('addQuotePlaceholder')}
                       </p>
                       <Button
@@ -1453,7 +1453,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
                       className="bg-red-600 hover:bg-red-700 text-white"
                     >
                       <Trash2 className="w-4 h-4 mr-2" />
-                      Remove
+                      {t('remove')}
                     </Button>
                   </div>
 

@@ -229,10 +229,10 @@ export default function PersonalContacts({ currentUser, onLogin }: PersonalConta
                       id="edit-relationship"
                       value={contact.relationship}
                       onChange={(e) => {
-                        const updatedContacts = contacts.map(c => 
-                          c.id === contact.id ? { ...c, relationship: e.target.value } : c
-                        );
-                        setContacts(updatedContacts);
+                        setEditingContact({
+                          ...contact,
+                          relationship: e.target.value
+                        });
                       }}
                       className="bg-white dark:bg-black text-black dark:text-white border border-black dark:border-white"
                     />

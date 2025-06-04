@@ -17,13 +17,21 @@ function getInitialCrop(
   mediaWidth: number,
   mediaHeight: number,
 ): Crop {
-  // Use percentage-based crop for better centering
+  // Calculate centered crop area with proper aspect ratio
+  const aspectRatio = 3 / 4; // Standard portrait aspect ratio
+  const cropWidth = Math.min(mediaWidth * 0.8, mediaHeight * 0.6 / aspectRatio);
+  const cropHeight = cropWidth * aspectRatio;
+  
+  // Center the crop area
+  const x = (mediaWidth - cropWidth) / 2;
+  const y = (mediaHeight - cropHeight) / 2;
+  
   return {
-    unit: '%',
-    x: 10,
-    y: 20,
-    width: 80,
-    height: 60,
+    unit: 'px',
+    x: Math.max(0, x),
+    y: Math.max(0, y),
+    width: cropWidth,
+    height: cropHeight,
   };
 }
 

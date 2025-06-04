@@ -624,14 +624,15 @@ export const translations: Record<string, Translation> = {
     // Profile UI
     backgroundImage: "Imagen de Fondo",
     noBackgroundImageSet: "No se ha establecido imagen de fondo",
-    uploadImage: "Subir Imagen",
+    uploadImage: "Cambiar Imagen",
     setYourPersonalBackground: "Establece tu fondo personal",
     chooseYourImage: "Elige tu imagen",
     uploadAnyPhoto: "Sube cualquier foto",
-    cropPosition: "Posición de Recorte",
+    cropPosition: "Editar y Recortar",
     useEditorToCrop: "Usa nuestro editor para recortar y centrar tu imagen perfectamente",
     screenImage: "Imagen de Pantalla",
     diary: "Diario",
+    remove: "Eliminar",
     
     // Legal
     legalPoliciesDisclamers: "Políticas Legales y Exenciones de Responsabilidad",
