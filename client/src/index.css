@@ -342,6 +342,53 @@ button:focus, input:focus {
     color: #ffffff !important; /* white */
   }
 
+  /* Override all input range sliders to remove yellow */
+  input[type="range"] {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    background: #e5e7eb !important;
+    border-radius: 6px !important;
+    height: 6px !important;
+    outline: none !important;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    width: 18px !important;
+    height: 18px !important;
+    border-radius: 50% !important;
+    background: #64748b !important; /* slate-500 */
+    cursor: pointer !important;
+    border: none !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 18px !important;
+    height: 18px !important;
+    border-radius: 50% !important;
+    background: #64748b !important; /* slate-500 */
+    cursor: pointer !important;
+    border: none !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+  }
+
+  /* Remove yellow from any Radix UI or other component sliders */
+  [role="slider"] {
+    background-color: #64748b !important; /* slate-500 */
+    border-color: #475569 !important; /* slate-600 */
+  }
+
+  /* Force override any yellow background or border */
+  *[style*="rgb(255, 255, 0)"],
+  *[style*="#ffff00"],
+  *[style*="#FFFF00"],
+  *[style*="yellow"] {
+    background-color: #64748b !important;
+    border-color: #64748b !important;
+  }
+
   /* Affirmations animation */
   @keyframes fade-in {
     from {

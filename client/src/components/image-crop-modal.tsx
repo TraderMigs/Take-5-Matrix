@@ -17,15 +17,13 @@ function getInitialCrop(
   mediaWidth: number,
   mediaHeight: number,
 ): Crop {
-  // Start with a rectangular crop area (80% of image width, 60% of height) centered
-  const cropWidth = mediaWidth * 0.8;
-  const cropHeight = mediaHeight * 0.6;
+  // Use percentage-based crop for better centering
   return {
-    unit: 'px',
-    x: (mediaWidth - cropWidth) / 2,
-    y: (mediaHeight - cropHeight) / 2,
-    width: cropWidth,
-    height: cropHeight,
+    unit: '%',
+    x: 10,
+    y: 20,
+    width: 80,
+    height: 60,
   };
 }
 
@@ -139,18 +137,13 @@ export default function ImageCropModal({ isOpen, onClose, imageSrc, onSave }: Im
 
           {/* Image Crop Area */}
           <div className="flex justify-center items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-4 min-h-[300px] overflow-hidden">
-            <div className="relative w-full max-w-md mx-auto">
+            <div className="w-full flex justify-center">
               <ReactCrop
                 crop={crop}
                 onChange={(_, percentCrop) => setCrop(percentCrop)}
                 onComplete={(c) => setCompletedCrop(c)}
                 keepSelection
-                className="w-full max-w-full"
-                style={{ 
-                  display: 'flex', 
-                  justifyContent: 'center',
-                  alignItems: 'center'
-                }}
+                className="mx-auto"
               >
                 <img
                   ref={imgRef}
@@ -158,13 +151,12 @@ export default function ImageCropModal({ isOpen, onClose, imageSrc, onSave }: Im
                   src={imageSrc}
                   style={{ 
                     transform: `scale(${scale}) rotate(${rotate}deg)`,
-                    width: '100%',
-                    maxWidth: '100%',
-                    height: 'auto',
+                    maxWidth: '400px',
                     maxHeight: '400px',
+                    width: 'auto',
+                    height: 'auto',
                     display: 'block',
-                    margin: '0 auto',
-                    objectFit: 'contain'
+                    margin: '0 auto'
                   }}
                   onLoad={onImageLoad}
                 />
