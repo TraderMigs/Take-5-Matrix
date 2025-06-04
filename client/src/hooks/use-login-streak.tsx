@@ -43,10 +43,12 @@ export function useLoginStreak() {
   const shouldShowCelebration = (lastCelebrationDate?: string): boolean => {
     if (!lastCelebrationDate) return true;
     
-    const today = new Date().toDateString();
-    const lastCelebrationDay = new Date(lastCelebrationDate).toDateString();
+    const now = new Date();
+    const lastCelebration = new Date(lastCelebrationDate);
+    const hoursDiff = (now.getTime() - lastCelebration.getTime()) / (1000 * 60 * 60);
     
-    return today !== lastCelebrationDay;
+    // Only show celebration if at least 24 hours have passed
+    return hoursDiff >= 24;
   };
 
   // Check if streak should continue (within 24-48 hours)

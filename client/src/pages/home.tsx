@@ -594,12 +594,27 @@ export default function Home() {
               console.error('Error saving server session:', error);
             });
           }}
-          onLogout={() => {
-            setCurrentUser(null);
+          onLogout={async () => {
+            try {
+              // Call server logout to destroy session
+              await fetch('/api/auth/logout', { method: 'POST' });
+            } catch (error) {
+              console.error('Server logout error:', error);
+            }
+            
+            // Clear all authentication-related localStorage data
             localStorage.removeItem('take5_current_user');
-            // Clear server session
-            fetch('/api/auth/session', { method: 'DELETE' }).catch(error => {
-              console.error('Error clearing server session:', error);
+            localStorage.removeItem('take5_profile_active_tab');
+            localStorage.removeItem('take5_login_streak');
+            
+            // Clear current user state
+            setCurrentUser(null);
+            setShowUserAccount(false);
+            
+            toast({
+              title: "Logged out",
+              description: "You have been successfully logged out.",
+              className: "bg-green-800 border-green-700 text-white",
             });
           }}
         />
@@ -611,12 +626,27 @@ export default function Home() {
           isOpen={showUserAccount}
           onClose={() => setShowUserAccount(false)}
           currentUser={currentUser}
-          onLogout={() => {
-            setCurrentUser(null);
+          onLogout={async () => {
+            try {
+              // Call server logout to destroy session
+              await fetch('/api/auth/logout', { method: 'POST' });
+            } catch (error) {
+              console.error('Server logout error:', error);
+            }
+            
+            // Clear all authentication-related localStorage data
             localStorage.removeItem('take5_current_user');
-            // Clear server session
-            fetch('/api/auth/session', { method: 'DELETE' }).catch(error => {
-              console.error('Error clearing server session:', error);
+            localStorage.removeItem('take5_profile_active_tab');
+            localStorage.removeItem('take5_login_streak');
+            
+            // Clear current user state
+            setCurrentUser(null);
+            setShowUserAccount(false);
+            
+            toast({
+              title: "Logged out",
+              description: "You have been successfully logged out.",
+              className: "bg-green-800 border-green-700 text-white",
             });
           }}
         />
@@ -688,10 +718,23 @@ export default function Home() {
         isOpen={showUserProfile}
         onClose={closeProfileView}
         currentUser={currentUser}
-        onLogout={() => {
-          setCurrentUser(null);
+        onLogout={async () => {
+          try {
+            // Call server logout to destroy session
+            await fetch('/api/auth/logout', { method: 'POST' });
+          } catch (error) {
+            console.error('Server logout error:', error);
+          }
+          
+          // Clear all authentication-related localStorage data
           localStorage.removeItem('take5_current_user');
+          localStorage.removeItem('take5_profile_active_tab');
+          localStorage.removeItem('take5_login_streak');
+          
+          // Clear current user state
+          setCurrentUser(null);
           closeProfileView();
+          
           toast({
             title: "Logged out",
             description: "You have been successfully logged out.",
