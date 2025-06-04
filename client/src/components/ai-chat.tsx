@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send, Bot, User } from "lucide-react";
+import { Send, Bot, User, Volume2, VolumeX, Settings } from "lucide-react";
 import { useLanguage } from "@/hooks/use-language";
 
 interface Message {
@@ -11,6 +11,8 @@ interface Message {
   text: string;
   sender: "user" | "ai";
   timestamp: Date;
+  model?: string;
+  audioUrl?: string;
 }
 
 interface AIChatProps {

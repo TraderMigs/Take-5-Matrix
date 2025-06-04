@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import OpenAI from 'openai';
 import { setupGoogleAuth } from './google-auth';
 import { generateVerificationToken, sendVerificationEmail, sendWelcomeEmail } from './email-service';
+import { getAIResponse, generateTextToSpeech, getEmotionalKeywords, updateEmotionalKeywords } from './ai-router';
 import bcrypt from 'bcryptjs';
 import fs from 'fs';
 import path from 'path';
@@ -382,7 +383,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
-  // AI Chat endpoint with GPT-4.1 Mini
+  // Enhanced AI Chat with dual model routing and voice output
   app.post("/api/ai-chat", async (req, res) => {
     try {
       const { message, conversationHistory, userName, language } = req.body;
@@ -394,12 +395,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.json({ 
           response: crisisResponse.response, 
           showContacts: crisisResponse.showContacts || false,
-          isCrisis: crisisResponse.isCrisis || false
+          isCrisis: crisisResponse.isCrisis || false,
+          model: 'crisis-fallback'
         });
       }
 
-      // Use GPT-4.1 Mini with conversation context and personalized responses
-      const aiResponse = await getOpenAIResponse(message, conversationHistory || [], userName);
+      // Use new AI router with model selection and TTS
+      const aiResult = await getAIResponse(message, conversationHistory || [], userName);
       
       // Log token usage for reporting
       try {
@@ -408,7 +410,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         // Estimate tokens (approximate: 1 token per 4 characters)
         const inputTokens = Math.ceil(message.length / 4);
-        const outputTokens = Math.ceil(aiResponse.length / 4);
+        const outputTokens = Math.ceil(aiResult.response.length / 4);
         const totalTokens = inputTokens + outputTokens;
         
         await storage.logTokenUsage({
@@ -416,30 +418,90 @@ export async function registerRoutes(app: Express): Promise<Server> {
           sessionId: `session_${Date.now()}`,
           tokensUsed: totalTokens,
           messageCount: 1,
-          model: "gpt-4-1106-preview"
+          model: aiResult.model
         });
         
-        console.log(`Token usage logged: ${totalTokens} tokens for user ${userId || 'anonymous'}`);
+        console.log(`Token usage logged: ${totalTokens} tokens for user ${userId || 'anonymous'} using ${aiResult.model}`);
       } catch (tokenError) {
         console.error('Failed to log token usage:', tokenError);
       }
       
-      res.json({ response: aiResponse });
+      res.json({ 
+        response: aiResult.response,
+        model: aiResult.model,
+        audioUrl: aiResult.audioUrl || null
+      });
     } catch (error) {
       console.error("AI Chat error:", error);
       
-      // Fallback to local response system if OpenAI fails
+      // Fallback to local response system if AI fails
       const { message: reqMessage, conversationHistory: reqHistory } = req.body;
       const fallbackResponse = generateFallbackResponse(reqMessage, reqHistory || []);
       res.json({ 
         response: fallbackResponse.response,
         showContacts: fallbackResponse.showContacts || false,
-        isCrisis: fallbackResponse.isCrisis || false
+        isCrisis: fallbackResponse.isCrisis || false,
+        model: 'local-fallback'
       });
     }
   });
 
+  // Voice generation endpoint for text-to-speech
+  app.post('/api/voice/generate', async (req, res) => {
+    try {
+      const { text, voice = 'alloy' } = req.body;
+      
+      if (!text) {
+        return res.status(400).json({ error: 'Text is required' });
+      }
 
+      const audioUrl = await generateTextToSpeech(text, voice);
+      
+      if (audioUrl) {
+        res.json({ audioUrl });
+      } else {
+        res.status(500).json({ error: 'Failed to generate audio' });
+      }
+    } catch (error) {
+      console.error('Voice generation error:', error);
+      res.status(500).json({ error: 'Voice generation failed' });
+    }
+  });
+
+  // Voice settings endpoint
+  app.get('/api/voice/available-voices', (req, res) => {
+    const voices = [
+      { id: 'alloy', name: 'Alloy', description: 'Natural British female voice' },
+      { id: 'shimmer', name: 'Shimmer', description: 'Warm British female voice' },
+      { id: 'nova', name: 'Nova', description: 'Clear female voice' },
+      { id: 'echo', name: 'Echo', description: 'Energetic female voice' },
+      { id: 'fable', name: 'Fable', description: 'Gentle female voice' },
+      { id: 'onyx', name: 'Onyx', description: 'Deep male voice' }
+    ];
+    res.json({ voices });
+  });
+
+  // Keyword management endpoints
+  app.get('/api/ai/emotional-keywords', (req, res) => {
+    const keywords = getEmotionalKeywords();
+    res.json({ keywords });
+  });
+
+  app.post('/api/ai/emotional-keywords', async (req, res) => {
+    try {
+      const { keywords } = req.body;
+      
+      if (!Array.isArray(keywords)) {
+        return res.status(400).json({ error: 'Keywords must be an array' });
+      }
+
+      updateEmotionalKeywords(keywords);
+      res.json({ success: true, message: 'Emotional keywords updated' });
+    } catch (error) {
+      console.error('Keyword update error:', error);
+      res.status(500).json({ error: 'Failed to update keywords' });
+    }
+  });
 
   // Test endpoint for weekly signup report (remove in production)
   app.get("/api/test/weekly-signup-report", async (req, res) => {
