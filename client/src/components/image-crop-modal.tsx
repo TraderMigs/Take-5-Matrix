@@ -132,20 +132,20 @@ export default function ImageCropModal({ isOpen, onClose, imageSrc, onSave }: Im
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl w-[95vw] max-h-[95vh] overflow-auto bg-white dark:bg-gray-800">
-        <DialogHeader className="bg-white dark:bg-black p-4 -m-6 mb-4 rounded-t-lg">
-          <DialogTitle className="text-black dark:text-white">Edit Profile Photo</DialogTitle>
+      <DialogContent className="max-w-md w-[90vw] max-h-[90vh] p-4 bg-white dark:bg-gray-800">
+        <DialogHeader className="pb-4">
+          <DialogTitle className="text-black dark:text-white text-center">Edit Profile Photo</DialogTitle>
         </DialogHeader>
         
         <div className="space-y-4">
           {/* Instructions */}
-          <div className="text-center text-sm text-gray-600 dark:text-gray-400 bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
-            Drag the crop area to position it anywhere on the image. Resize by dragging the corners or edges to crop any size you want.
+          <div className="text-center text-xs text-gray-600 dark:text-gray-400 bg-blue-50 dark:bg-blue-900/20 p-2 rounded">
+            Drag to position and resize the crop area
           </div>
 
           {/* Image Crop Area */}
-          <div className="flex justify-center items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-4 min-h-[300px] overflow-hidden">
-            <div className="w-full flex justify-center">
+          <div className="flex justify-center items-center bg-gray-100 dark:bg-gray-700 rounded p-2">
+            <div className="w-full max-w-xs mx-auto">
               <ReactCrop
                 crop={crop}
                 onChange={(_, percentCrop) => setCrop(percentCrop)}
@@ -159,8 +159,8 @@ export default function ImageCropModal({ isOpen, onClose, imageSrc, onSave }: Im
                   src={imageSrc}
                   style={{ 
                     transform: `scale(${scale}) rotate(${rotate}deg)`,
-                    maxWidth: '400px',
-                    maxHeight: '400px',
+                    maxWidth: '250px',
+                    maxHeight: '250px',
                     width: 'auto',
                     height: 'auto',
                     display: 'block',
@@ -212,51 +212,54 @@ export default function ImageCropModal({ isOpen, onClose, imageSrc, onSave }: Im
             </div>
 
             {/* Crop Controls */}
-            <div className="flex justify-center space-x-3">
+            <div className="grid grid-cols-2 gap-2">
               <Button
                 onClick={handleResetCrop}
                 variant="outline"
                 size="sm"
-                className="text-black dark:text-white"
+                className="text-black dark:text-white text-xs"
               >
-                <RefreshCw className="w-4 h-4 mr-2" />
+                <RefreshCw className="w-3 h-3 mr-1" />
                 Reset
               </Button>
               <Button
                 onClick={handleCropFullImage}
                 variant="outline"
                 size="sm"
-                className="text-black dark:text-white"
+                className="text-black dark:text-white text-xs"
               >
-                <Image className="w-4 h-4 mr-2" />
+                <Image className="w-3 h-3 mr-1" />
                 Crop Full Image
               </Button>
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-end space-x-3 pt-4">
+          <div className="grid grid-cols-3 gap-2 pt-4">
             <Button
               onClick={onClose}
               variant="outline"
-              className="bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300"
+              size="sm"
+              className="bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300 text-xs"
             >
-              <X className="w-4 h-4 mr-2" />
+              <X className="w-3 h-3 mr-1" />
               Cancel
             </Button>
             <Button
               onClick={handleUseFullImage}
-              className="bg-slate-500 hover:bg-slate-600 text-white"
+              size="sm"
+              className="bg-slate-500 hover:bg-slate-600 text-white text-xs"
             >
-              <Image className="w-4 h-4 mr-2" />
-              Use Full Image
+              <Image className="w-3 h-3 mr-1" />
+              Use Full
             </Button>
             <Button
               onClick={handleSave}
-              className="bg-slate-600 hover:bg-slate-700 text-white"
+              size="sm"
+              className="bg-slate-600 hover:bg-slate-700 text-white text-xs"
             >
-              <Save className="w-4 h-4 mr-2" />
-              Save Cropped
+              <Save className="w-3 h-3 mr-1" />
+              Save
             </Button>
           </div>
         </div>
