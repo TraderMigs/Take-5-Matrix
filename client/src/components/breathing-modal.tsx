@@ -33,7 +33,7 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
     pause: 3,
   };
 
-  // Create dynamic breathing sound with pitch changes
+  // Create gentle breathing sound with soft tones
   const createBreathingSound = () => {
     if (!audioContextRef.current) {
       audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -41,7 +41,7 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
 
     const audioContext = audioContextRef.current;
     
-    // Create oscillator for breathing tones
+    // Create oscillator for soft breathing tones
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
     
@@ -49,12 +49,12 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
     oscillator.connect(gainNode);
     gainNode.connect(audioContext.destination);
     
-    // Set initial frequency and volume
-    oscillator.frequency.setValueAtTime(200, audioContext.currentTime); // Start at 200Hz
+    // Set initial frequency and volume - much softer
+    oscillator.frequency.setValueAtTime(120, audioContext.currentTime); // Start at lower 120Hz
     gainNode.gain.setValueAtTime(0, audioContext.currentTime); // Start silent
     
-    // Use a gentle sine wave
-    oscillator.type = 'sine';
+    // Use triangle wave for softer, warmer tone
+    oscillator.type = 'triangle';
     
     // Start the oscillator
     oscillator.start();
@@ -62,7 +62,7 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
     return { oscillator, gainNode };
   };
 
-  // Update breathing sound based on phase
+  // Update breathing sound based on phase - gentle and soothing
   const updateBreathingSound = (currentPhase: string, timeRemaining: number, totalTime: number) => {
     if (!oscillatorRef.current || !gainRef.current || !audioContextRef.current) return;
     
@@ -70,20 +70,20 @@ export default function BreathingModal({ isOpen, onClose }: BreathingModalProps)
     const now = audioContext.currentTime;
     
     if (currentPhase === 'inhale') {
-      // Rising tone during inhale (200Hz to 400Hz)
+      // Gentle rising tone during inhale (120Hz to 180Hz) - much smaller range
       const progress = (totalTime - timeRemaining) / totalTime;
-      const frequency = 200 + (progress * 200); // 200Hz to 400Hz
-      oscillatorRef.current.frequency.setValueAtTime(frequency, now);
-      gainRef.current.gain.setValueAtTime(0.08, now);
+      const frequency = 120 + (progress * 60); // 120Hz to 180Hz
+      oscillatorRef.current.frequency.exponentialRampToValueAtTime(frequency, now + 0.1);
+      gainRef.current.gain.exponentialRampToValueAtTime(0.03, now + 0.1); // Much quieter
     } else if (currentPhase === 'exhale') {
-      // Falling tone during exhale (400Hz to 200Hz)
+      // Gentle falling tone during exhale (180Hz to 120Hz)
       const progress = (totalTime - timeRemaining) / totalTime;
-      const frequency = 400 - (progress * 200); // 400Hz to 200Hz
-      oscillatorRef.current.frequency.setValueAtTime(frequency, now);
-      gainRef.current.gain.setValueAtTime(0.08, now);
+      const frequency = 180 - (progress * 60); // 180Hz to 120Hz
+      oscillatorRef.current.frequency.exponentialRampToValueAtTime(frequency, now + 0.1);
+      gainRef.current.gain.exponentialRampToValueAtTime(0.03, now + 0.1); // Much quieter
     } else {
-      // Silence during hold and pause
-      gainRef.current.gain.setValueAtTime(0, now);
+      // Gentle fade to silence during hold and pause
+      gainRef.current.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
     }
   };
 
