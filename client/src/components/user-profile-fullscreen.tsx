@@ -64,8 +64,18 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
   const [editingEntryId, setEditingEntryId] = useState<number | null>(null);
   const [showEntryDownloadModal, setShowEntryDownloadModal] = useState(false);
   const [selectedEntryForDownload, setSelectedEntryForDownload] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState(() => {
+    // Load saved tab from localStorage, default to 'profile' if none saved
+    return localStorage.getItem('take5_profile_active_tab') || 'profile';
+  });
   const { toast } = useToast();
   const { t } = useLanguage();
+
+  // Handle tab change and persist to localStorage
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    localStorage.setItem('take5_profile_active_tab', value);
+  };
 
   // Load profile image from localStorage on component mount
   useEffect(() => {
@@ -893,7 +903,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
           </div>
         </div>
 
-        <Tabs defaultValue="profile" className="w-full">
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
           <TabsList className="grid w-full grid-cols-3 bg-teal-200 dark:bg-teal-800">
             <TabsTrigger 
               value="profile" 
