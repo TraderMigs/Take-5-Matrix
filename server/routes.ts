@@ -212,32 +212,36 @@ const openai = new OpenAI({
 
 // Using GPT-4.1 Mini (gpt-4-1106-preview) as requested by user
 async function getOpenAIResponse(message: string, conversationHistory: any[] = [], userName?: string): Promise<string> {
-  try {
-    // Check for positive feedback or thanks before considering any redirects
-    const lowerMessage = message.toLowerCase().trim();
-    const isPositiveFeedback = lowerMessage.includes('thank') || lowerMessage.includes('thanks') || 
-                              lowerMessage.includes('worked') || lowerMessage.includes('helped') || 
-                              lowerMessage.includes('better') || lowerMessage.includes('good') ||
-                              lowerMessage.includes('appreciate');
-    
-    // Count AI messages in current session to implement redirect logic
-    const aiMessageCount = conversationHistory.filter(msg => msg.sender === 'ai').length;
-    
-    // Only suggest tools after 6+ exchanges and NOT when user is giving positive feedback
-    if (aiMessageCount >= 6 && !isPositiveFeedback && Math.random() > 0.6) { // 40% chance after 6+ exchanges, but never on positive feedback
-      const redirectMessages = [
-        `You know what helps most right now${userName ? `, ${userName}` : ''}? Try tapping "I Feel Overwhelmed". People say it really helps, and I think it'll do the same for you. I'll be right here after.`,
-        `Hey${userName ? ` ${userName}` : ''}, I think you'd really benefit from trying "I Feel Anxious" right now. It's designed exactly for moments like this. Give it a try and come back to chat whenever you need.`,
-        `${userName ? `${userName}, ` : ''}why don't you try the "Daily Reset" tool? It might be exactly what you need right now. I'll be here when you're ready to talk more.`
-      ];
-      return redirectMessages[Math.floor(Math.random() * redirectMessages.length)];
-    }
+  const maxRetries = 3;
+  let lastError;
 
-    // Create context from conversation history
-    const messages: Array<{role: 'system' | 'user' | 'assistant', content: string}> = [
-      {
-        role: "system",
-        content: `You are a calm, emotionally supportive digital companion named "Take 5". You are not a therapist and don't give medical advice. Instead, you offer short, comforting conversations to help users feel seen and supported.
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      // Check for positive feedback or thanks before considering any redirects
+      const lowerMessage = message.toLowerCase().trim();
+      const isPositiveFeedback = lowerMessage.includes('thank') || lowerMessage.includes('thanks') || 
+                                lowerMessage.includes('worked') || lowerMessage.includes('helped') || 
+                                lowerMessage.includes('better') || lowerMessage.includes('good') ||
+                                lowerMessage.includes('appreciate');
+      
+      // Count AI messages in current session to implement redirect logic
+      const aiMessageCount = conversationHistory.filter(msg => msg.sender === 'ai').length;
+      
+      // Only suggest tools after 6+ exchanges and NOT when user is giving positive feedback
+      if (aiMessageCount >= 6 && !isPositiveFeedback && Math.random() > 0.6) { // 40% chance after 6+ exchanges, but never on positive feedback
+        const redirectMessages = [
+          `You know what helps most right now${userName ? `, ${userName}` : ''}? Try tapping "I Feel Overwhelmed". People say it really helps, and I think it'll do the same for you. I'll be right here after.`,
+          `Hey${userName ? ` ${userName}` : ''}, I think you'd really benefit from trying "I Feel Anxious" right now. It's designed exactly for moments like this. Give it a try and come back to chat whenever you need.`,
+          `${userName ? `${userName}, ` : ''}why don't you try the "Daily Reset" tool? It might be exactly what you need right now. I'll be here when you're ready to talk more.`
+        ];
+        return redirectMessages[Math.floor(Math.random() * redirectMessages.length)];
+      }
+
+      // Create context from conversation history
+      const messages: Array<{role: 'system' | 'user' | 'assistant', content: string}> = [
+        {
+          role: "system",
+          content: `You are a calm, emotionally supportive digital companion named "Take 5". You are not a therapist and don't give medical advice. Instead, you offer short, comforting conversations to help users feel seen and supported.
 
 Always speak like a real human — warm, kind, relaxed, casual. Keep your responses under 100 words.
 
@@ -250,38 +254,59 @@ Never offer to show emergency contacts or trusted contacts. Never suggest contac
 Only suggest built-in tools after many exchanges and when genuinely appropriate - never when someone is sharing positive news or thanking you.
 
 Never pretend to be a doctor. Never fake empathy — always keep it real, grounded, and emotionally safe. Your job is to connect, not cure.`
-      }
-    ];
+        }
+      ];
 
-    // Add conversation history (keep last 4 messages for context)
-    if (conversationHistory && conversationHistory.length > 0) {
-      conversationHistory.slice(-4).forEach((msg: any) => {
-        messages.push({
-          role: msg.sender === 'user' ? 'user' as const : 'assistant' as const,
-          content: msg.text
+      // Add conversation history (keep last 4 messages for context)
+      if (conversationHistory && conversationHistory.length > 0) {
+        conversationHistory.slice(-4).forEach((msg: any) => {
+          messages.push({
+            role: msg.sender === 'user' ? 'user' as const : 'assistant' as const,
+            content: msg.text
+          });
         });
+      }
+
+      // Add current message
+      messages.push({
+        role: "user" as const,
+        content: message
       });
+
+      console.log(`OpenAI API attempt ${attempt}/${maxRetries} for message: "${message.substring(0, 50)}..."`);
+
+      const response = await openai.chat.completions.create({
+        model: "gpt-4-1106-preview", // GPT-4.1 Mini as requested
+        messages: messages,
+        max_tokens: 150, // Limit for shorter responses
+        temperature: 0.8, // Slightly higher for more human-like responses
+        timeout: 30000, // 30 second timeout
+      });
+
+      const content = response.choices[0]?.message?.content;
+      if (content && content.trim()) {
+        console.log(`OpenAI API success on attempt ${attempt}`);
+        return content.trim();
+      }
+
+      throw new Error("Empty response from OpenAI API");
+
+    } catch (error: any) {
+      lastError = error;
+      console.error(`OpenAI API attempt ${attempt}/${maxRetries} failed:`, error.message);
+      
+      // If this is not the last attempt, wait before retrying
+      if (attempt < maxRetries) {
+        const waitTime = Math.min(1000 * Math.pow(2, attempt - 1), 5000); // Exponential backoff, max 5 seconds
+        console.log(`Waiting ${waitTime}ms before retry...`);
+        await new Promise(resolve => setTimeout(resolve, waitTime));
+      }
     }
-
-    // Add current message
-    messages.push({
-      role: "user" as const,
-      content: message
-    });
-
-    const response = await openai.chat.completions.create({
-      model: "gpt-4-1106-preview", // GPT-4.1 Mini as requested
-      messages: messages,
-      max_tokens: 150, // Limit for shorter responses
-      temperature: 0.8, // Slightly higher for more human-like responses
-    });
-
-    return response.choices[0]?.message?.content || "I'm here with you. What's on your mind?";
-  } catch (error) {
-    console.error('OpenAI API error:', error);
-    // Fallback to existing response system
-    return generateFallbackResponse(message, conversationHistory).response;
   }
+
+  console.error('All OpenAI API attempts failed, falling back to local response');
+  // Fallback to existing response system after all retries failed
+  return generateFallbackResponse(message, conversationHistory).response;
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
