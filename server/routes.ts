@@ -550,7 +550,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).send('Invalid credentials');
       }
 
-      res.json(user);
+      // Set up session
+      req.session.userId = user.id;
+      req.session.username = user.username;
+      
+      // Save session and respond
+      req.session.save((err: any) => {
+        if (err) {
+          console.error('Session save error:', err);
+          return res.status(500).json({ error: 'Failed to save session' });
+        }
+        res.json(user);
+      });
     } catch (error) {
       console.error('Login error:', error);
       res.status(500).json({ error: 'Failed to login' });
@@ -558,7 +569,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.post('/api/auth/logout', async (req, res) => {
-    res.json({ success: true });
+    req.session.destroy((err: any) => {
+      if (err) {
+        console.error('Session destroy error:', err);
+        return res.status(500).json({ error: 'Failed to logout' });
+      }
+      res.json({ success: true });
+    });
   });
 
   // Email verification routes

@@ -6,6 +6,14 @@ import { setupVite, serveStatic, log } from "./vite";
 import { setupTokenReportScheduler } from "./token-reporting";
 import { setupWeeklySignupReportScheduler } from "./signup-reporting";
 
+// Extend session data interface
+declare module 'express-session' {
+  interface SessionData {
+    userId: number;
+    username: string;
+  }
+}
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
