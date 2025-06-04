@@ -1,0 +1,46 @@
+I want you to give me the **entire app source code and full infrastructure** in complete detail — every file, folder, config, and logic that’s running this app. I mean everything — leave nothing out. Be specific and clear.
+
+Here’s exactly what I need:
+
+1. **Frontend Code**  
+   - Full HTML, CSS, JavaScript, or React files  
+   - Any UI frameworks or styling libraries in use  
+   - Event handling logic  
+   - Audio/TTS output logic (if present)  
+   - Any animations or input/output display logic  
+   - All public assets like images, icons, fonts, etc.
+
+2. **Backend Code**  
+   - Full server code (Python/Flask, Node/Express, etc.)  
+   - All route handlers and endpoints  
+   - AI chat integration (OpenAI calls, prompt logic, switching between models)  
+   - TTS integration (OpenAI voice API or others)  
+   - Auth logic (OAuth, login, signup, sessions)  
+   - API key usage and handling  
+   - File upload/download endpoints (if any)
+
+3. **Environment and Config Files**  
+   - `.env` file (keys redacted but structure intact)  
+   - `.replit` file  
+   - `replit.nix` (or package management setup)  
+   - `requirements.txt`, `package.json`, or equivalent dependency files  
+   - `.gitignore`  
+   - Any secrets, runtime variables, build scripts
+
+4. **Supporting Systems**  
+   - Data storage logic (SQLite, Supabase, Firebase, etc.)  
+   - LocalStorage or session handling in frontend  
+   - Any scheduled tasks, webhooks, or background services  
+   - Any error logging, reporting, or analytics systems
+
+5. **Directory Structure**  
+   - A tree view of the full folder/file structure of the project  
+   - Label each file with its purpose if not obvious  
+   - Tell me which files are essential and which are optional
+
+6. **Output Format**  
+   - Either give me the entire codebase as one downloadable zip  
+   - Or give me each file in full with its name and code block one after another
+
+Important: do not give just summaries or snippets. I want the full raw working codebase so I can review or migrate it if needed.
+
