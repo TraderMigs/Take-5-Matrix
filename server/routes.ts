@@ -635,6 +635,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.error('Session destroy error:', err);
         return res.status(500).json({ error: 'Failed to logout' });
       }
+      // Clear the session cookie
+      res.clearCookie('connect.sid', {
+        path: '/',
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax'
+      });
       res.json({ success: true });
     });
   });

@@ -175,6 +175,28 @@ export default function UserAccountClean({ isOpen, onClose, currentUser, onLogin
     setIsLoading(false);
   };
 
+  const handleLogout = async () => {
+    try {
+      // Call server logout to destroy session
+      await fetch('/api/auth/logout', { method: 'POST' });
+      
+      // Clear localStorage data
+      localStorage.removeItem('take5_current_user');
+      localStorage.removeItem('take5_profile_active_tab');
+      
+      // Call parent logout handler
+      onLogout();
+      onClose();
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Still clear localStorage even if server logout fails
+      localStorage.removeItem('take5_current_user');
+      localStorage.removeItem('take5_profile_active_tab');
+      onLogout();
+      onClose();
+    }
+  };
+
   // Profile completion screen
   if (showProfileCompletion) {
     return (
