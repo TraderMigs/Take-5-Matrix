@@ -1,5 +1,5 @@
 // Extended translations for all languages in the language selector
-import { ComprehensiveTranslations } from './comprehensive-translations';
+import { ComprehensiveTranslations, coreTranslations } from './comprehensive-translations';
 
 // Extended translations for additional languages
 export const extendedTranslations: ComprehensiveTranslations = {
@@ -514,8 +514,7 @@ export const extendedTranslations: ComprehensiveTranslations = {
   }
 };
 
-// Import core translations directly
-import { coreTranslations } from './comprehensive-translations';
+
 
 // Merge all translations
 export function getAllTranslations(): ComprehensiveTranslations {
