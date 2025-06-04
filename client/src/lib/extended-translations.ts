@@ -358,28 +358,194 @@ export const extendedTranslations: ComprehensiveTranslations = {
     error: "Fel",
     success: "Framgång",
     loading: "Laddar..."
+  },
+
+  // Norwegian
+  no: {
+    appName: "Take 5",
+    tagline: "Ta et pust. Ta tilbake kontrollen.",
+    searchPlaceholder: "Skriv hvordan du føler: 'Jeg er alene', 'hjemløs', 'vil dø'...",
+    login: "Logg Inn",
+    createAccount: "Opprett Konto",
+    loginToCreateContactsList: "Logg inn for å opprette kontaktliste",
+    breathing: "Pust",
+    breathingGuide: "5 min guide",
+    affirmations: "Bekreftelser",
+    kindWords: "Snille ord",
+    calmMusic: "Rolig Musikk",
+    soothingSounds: "Beroligende lyder",
+    grounding: "Jording",
+    groundingTechnique: "5-4-3-2-1",
+    trustedContacts: "Dine Pålitelige Kontakter",
+    emergencySupport: "Akutt Støtte",
+    callEmergency: "Ring {number} (Akutt)",
+    youAreNotAlone: "Du er ikke alene.",
+    youMatter: "Du betyr noe. Livet ditt har verdi.",
+    helpIsAlwaysAvailable: "Hjelp er alltid tilgjengelig.",
+    thisToWillPass: "Dette øyeblikket er midlertidig. Du klarer det.",
+    howCanWeSupport: "Hvordan har du det, venn?",
+    feelOverwhelmed: "Jeg Føler Meg Overveldet",
+    feelAnxious: "Jeg Føler Meg Engstelig",
+    feelDepressed: "Jeg Føler Meg Deprimert",
+    needToTalk: "Jeg Trenger å Snakke",
+    welcomeBack: "Velkommen Tilbake",
+    continueWithGoogle: "Fortsett med Google",
+    or: "ELLER",
+    needAccountSignUp: "Trenger du en konto? Registrer deg",
+    email: "E-post",
+    password: "Passord",
+    signIn: "Logg Inn",
+    signUp: "Registrer",
+    close: "Lukk",
+    save: "Lagre",
+    cancel: "Avbryt",
+    delete: "Slett",
+    edit: "Rediger",
+    add: "Legg til",
+    remove: "Fjern",
+    yes: "Ja",
+    no: "Nei",
+    ok: "OK",
+    error: "Feil",
+    success: "Suksess",
+    loading: "Laster..."
+  },
+
+  // Polish
+  pl: {
+    appName: "Take 5",
+    tagline: "Oddychaj. Przejmij kontrolę.",
+    searchPlaceholder: "Napisz jak się czujesz: 'Jestem sam', 'bezdomny', 'chcę umrzeć'...",
+    login: "Zaloguj",
+    createAccount: "Utwórz Konto",
+    loginToCreateContactsList: "Zaloguj się, aby utworzyć listę kontaktów",
+    breathing: "Oddychanie",
+    breathingGuide: "5 min przewodnik",
+    affirmations: "Afirmacje",
+    kindWords: "Miłe słowa",
+    calmMusic: "Spokojna Muzyka",
+    soothingSounds: "Uspokajające dźwięki",
+    grounding: "Uziemienie",
+    groundingTechnique: "5-4-3-2-1",
+    trustedContacts: "Twoje Zaufane Kontakty",
+    emergencySupport: "Wsparcie Kryzysowe",
+    callEmergency: "Zadzwoń {number} (Pilne)",
+    youAreNotAlone: "Nie jesteś sam.",
+    youMatter: "Jesteś ważny. Twoje życie ma wartość.",
+    helpIsAlwaysAvailable: "Pomoc jest zawsze dostępna.",
+    thisToWillPass: "Ta chwila jest tymczasowa. Dasz radę.",
+    howCanWeSupport: "Jak się czujesz, przyjacielu?",
+    feelOverwhelmed: "Czuję Się Przytłoczony",
+    feelAnxious: "Czuję Się Niespokojny",
+    feelDepressed: "Czuję Się Przygnębiony",
+    needToTalk: "Muszę Porozmawiać",
+    welcomeBack: "Witaj Ponownie",
+    continueWithGoogle: "Kontynuuj z Google",
+    or: "LUB",
+    needAccountSignUp: "Potrzebujesz konta? Zarejestruj się",
+    email: "Email",
+    password: "Hasło",
+    signIn: "Zaloguj",
+    signUp: "Zarejestruj",
+    close: "Zamknij",
+    save: "Zapisz",
+    cancel: "Anuluj",
+    delete: "Usuń",
+    edit: "Edytuj",
+    add: "Dodaj",
+    remove: "Usuń",
+    yes: "Tak",
+    no: "Nie",
+    ok: "OK",
+    error: "Błąd",
+    success: "Sukces",
+    loading: "Ładowanie..."
+  },
+
+  // Vietnamese
+  vi: {
+    appName: "Take 5",
+    tagline: "Hít thở sâu. Lấy lại quyền kiểm soát.",
+    searchPlaceholder: "Gõ cảm xúc của bạn: 'Tôi cô đơn', 'vô gia cư', 'muốn chết'...",
+    login: "Đăng Nhập",
+    createAccount: "Tạo Tài Khoản",
+    loginToCreateContactsList: "Đăng nhập để tạo danh sách liên hệ",
+    breathing: "Hô Hấp",
+    breathingGuide: "Hướng dẫn 5 phút",
+    affirmations: "Khẳng Định",
+    kindWords: "Lời tử tế",
+    calmMusic: "Nhạc Thư Giãn",
+    soothingSounds: "Âm thanh dịu nhẹ",
+    grounding: "Kỹ Thuật Tập Trung",
+    groundingTechnique: "5-4-3-2-1",
+    trustedContacts: "Danh Bạ Tin Cậy",
+    emergencySupport: "Hỗ Trợ Khẩn Cấp",
+    callEmergency: "Gọi {number} (Khẩn cấp)",
+    youAreNotAlone: "Bạn không cô đơn.",
+    youMatter: "Bạn quan trọng. Cuộc sống của bạn có giá trị.",
+    helpIsAlwaysAvailable: "Luôn có sự giúp đỡ.",
+    thisToWillPass: "Khoảnh khắc này sẽ qua. Bạn làm được.",
+    howCanWeSupport: "Bạn cảm thấy thế nào?",
+    feelOverwhelmed: "Tôi Cảm Thấy Choáng Ngợp",
+    feelAnxious: "Tôi Cảm Thấy Lo Lắng",
+    feelDepressed: "Tôi Cảm Thấy Trầm Cảm",
+    needToTalk: "Tôi Cần Nói Chuyện",
+    welcomeBack: "Chào Mừng Trở Lại",
+    continueWithGoogle: "Tiếp tục với Google",
+    or: "HOẶC",
+    needAccountSignUp: "Cần tài khoản? Đăng ký",
+    email: "Email",
+    password: "Mật khẩu",
+    signIn: "Đăng Nhập",
+    signUp: "Đăng Ký",
+    close: "Đóng",
+    save: "Lưu",
+    cancel: "Hủy",
+    delete: "Xóa",
+    edit: "Sửa",
+    add: "Thêm",
+    remove: "Gỡ bỏ",
+    yes: "Có",
+    no: "Không",
+    ok: "OK",
+    error: "Lỗi",
+    success: "Thành công",
+    loading: "Đang tải..."
   }
 };
 
+// Import core translations directly
+import { coreTranslations } from './comprehensive-translations';
+
 // Merge all translations
 export function getAllTranslations(): ComprehensiveTranslations {
-  const { coreTranslations } = require('./comprehensive-translations');
   return { ...coreTranslations, ...extendedTranslations };
 }
 
 // Enhanced translation function with comprehensive coverage
 export function getExtendedTranslation(languageCode: string, key: string, fallback?: string): string {
-  const allTranslations = getAllTranslations();
-  const translations = allTranslations[languageCode];
-  
-  if (translations && translations[key]) {
-    return translations[key];
+  // Check extended translations first
+  const extendedLangTranslations = extendedTranslations[languageCode];
+  if (extendedLangTranslations && extendedLangTranslations[key]) {
+    return extendedLangTranslations[key];
   }
   
-  // Fallback to English if translation not found
-  const englishTranslation = allTranslations.en?.[key];
-  if (englishTranslation) {
-    return englishTranslation;
+  // Check core translations
+  const coreLangTranslations = coreTranslations[languageCode];
+  if (coreLangTranslations && coreLangTranslations[key]) {
+    return coreLangTranslations[key];
+  }
+  
+  // Fallback to English in extended translations
+  const englishExtended = extendedTranslations.en?.[key];
+  if (englishExtended) {
+    return englishExtended;
+  }
+  
+  // Fallback to English in core translations
+  const englishCore = coreTranslations.en?.[key];
+  if (englishCore) {
+    return englishCore;
   }
   
   // Ultimate fallback

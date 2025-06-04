@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { type Language, translations, t as translateFunction } from '@/lib/translations';
+import { getExtendedTranslation } from '@/lib/extended-translations';
+import { getTranslation } from '@/lib/comprehensive-translations';
 
 interface LanguageContextType {
   language: Language;
@@ -16,7 +18,27 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   });
 
   const t = (key: string, params?: Record<string, string>) => {
-    return translateFunction(key, params, language);
+    // First try the comprehensive translation system for immediate multilingual support
+    let translation = getExtendedTranslation(language, key);
+    
+    // Fallback to core translations if not found
+    if (translation === key) {
+      translation = getTranslation(language, key);
+    }
+    
+    // If still not found, try the original translation system
+    if (translation === key) {
+      translation = translateFunction(key, params, language);
+    }
+    
+    // Apply parameter substitution if params provided and translation found
+    if (params && translation !== key) {
+      Object.keys(params).forEach(param => {
+        translation = translation.replace(new RegExp(`{${param}}`, 'g'), params[param]);
+      });
+    }
+    
+    return translation;
   };
 
   const handleSetLanguage = (newLanguage: Language) => {
