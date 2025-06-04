@@ -839,7 +839,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.patch('/api/diary/:id', async (req, res) => {
     try {
       const entryId = parseInt(req.params.id);
-      const { title, content, mood, images } = req.body;
+      const { title, content, mood, images, userId } = req.body;
+
+      // Basic validation
+      if (!entryId || isNaN(entryId)) {
+        return res.status(400).json({ error: 'Invalid entry ID' });
+      }
+
+      // Authentication check - require either session userId or userId in body
+      const sessionUserId = req.session.userId;
+      const requestUserId = userId;
+      
+      if (!sessionUserId && !requestUserId) {
+        return res.status(401).json({ error: 'Authentication required' });
+      }
+
+      // Verify entry exists and belongs to user
+      const existingEntries = await storage.getDiaryEntries(sessionUserId || requestUserId);
+      const entryExists = existingEntries.find(entry => entry.id === entryId);
+      
+      if (!entryExists) {
+        return res.status(404).json({ error: 'Entry not found or access denied' });
+      }
 
       const updatedEntry = await storage.updateDiaryEntry(entryId, { title, content, mood, images });
       res.json(updatedEntry);

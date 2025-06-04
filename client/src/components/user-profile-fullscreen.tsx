@@ -132,7 +132,8 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
         body: JSON.stringify({
           title: title,
           content: content,
-          images: currentImages
+          images: currentImages,
+          userId: currentUser?.id
         }),
       });
 
