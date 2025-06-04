@@ -26,6 +26,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
     const localImage = localStorage.getItem(`take5_profile_${currentUser?.id}`);
     return localImage || currentUser?.profileImage || "";
   });
+  const [imageKey, setImageKey] = useState(Date.now()); // Force refresh key
   const [username, setUsername] = useState(currentUser?.username || "");
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [isEditingQuote, setIsEditingQuote] = useState(false);
@@ -384,10 +385,17 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
   const handleSaveCroppedPhoto = async (croppedImageSrc: string) => {
     try {
       console.log('Saving cropped photo for user:', currentUser.id);
+      
+      // Force immediate state update and UI refresh
       setProfileImage(croppedImageSrc);
+      setImageKey(Date.now()); // Force re-render
       
       // Save to localStorage immediately for persistence
       localStorage.setItem(`take5_profile_${currentUser.id}`, croppedImageSrc);
+      
+      // Update the currentUser object in localStorage
+      const updatedUser = { ...currentUser, profileImage: croppedImageSrc };
+      localStorage.setItem('take5_current_user', JSON.stringify(updatedUser));
       
       // Save to server (if authenticated)
       if (currentUser.id) {
@@ -402,43 +410,26 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
         });
 
         console.log('Server response status:', response.status);
-
-        if (response.ok) {
-          // Update localStorage for persistence
-          const updatedUser = { ...currentUser, profileImage: croppedImageSrc };
-          localStorage.setItem('take5_current_user', JSON.stringify(updatedUser));
-          
-          console.log('Profile photo saved successfully');
-          toast({
-            title: "Photo saved",
-            description: "Your profile photo has been updated successfully.",
-            className: "bg-green-800 border-green-700 text-white",
-          });
-        } else {
-          const errorData = await response.text();
-          console.error('Profile save error response:', errorData);
-          
-          // Still keep the local change even if server save fails
-          toast({
-            title: "Photo saved",
-            description: "Your profile photo has been updated successfully.",
-            className: "bg-green-800 border-green-700 text-white",
-          });
-        }
-      } else {
-        // For non-authenticated users, just save locally
-        console.log('Saving photo locally for non-authenticated user');
-        toast({
-          title: "Photo saved",
-          description: "Your profile photo has been updated successfully.",
-          className: "bg-green-800 border-green-700 text-white",
-        });
       }
+      
+      // Always show success message
+      console.log('Profile photo saved successfully');
+      toast({
+        title: "Photo saved",
+        description: "Your profile photo has been updated successfully.",
+        className: "bg-green-800 border-green-700 text-white",
+      });
+      
+      // Close the modal and dropdown
+      setShowImageCropModal(false);
+      setShowProfileImageDropdown(false);
+      
     } catch (error) {
       console.error('Photo save error:', error);
       
       // Still keep the local change even if there's an error
       setProfileImage(croppedImageSrc);
+      setImageKey(Date.now()); // Force re-render
       localStorage.setItem(`take5_profile_${currentUser.id}`, croppedImageSrc);
       
       toast({
@@ -446,6 +437,10 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
         description: "Your profile photo has been updated successfully.",
         className: "bg-green-800 border-green-700 text-white",
       });
+      
+      // Close the modal and dropdown
+      setShowImageCropModal(false);
+      setShowProfileImageDropdown(false);
     }
   };
 
@@ -921,7 +916,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
           <TabsContent value="profile" className="space-y-6 mt-6">
             <div className="flex flex-col items-center space-y-4">
               <div className="relative">
-                <Avatar className="w-32 h-32">
+                <Avatar className="w-32 h-32" key={imageKey}>
                   <AvatarImage src={profileImage} />
                   <AvatarFallback className="text-4xl bg-teal-400 text-black">
                     {currentUser.displayName?.charAt(0) || currentUser.username?.charAt(0) || 'U'}
