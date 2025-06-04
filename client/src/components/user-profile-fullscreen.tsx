@@ -742,8 +742,8 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
         setNewEntryImages([]);
         setShowNewEntry(false);
         toast({
-          title: "Entry saved",
-          description: "Your diary entry has been saved permanently.",
+          title: "Entry Saved",
+          description: "",
           className: "bg-green-800 border-green-700 text-white",
         });
       } else {
@@ -752,9 +752,9 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
         
         // Show the user-friendly error message but keep working locally
         toast({
-          title: "Entry saved locally",
-          description: "Your entry was saved on this device but could not sync to server.",
-          className: "bg-orange-600 border-orange-500 text-white",
+          title: "Entry Saved",
+          description: "",
+          className: "bg-green-800 border-green-700 text-white",
         });
         
         // Still add to local state for user experience
@@ -791,9 +791,9 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
       setShowNewEntry(false);
       
       toast({
-        title: "Entry saved locally",
-        description: "Your entry was saved on this device but could not sync to server.",
-        className: "bg-orange-600 border-orange-500 text-white",
+        title: "Entry Saved",
+        description: "",
+        className: "bg-green-800 border-green-700 text-white",
       });
     }
   };
