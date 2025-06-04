@@ -915,7 +915,7 @@ export default function UserProfileFullscreen({ isOpen, onClose, currentUser, on
           <TabsContent value="profile" className="space-y-6 mt-6">
             <div className="flex flex-col items-center space-y-4">
               <div className="relative">
-                <Avatar className="w-32 h-32" key={imageKey}>
+                <Avatar className="w-32 h-32">
                   <AvatarImage src={profileImage} />
                   <AvatarFallback className="text-4xl bg-teal-400 text-black">
                     {currentUser.displayName?.charAt(0) || currentUser.username?.charAt(0) || 'U'}

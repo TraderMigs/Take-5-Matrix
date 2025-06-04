@@ -55,7 +55,7 @@ export default function AnimalSpinner({ currentUser, isVisible }: AnimalSpinnerP
   }, [currentUser?.id]);
 
   const spinWheel = () => {
-    if (isSpinning || hasSpunToday) return;
+    if (isSpinning) return;
 
     setIsSpinning(true);
     
@@ -66,16 +66,22 @@ export default function AnimalSpinner({ currentUser, isVisible }: AnimalSpinnerP
 
     // After 3 seconds, show result
     setTimeout(() => {
-      const randomAnimal = animals[Math.floor(Math.random() * animals.length)];
-      setSelectedAnimal(randomAnimal);
-      setIsSpinning(false);
-      setShowResult(true);
-      setHasSpunToday(true);
+      if (hasSpunToday && selectedAnimal) {
+        // Show existing result if already spun today
+        setShowResult(true);
+      } else {
+        // Generate new result for first spin
+        const randomAnimal = animals[Math.floor(Math.random() * animals.length)];
+        setSelectedAnimal(randomAnimal);
+        setShowResult(true);
+        setHasSpunToday(true);
 
-      // Save to localStorage
-      const today = new Date().toDateString();
-      localStorage.setItem(`take5_animal_spin_${currentUser.id}`, today);
-      localStorage.setItem(`take5_animal_result_${currentUser.id}`, JSON.stringify(randomAnimal));
+        // Save to localStorage
+        const today = new Date().toDateString();
+        localStorage.setItem(`take5_animal_spin_${currentUser.id}`, today);
+        localStorage.setItem(`take5_animal_result_${currentUser.id}`, JSON.stringify(randomAnimal));
+      }
+      setIsSpinning(false);
     }, 3000);
   };
 
@@ -113,7 +119,9 @@ export default function AnimalSpinner({ currentUser, isVisible }: AnimalSpinnerP
         <div className="text-center">
           {hasSpunToday ? (
             <div className="space-y-2">
-              <p className="text-white text-sm">You already spun today!</p>
+              <p className="text-white text-sm font-medium">
+                {isSpinning ? "Spinning..." : "Tap to spin!"}
+              </p>
               {selectedAnimal && (
                 <div className="bg-white/20 rounded-lg p-3">
                   <p className="text-white font-bold">
